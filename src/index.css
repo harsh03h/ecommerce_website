@@ -5,9 +5,14 @@
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
   
-  --color-brand-bg: #f5f2ed;
-  --color-brand-ink: #1a1a1a;
-  --color-brand-gold: #c5a059;
+  /* Deep Midnight Blue for Trust & Premium feel */
+  --color-brand-bg: #0B1325;
+  /* Slightly lighter blue for elevated surfaces */
+  --color-brand-surface: #131E3A;
+  /* Pearl White for crisp, elegant text */
+  --color-brand-ink: #F8F9FA;
+  /* Premium Gold for accents */
+  --color-brand-gold: #D4AF37;
 }
 
 body {
