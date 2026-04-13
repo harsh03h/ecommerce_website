@@ -1,11 +1,30 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon } from 'lucide-react';
-import { auth, signInWithGoogle, logout } from './firebase';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart } from 'lucide-react';
+import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
 
 // Mock Data for the store
-const PRODUCTS = [
+export type ProductVariant = {
+  name: string;
+  options: string[];
+};
+
+export type Product = {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  image: string;
+  images: string[];
+  isNew: boolean;
+  sales: number;
+  description: string;
+  variants?: ProductVariant[];
+};
+
+const PRODUCTS: Product[] = [
   {
     id: 'c1',
     name: 'Banarasi Silk Saree',
@@ -19,7 +38,10 @@ const PRODUCTS = [
     ],
     isNew: true,
     sales: 120,
-    description: 'Authentic handwoven Banarasi silk saree featuring intricate zari work. Perfect for weddings and festive occasions.'
+    description: 'Authentic handwoven Banarasi silk saree featuring intricate zari work. Perfect for weddings and festive occasions.',
+    variants: [
+      { name: 'Color', options: ['Crimson Red', 'Royal Blue', 'Emerald Green'] }
+    ]
   },
   {
     id: 'j1',
@@ -34,7 +56,11 @@ const PRODUCTS = [
     ],
     isNew: true,
     sales: 45,
-    description: 'Exquisite Kundan bridal necklace set with matching earrings and maang tikka, crafted in 22k gold plating.'
+    description: 'Exquisite Kundan bridal necklace set with matching earrings and maang tikka, crafted in 22k gold plating.',
+    variants: [
+      { name: 'Metal Finish', options: ['22k Gold', 'Antique Gold'] },
+      { name: 'Stone Color', options: ['Ruby Red', 'Emerald Green', 'Pearl White'] }
+    ]
   },
   {
     id: 'c2',
@@ -49,7 +75,11 @@ const PRODUCTS = [
     ],
     isNew: false,
     sales: 300,
-    description: 'Deep maroon velvet lehenga adorned with heavy zardosi and thread embroidery. Includes a matching net dupatta.'
+    description: 'Deep maroon velvet lehenga adorned with heavy zardosi and thread embroidery. Includes a matching net dupatta.',
+    variants: [
+      { name: 'Size', options: ['S', 'M', 'L', 'XL'] },
+      { name: 'Color', options: ['Deep Maroon', 'Midnight Blue'] }
+    ]
   },
   {
     id: 'j2',
@@ -64,7 +94,11 @@ const PRODUCTS = [
     ],
     isNew: false,
     sales: 210,
-    description: 'Classic tennis bracelet featuring brilliant-cut VVS diamonds set in 18k white gold. A timeless statement piece.'
+    description: 'Classic tennis bracelet featuring brilliant-cut VVS diamonds set in 18k white gold. A timeless statement piece.',
+    variants: [
+      { name: 'Metal', options: ['18k White Gold', '18k Yellow Gold', '18k Rose Gold'] },
+      { name: 'Length', options: ['6.5 inches', '7 inches', '7.5 inches'] }
+    ]
   },
   {
     id: 'c3',
@@ -79,7 +113,10 @@ const PRODUCTS = [
     ],
     isNew: false,
     sales: 80,
-    description: 'Pure Kashmiri Pashmina shawl with subtle hand-embroidery along the borders. Incredibly soft and warm.'
+    description: 'Pure Kashmiri Pashmina shawl with subtle hand-embroidery along the borders. Incredibly soft and warm.',
+    variants: [
+      { name: 'Color', options: ['Ivory White', 'Charcoal Grey', 'Dusty Rose'] }
+    ]
   },
   {
     id: 'j3',
@@ -115,15 +152,19 @@ export default function App() {
   const [storeMode, setStoreMode] = useState<StoreMode>('clothing');
   const [sortBy, setSortBy] = useState('featured');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentView, setCurrentView] = useState<'home' | 'wishlist'>('home');
   
   // Auth State
   const [user, setUser] = useState<User | null>(null);
   const [isAuthReady, setIsAuthReady] = useState(false);
+  const [wishlist, setWishlist] = useState<string[]>([]);
+  const [cart, setCart] = useState<{productId: string, quantity: number, variants?: Record<string, string>}[]>([]);
 
   // Review System State
   const [reviews, setReviews] = useState(INITIAL_REVIEWS);
-  const [selectedProduct, setSelectedProduct] = useState<typeof PRODUCTS[0] | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
   const [reviewForm, setReviewForm] = useState({ author: '', rating: 5, comment: '' });
 
   // Lock body scroll when modal or mobile menu is open
@@ -144,6 +185,68 @@ export default function App() {
     });
     return () => unsubscribe();
   }, []);
+
+  // Listen to Wishlist
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'wishlist'), (snapshot) => {
+        const items = snapshot.docs.map(doc => doc.id);
+        setWishlist(items);
+      }, (error) => {
+        console.error("Error fetching wishlist", error);
+      });
+      return () => unsubscribe();
+    } else {
+      setWishlist([]);
+    }
+  }, [user]);
+
+  const toggleWishlist = async (e: React.MouseEvent, productId: string) => {
+    e.stopPropagation();
+    if (!user) {
+      signInWithGoogle();
+      return;
+    }
+    const isSaved = wishlist.includes(productId);
+    try {
+      if (isSaved) {
+        await deleteDoc(doc(db, 'users', user.uid, 'wishlist', productId));
+      } else {
+        await setDoc(doc(db, 'users', user.uid, 'wishlist', productId), {
+          productId,
+          addedAt: serverTimestamp()
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling wishlist", error);
+    }
+  };
+
+  const addToCart = (e: React.MouseEvent, productId: string, variants?: Record<string, string>) => {
+    e.stopPropagation();
+    setCart(prev => {
+      // Check if item with same product ID and same variants exists
+      const existingIndex = prev.findIndex(item => {
+        if (item.productId !== productId) return false;
+        if (!item.variants && !variants) return true;
+        if (!item.variants || !variants) return false;
+        
+        // Compare variants
+        const itemKeys = Object.keys(item.variants);
+        const newKeys = Object.keys(variants);
+        if (itemKeys.length !== newKeys.length) return false;
+        
+        return itemKeys.every(key => item.variants![key] === variants[key]);
+      });
+
+      if (existingIndex >= 0) {
+        const newCart = [...prev];
+        newCart[existingIndex].quantity += 1;
+        return newCart;
+      }
+      return [...prev, { productId, quantity: 1, variants }];
+    });
+  };
 
   const filteredProducts = useMemo(() => {
     let result = [...PRODUCTS];
@@ -206,6 +309,83 @@ export default function App() {
     );
   };
 
+  const renderProductCard = (product: typeof PRODUCTS[0]) => {
+    const productReviews = reviews[product.id] || [];
+    const avgRating = productReviews.length > 0 
+      ? productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length 
+      : 0;
+    const isSaved = wishlist.includes(product.id);
+
+    return (
+      <motion.div 
+        key={product.id}
+        layout
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        transition={{ duration: 0.3 }}
+        className="group cursor-pointer"
+        onClick={() => {
+          setSelectedProduct(product);
+          setSelectedImageIndex(0);
+          
+          // Initialize default variants
+          const defaultVariants: Record<string, string> = {};
+          if (product.variants) {
+            product.variants.forEach(v => {
+              defaultVariants[v.name] = v.options[0];
+            });
+          }
+          setSelectedVariants(defaultVariants);
+        }}
+      >
+        <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-brand-surface">
+          {product.isNew && (
+            <div className="absolute top-3 left-3 md:top-4 md:left-4 z-10 bg-brand-gold text-brand-bg text-[9px] md:text-[10px] uppercase tracking-widest px-2 py-1 md:px-3 md:py-1 font-medium">
+              New Arrival
+            </div>
+          )}
+          <button 
+            onClick={(e) => toggleWishlist(e, product.id)}
+            className="absolute top-3 right-3 md:top-4 md:right-4 z-20 p-2 bg-brand-bg/80 hover:bg-brand-bg rounded-full text-brand-ink transition-colors backdrop-blur-md"
+          >
+            <Heart className={`w-4 h-4 ${isSaved ? 'fill-brand-gold text-brand-gold' : ''}`} />
+          </button>
+          <img 
+            src={product.image} 
+            alt={product.name}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 pointer-events-none">
+            <button className="bg-brand-bg/90 text-brand-gold text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]">
+              View Details
+            </button>
+            <button 
+              onClick={(e) => addToCart(e, product.id)}
+              className="bg-brand-gold text-brand-bg text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-bg hover:text-brand-gold transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        <div className="flex justify-between items-start">
+          <div>
+            <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
+            <h4 className="font-serif text-base md:text-lg text-brand-ink">{product.name}</h4>
+            {productReviews.length > 0 && (
+              <div className="flex items-center gap-1 md:gap-2 mt-1">
+                {renderStars(Math.round(avgRating))}
+                <span className="text-[10px] md:text-xs text-brand-ink/50">({productReviews.length})</span>
+              </div>
+            )}
+          </div>
+          <p className="text-xs md:text-sm tracking-wider text-brand-ink/80 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
+        </div>
+      </motion.div>
+    );
+  };
+
   const brandInfo = {
     clothing: { title: 'Harsh Imporium', sub: 'Luxury Clothing' },
     jewellery: { title: 'Anand Jewellars', sub: 'Fine Jewellery' }
@@ -237,9 +417,9 @@ export default function App() {
               <a href="#collections" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Collections</a>
               {isAuthReady && user ? (
                 <>
-                  <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">My Wishlist</a>
+                  <button onClick={() => { setCurrentView('wishlist'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">My Wishlist</button>
                   <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Order History</a>
-                  <button onClick={() => { logout(); setIsMobileMenuOpen(false); }} className="text-left text-red-400 hover:text-red-300 transition-colors border-b border-brand-ink/10 pb-4">Sign Out</button>
+                  <button onClick={() => { logout(); setIsMobileMenuOpen(false); setCurrentView('home'); }} className="text-left text-red-400 hover:text-red-300 transition-colors border-b border-brand-ink/10 pb-4">Sign Out</button>
                 </>
               ) : (
                 <button onClick={() => { signInWithGoogle(); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Log In</button>
@@ -282,7 +462,7 @@ export default function App() {
           </div>
         </div>
         
-        <div className="text-center w-1/3 flex flex-col items-center">
+        <div className="text-center w-1/3 flex flex-col items-center cursor-pointer" onClick={() => setCurrentView('home')}>
           <h1 className="font-serif text-xl md:text-3xl leading-none tracking-tight text-brand-gold transition-all">
             {brandInfo.title}
           </h1>
@@ -327,9 +507,9 @@ export default function App() {
                   <p className="text-xs font-medium text-brand-ink truncate">{user.displayName || 'User'}</p>
                   <p className="text-[10px] text-brand-ink/60 truncate">{user.email}</p>
                 </div>
-                <button className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">My Wishlist</button>
+                <button onClick={() => setCurrentView('wishlist')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">My Wishlist</button>
                 <button className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">Order History</button>
-                <button onClick={logout} className="text-left px-4 py-3 text-xs uppercase tracking-widest text-red-400 hover:bg-brand-ink/5 transition-colors border-t border-brand-ink/10">Sign Out</button>
+                <button onClick={() => { logout(); setCurrentView('home'); }} className="text-left px-4 py-3 text-xs uppercase tracking-widest text-red-400 hover:bg-brand-ink/5 transition-colors border-t border-brand-ink/10">Sign Out</button>
               </div>
             </div>
           ) : (
@@ -345,7 +525,11 @@ export default function App() {
           </button>
           <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors relative">
             <ShoppingBag className="w-5 h-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-brand-gold rounded-full"></span>
+            {cart.reduce((sum, item) => sum + item.quantity, 0) > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-bg text-[10px] font-bold rounded-full flex items-center justify-center">
+                {cart.reduce((sum, item) => sum + item.quantity, 0)}
+              </span>
+            )}
           </button>
         </div>
       </nav>
@@ -369,7 +553,9 @@ export default function App() {
       </div>
 
       <main className="flex-grow">
-        {/* Hero Section */}
+        {currentView === 'home' ? (
+          <>
+            {/* Hero Section */}
         <section className="relative h-[70vh] md:h-[85vh] flex flex-col md:flex-row border-b border-brand-ink/10">
           {/* Left: Clothing */}
           {storeMode === 'clothing' && (
@@ -494,60 +680,7 @@ export default function App() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-12">
             <AnimatePresence mode="popLayout">
-              {filteredProducts.map((product, idx) => {
-                const productReviews = reviews[product.id] || [];
-                const avgRating = productReviews.length > 0 
-                  ? productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length 
-                  : 0;
-
-                return (
-                  <motion.div 
-                    key={product.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
-                    className="group cursor-pointer"
-                    onClick={() => {
-                      setSelectedProduct(product);
-                      setSelectedImageIndex(0);
-                    }}
-                  >
-                    <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-brand-surface">
-                      {product.isNew && (
-                        <div className="absolute top-3 left-3 md:top-4 md:left-4 z-10 bg-brand-gold text-brand-bg text-[9px] md:text-[10px] uppercase tracking-widest px-2 py-1 md:px-3 md:py-1 font-medium">
-                          New Arrival
-                        </div>
-                      )}
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        referrerPolicy="no-referrer"
-                      />
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <button className="bg-brand-bg/90 text-brand-gold text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm">
-                          View Details
-                        </button>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
-                        <h4 className="font-serif text-base md:text-lg text-brand-ink">{product.name}</h4>
-                        {productReviews.length > 0 && (
-                          <div className="flex items-center gap-1 md:gap-2 mt-1">
-                            {renderStars(Math.round(avgRating))}
-                            <span className="text-[10px] md:text-xs text-brand-ink/50">({productReviews.length})</span>
-                          </div>
-                        )}
-                      </div>
-                      <p className="text-xs md:text-sm tracking-wider text-brand-ink/80 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
+              {filteredProducts.map(renderProductCard)}
             </AnimatePresence>
           </div>
           
@@ -632,6 +765,27 @@ export default function App() {
             ))}
           </div>
         </section>
+          </>
+        ) : (
+          <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto min-h-[60vh]">
+            <h2 className="font-serif text-3xl md:text-5xl mb-8">My Wishlist</h2>
+            {wishlist.length === 0 ? (
+              <div className="text-center py-20 bg-brand-surface border border-brand-ink/10">
+                <Heart className="w-12 h-12 text-brand-ink/20 mx-auto mb-4" />
+                <p className="text-brand-ink/60 mb-6">Your wishlist is empty.</p>
+                <button onClick={() => setCurrentView('home')} className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors">
+                  Continue Shopping
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-12">
+                <AnimatePresence mode="popLayout">
+                  {PRODUCTS.filter(p => wishlist.includes(p.id)).map(renderProductCard)}
+                </AnimatePresence>
+              </div>
+            )}
+          </section>
+        )}
       </main>
 
       {/* Footer */}
@@ -736,10 +890,72 @@ export default function App() {
               {/* Right: Details & Reviews */}
               <div className="w-full md:w-3/5 p-6 md:p-12 flex flex-col">
                 <div className="mb-6 md:mb-8 border-b border-brand-ink/10 pb-6 md:pb-8">
-                  <p className="text-[10px] md:text-xs uppercase tracking-widest text-brand-gold mb-2">{selectedProduct.category}</p>
+                  <nav className="flex items-center gap-2 text-[9px] md:text-[10px] uppercase tracking-widest mb-4 text-brand-ink/60">
+                    <button 
+                      onClick={() => { setSelectedProduct(null); setCurrentView('home'); }}
+                      className="hover:text-brand-gold transition-colors"
+                    >
+                      Home
+                    </button>
+                    <span>/</span>
+                    <button 
+                      onClick={() => { 
+                        setSelectedProduct(null); 
+                        setCurrentView('home');
+                        setStoreMode(selectedProduct.category.toLowerCase() as StoreMode);
+                      }}
+                      className="hover:text-brand-gold transition-colors"
+                    >
+                      {selectedProduct.category}
+                    </button>
+                    <span>/</span>
+                    <span className="text-brand-gold truncate max-w-[120px] md:max-w-[200px]">{selectedProduct.name}</span>
+                  </nav>
                   <h2 className="font-serif text-2xl md:text-4xl text-brand-ink mb-3 md:mb-4">{selectedProduct.name}</h2>
                   <p className="text-lg md:text-xl tracking-wider text-brand-ink/90 mb-4 md:mb-6">₹{selectedProduct.price.toLocaleString('en-IN')}</p>
-                  <p className="text-sm text-brand-ink/70 leading-relaxed">{selectedProduct.description}</p>
+                  <p className="text-sm text-brand-ink/70 leading-relaxed mb-6">{selectedProduct.description}</p>
+                  
+                  {/* Variants */}
+                  {selectedProduct.variants && selectedProduct.variants.length > 0 && (
+                    <div className="space-y-4 mb-8">
+                      {selectedProduct.variants.map((variant) => (
+                        <div key={variant.name}>
+                          <p className="text-[10px] md:text-xs uppercase tracking-widest text-brand-ink/60 mb-2">{variant.name}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {variant.options.map((option) => (
+                              <button
+                                key={option}
+                                onClick={() => setSelectedVariants(prev => ({ ...prev, [variant.name]: option }))}
+                                className={`px-4 py-2 text-xs uppercase tracking-widest border transition-colors ${
+                                  selectedVariants[variant.name] === option 
+                                    ? 'border-brand-gold bg-brand-gold/10 text-brand-gold' 
+                                    : 'border-brand-ink/20 text-brand-ink hover:border-brand-gold/50'
+                                }`}
+                              >
+                                {option}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <button 
+                      onClick={(e) => addToCart(e, selectedProduct.id, selectedVariants)}
+                      className="flex-1 bg-brand-gold text-brand-bg px-6 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors"
+                    >
+                      Add to Cart
+                    </button>
+                    <button 
+                      onClick={(e) => toggleWishlist(e, selectedProduct.id)}
+                      className="flex-1 flex items-center justify-center gap-2 border border-brand-gold text-brand-gold px-6 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-gold hover:text-brand-bg transition-colors"
+                    >
+                      <Heart className={`w-4 h-4 ${wishlist.includes(selectedProduct.id) ? 'fill-current' : ''}`} />
+                      {wishlist.includes(selectedProduct.id) ? 'Saved to Wishlist' : 'Add to Wishlist'}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="flex-grow">
