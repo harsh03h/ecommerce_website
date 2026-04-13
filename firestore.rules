@@ -45,12 +45,14 @@ service cloud.firestore {
 
     // Domain Validators
     function isValidUser(data) {
-      return hasOnlyAllowedFields(['uid', 'email', 'displayName', 'photoURL', 'role', 'createdAt']) &&
+      return hasOnlyAllowedFields(['uid', 'email', 'displayName', 'photoURL', 'role', 'createdAt', 'phone', 'address']) &&
              hasRequiredFields(['uid', 'email', 'role', 'createdAt']) &&
              data.uid is string && data.uid.size() > 0 && data.uid.size() < 100 &&
              isValidEmail(data.email) &&
              (!('displayName' in data) || (data.displayName is string && data.displayName.size() < 100)) &&
              (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() < 1000)) &&
+             (!('phone' in data) || (data.phone is string && data.phone.size() < 20)) &&
+             (!('address' in data) || (data.address is string && data.address.size() < 500)) &&
              data.role in ['user', 'admin'] &&
              data.createdAt is timestamp;
     }
@@ -60,6 +62,15 @@ service cloud.firestore {
              hasRequiredFields(['productId', 'addedAt']) &&
              data.productId is string && data.productId.size() > 0 && data.productId.size() < 100 &&
              data.addedAt is timestamp;
+    }
+
+    function isValidOrder(data) {
+      return hasOnlyAllowedFields(['items', 'totalAmount', 'status', 'createdAt']) &&
+             hasRequiredFields(['items', 'totalAmount', 'status', 'createdAt']) &&
+             data.items is list &&
+             data.totalAmount is number &&
+             data.status in ['pending', 'processing', 'shipped', 'delivered'] &&
+             data.createdAt is timestamp;
     }
 
     match /users/{userId} {
@@ -80,6 +91,13 @@ service cloud.firestore {
                       request.resource.data.productId == productId;
         allow update: if false; // Wishlist items don't need updates, just create/delete
         allow delete: if isOwner(userId) || isAdmin();
+      }
+
+      match /orders/{orderId} {
+        allow read: if isOwner(userId) || isAdmin();
+        allow create: if isOwner(userId) && isValidOrder(request.resource.data);
+        allow update: if isAdmin();
+        allow delete: if isAdmin();
       }
     }
   }

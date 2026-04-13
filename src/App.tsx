@@ -152,13 +152,21 @@ export default function App() {
   const [storeMode, setStoreMode] = useState<StoreMode>('clothing');
   const [sortBy, setSortBy] = useState('featured');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'wishlist'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders'>('home');
   
   // Auth State
   const [user, setUser] = useState<User | null>(null);
   const [isAuthReady, setIsAuthReady] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [cart, setCart] = useState<{productId: string, quantity: number, variants?: Record<string, string>}[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  
+  // Profile State
+  const [profileData, setProfileData] = useState<{ displayName: string; phone: string; address: string }>({ displayName: '', phone: '', address: '' });
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
 
   // Review System State
   const [reviews, setReviews] = useState(INITIAL_REVIEWS);
@@ -186,6 +194,27 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  // Listen to Profile Data
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setProfileData({
+            displayName: data.displayName || '',
+            phone: data.phone || '',
+            address: data.address || ''
+          });
+        }
+      }, (error) => {
+        console.error("Error fetching profile", error);
+      });
+      return () => unsubscribe();
+    } else {
+      setProfileData({ displayName: '', phone: '', address: '' });
+    }
+  }, [user]);
+
   // Listen to Wishlist
   useEffect(() => {
     if (user) {
@@ -198,6 +227,27 @@ export default function App() {
       return () => unsubscribe();
     } else {
       setWishlist([]);
+    }
+  }, [user]);
+
+  // Listen to Orders
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'orders'), (snapshot) => {
+        const fetchedOrders = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })).sort((a: any, b: any) => {
+          if (!a.createdAt || !b.createdAt) return 0;
+          return b.createdAt.toMillis() - a.createdAt.toMillis();
+        });
+        setOrders(fetchedOrders);
+      }, (error) => {
+        console.error("Error fetching orders", error);
+      });
+      return () => unsubscribe();
+    } else {
+      setOrders([]);
     }
   }, [user]);
 
@@ -246,6 +296,56 @@ export default function App() {
       }
       return [...prev, { productId, quantity: 1, variants }];
     });
+  };
+
+  const saveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) return;
+    setIsSavingProfile(true);
+    try {
+      await setDoc(doc(db, 'users', user.uid), {
+        displayName: profileData.displayName,
+        phone: profileData.phone,
+        address: profileData.address
+      }, { merge: true });
+      setIsEditingProfile(false);
+    } catch (error) {
+      console.error("Error saving profile", error);
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
+
+  const checkout = async () => {
+    if (!user) {
+      signInWithGoogle();
+      return;
+    }
+    if (cart.length === 0) return;
+    
+    setIsCheckingOut(true);
+    try {
+      const totalAmount = cart.reduce((sum, item) => {
+        const product = PRODUCTS.find(p => p.id === item.productId);
+        return sum + (product?.price || 0) * item.quantity;
+      }, 0);
+
+      const orderId = `ord_${Date.now()}`;
+      await setDoc(doc(db, 'users', user.uid, 'orders', orderId), {
+        items: cart,
+        totalAmount,
+        status: 'pending',
+        createdAt: serverTimestamp()
+      });
+      
+      setCart([]);
+      setIsCartOpen(false);
+      setCurrentView('orders');
+    } catch (error) {
+      console.error("Error creating order", error);
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
   const filteredProducts = useMemo(() => {
@@ -417,8 +517,9 @@ export default function App() {
               <a href="#collections" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Collections</a>
               {isAuthReady && user ? (
                 <>
+                  <button onClick={() => { setCurrentView('profile'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">My Profile</button>
                   <button onClick={() => { setCurrentView('wishlist'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">My Wishlist</button>
-                  <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Order History</a>
+                  <button onClick={() => { setCurrentView('orders'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Order History</button>
                   <button onClick={() => { logout(); setIsMobileMenuOpen(false); setCurrentView('home'); }} className="text-left text-red-400 hover:text-red-300 transition-colors border-b border-brand-ink/10 pb-4">Sign Out</button>
                 </>
               ) : (
@@ -507,8 +608,9 @@ export default function App() {
                   <p className="text-xs font-medium text-brand-ink truncate">{user.displayName || 'User'}</p>
                   <p className="text-[10px] text-brand-ink/60 truncate">{user.email}</p>
                 </div>
+                <button onClick={() => setCurrentView('profile')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">My Profile</button>
                 <button onClick={() => setCurrentView('wishlist')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">My Wishlist</button>
-                <button className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">Order History</button>
+                <button onClick={() => setCurrentView('orders')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">Order History</button>
                 <button onClick={() => { logout(); setCurrentView('home'); }} className="text-left px-4 py-3 text-xs uppercase tracking-widest text-red-400 hover:bg-brand-ink/5 transition-colors border-t border-brand-ink/10">Sign Out</button>
               </div>
             </div>
@@ -523,7 +625,7 @@ export default function App() {
           <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors">
             <Search className="w-5 h-5" />
           </button>
-          <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors relative">
+          <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors relative" onClick={() => setIsCartOpen(true)}>
             <ShoppingBag className="w-5 h-5" />
             {cart.reduce((sum, item) => sum + item.quantity, 0) > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-bg text-[10px] font-bold rounded-full flex items-center justify-center">
@@ -533,6 +635,93 @@ export default function App() {
           </button>
         </div>
       </nav>
+
+      {/* Cart Drawer */}
+      <AnimatePresence>
+        {isCartOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm flex justify-end"
+            onClick={() => setIsCartOpen(false)}
+          >
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              className="w-full max-w-md bg-brand-surface h-full flex flex-col shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6 border-b border-brand-ink/10 flex justify-between items-center">
+                <h2 className="font-serif text-2xl text-brand-ink">Your Cart</h2>
+                <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-brand-ink/10 rounded-full">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="flex-grow overflow-y-auto p-6 flex flex-col gap-6 custom-scrollbar">
+                {cart.length === 0 ? (
+                  <div className="text-center py-12">
+                    <ShoppingBag className="w-12 h-12 text-brand-ink/20 mx-auto mb-4" />
+                    <p className="text-brand-ink/60">Your cart is empty.</p>
+                  </div>
+                ) : (
+                  cart.map((item, idx) => {
+                    const product = PRODUCTS.find(p => p.id === item.productId);
+                    if (!product) return null;
+                    return (
+                      <div key={idx} className="flex gap-4 border-b border-brand-ink/10 pb-6">
+                        <img src={product.image} alt={product.name} className="w-20 h-24 object-cover" referrerPolicy="no-referrer" />
+                        <div className="flex-grow">
+                          <h4 className="font-serif text-lg text-brand-ink">{product.name}</h4>
+                          <p className="text-sm text-brand-ink/70 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
+                          {item.variants && Object.entries(item.variants).map(([key, val]) => (
+                            <p key={key} className="text-[10px] uppercase tracking-widest text-brand-ink/50 mt-1">{key}: {val}</p>
+                          ))}
+                          <div className="flex items-center justify-between mt-3">
+                            <p className="text-xs text-brand-ink/80">Qty: {item.quantity}</p>
+                            <button 
+                              onClick={() => {
+                                setCart(prev => prev.filter((_, i) => i !== idx));
+                              }}
+                              className="text-[10px] uppercase tracking-widest text-red-400 hover:text-red-500 transition-colors"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+              
+              {cart.length > 0 && (
+                <div className="p-6 border-t border-brand-ink/10 bg-brand-bg">
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-sm uppercase tracking-widest text-brand-ink/70">Subtotal</span>
+                    <span className="font-serif text-xl text-brand-ink">
+                      ₹{cart.reduce((sum, item) => {
+                        const product = PRODUCTS.find(p => p.id === item.productId);
+                        return sum + (product?.price || 0) * item.quantity;
+                      }, 0).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                  <button 
+                    onClick={checkout}
+                    disabled={isCheckingOut}
+                    className="w-full bg-brand-gold text-brand-bg py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors disabled:opacity-50"
+                  >
+                    {isCheckingOut ? 'Processing...' : 'Checkout'}
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Mobile Store Mode Toggle (Visible only on small screens below nav) */}
       <div className="md:hidden flex justify-center bg-brand-bg border-b border-brand-ink/10 py-3 px-4">
@@ -766,7 +955,7 @@ export default function App() {
           </div>
         </section>
           </>
-        ) : (
+        ) : currentView === 'wishlist' ? (
           <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto min-h-[60vh]">
             <h2 className="font-serif text-3xl md:text-5xl mb-8">My Wishlist</h2>
             {wishlist.length === 0 ? (
@@ -785,7 +974,166 @@ export default function App() {
               </div>
             )}
           </section>
-        )}
+        ) : currentView === 'profile' && user ? (
+          <section className="py-12 md:py-20 px-4 md:px-12 max-w-3xl mx-auto min-h-[60vh]">
+            <h2 className="font-serif text-3xl md:text-5xl mb-8">My Profile</h2>
+            <div className="bg-brand-surface border border-brand-ink/10 p-6 md:p-10">
+              <div className="flex items-center gap-6 mb-8 pb-8 border-b border-brand-ink/10">
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt="Profile" className="w-20 h-20 rounded-full object-cover" referrerPolicy="no-referrer" />
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-brand-gold text-brand-bg flex items-center justify-center text-3xl font-serif">
+                    {user.displayName?.charAt(0) || user.email?.charAt(0) || 'U'}
+                  </div>
+                )}
+                <div>
+                  <h3 className="font-serif text-2xl text-brand-ink">{profileData.displayName || user.displayName || 'User'}</h3>
+                  <p className="text-sm text-brand-ink/60 mt-1">{user.email}</p>
+                </div>
+              </div>
+
+              {isEditingProfile ? (
+                <form onSubmit={saveProfile} className="space-y-6">
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-brand-ink/60 mb-2">Display Name</label>
+                    <input 
+                      type="text" 
+                      value={profileData.displayName}
+                      onChange={(e) => setProfileData({...profileData, displayName: e.target.value})}
+                      className="w-full bg-brand-bg border border-brand-ink/20 px-4 py-3 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors"
+                      placeholder="Your Name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-brand-ink/60 mb-2">Phone Number</label>
+                    <input 
+                      type="tel" 
+                      value={profileData.phone}
+                      onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
+                      className="w-full bg-brand-bg border border-brand-ink/20 px-4 py-3 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors"
+                      placeholder="+91 XXXXX XXXXX"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-brand-ink/60 mb-2">Delivery Address</label>
+                    <textarea 
+                      value={profileData.address}
+                      onChange={(e) => setProfileData({...profileData, address: e.target.value})}
+                      className="w-full bg-brand-bg border border-brand-ink/20 px-4 py-3 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors min-h-[100px] resize-y"
+                      placeholder="Enter your full delivery address"
+                    />
+                  </div>
+                  <div className="flex gap-4 pt-4">
+                    <button 
+                      type="submit" 
+                      disabled={isSavingProfile}
+                      className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors disabled:opacity-50"
+                    >
+                      {isSavingProfile ? 'Saving...' : 'Save Changes'}
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setIsEditingProfile(false)}
+                      className="border border-brand-ink/20 text-brand-ink px-8 py-3 text-xs uppercase tracking-widest font-medium hover:border-brand-ink transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-brand-ink/60 mb-1">Display Name</p>
+                      <p className="text-brand-ink">{profileData.displayName || user.displayName || 'Not provided'}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-brand-ink/60 mb-1">Email Address</p>
+                      <p className="text-brand-ink">{user.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-brand-ink/60 mb-1">Phone Number</p>
+                      <p className="text-brand-ink">{profileData.phone || 'Not provided'}</p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <p className="text-[10px] uppercase tracking-widest text-brand-ink/60 mb-1">Delivery Address</p>
+                      <p className="text-brand-ink whitespace-pre-line">{profileData.address || 'Not provided'}</p>
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t border-brand-ink/10">
+                    <button 
+                      onClick={() => setIsEditingProfile(true)}
+                      className="border border-brand-gold text-brand-gold px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-gold hover:text-brand-bg transition-colors"
+                    >
+                      Edit Profile
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        ) : currentView === 'orders' && user ? (
+          <section className="py-12 md:py-20 px-4 md:px-12 max-w-5xl mx-auto min-h-[60vh]">
+            <h2 className="font-serif text-3xl md:text-5xl mb-8">Order History</h2>
+            {orders.length === 0 ? (
+              <div className="text-center py-20 bg-brand-surface border border-brand-ink/10">
+                <ShoppingBag className="w-12 h-12 text-brand-ink/20 mx-auto mb-4" />
+                <p className="text-brand-ink/60 mb-6">You haven't placed any orders yet.</p>
+                <button onClick={() => setCurrentView('home')} className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors">
+                  Start Shopping
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-8">
+                {orders.map(order => (
+                  <div key={order.id} className="bg-brand-surface border border-brand-ink/10 p-6 md:p-8">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-6 border-b border-brand-ink/10 gap-4">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest text-brand-ink/60 mb-1">Order Placed</p>
+                        <p className="text-sm font-medium text-brand-ink">
+                          {order.createdAt ? new Date(order.createdAt.toMillis()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Processing...'}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest text-brand-ink/60 mb-1">Total Amount</p>
+                        <p className="text-sm font-medium text-brand-ink">₹{order.totalAmount?.toLocaleString('en-IN')}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest text-brand-ink/60 mb-1">Order ID</p>
+                        <p className="text-sm font-medium text-brand-ink">{order.id}</p>
+                      </div>
+                      <div>
+                        <span className="inline-block px-3 py-1 bg-brand-gold/10 text-brand-gold text-[10px] uppercase tracking-widest font-medium">
+                          {order.status}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      {(order.items || []).map((item: any, idx: number) => {
+                        const product = PRODUCTS.find(p => p.id === item.productId);
+                        if (!product) return null;
+                        return (
+                          <div key={idx} className="flex gap-4 md:gap-6">
+                            <img src={product.image} alt={product.name} className="w-20 h-24 md:w-24 md:h-32 object-cover" referrerPolicy="no-referrer" />
+                            <div className="flex-grow">
+                              <h4 className="font-serif text-lg md:text-xl text-brand-ink">{product.name}</h4>
+                              <p className="text-sm text-brand-ink/70 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
+                              {item.variants && Object.entries(item.variants).map(([key, val]) => (
+                                <p key={key} className="text-[10px] uppercase tracking-widest text-brand-ink/50 mt-1">{key}: {val as string}</p>
+                              ))}
+                              <p className="text-xs text-brand-ink/80 mt-3">Qty: {item.quantity}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        ) : null}
       </main>
 
       {/* Footer */}
