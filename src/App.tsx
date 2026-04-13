@@ -77,8 +77,10 @@ const INITIAL_REVIEWS: Record<string, { id: string; author: string; rating: numb
   ]
 };
 
+type StoreMode = 'clothing' | 'jewellery';
+
 export default function App() {
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [storeMode, setStoreMode] = useState<StoreMode>('clothing');
   const [sortBy, setSortBy] = useState('featured');
   
   // Review System State
@@ -89,9 +91,9 @@ export default function App() {
   const filteredProducts = useMemo(() => {
     let result = [...PRODUCTS];
     
-    if (activeCategory !== 'All') {
-      result = result.filter(p => p.category === activeCategory);
-    }
+    // Filter by Store Mode
+    if (storeMode === 'clothing') result = result.filter(p => p.category === 'Clothing');
+    if (storeMode === 'jewellery') result = result.filter(p => p.category === 'Jewellery');
 
     switch (sortBy) {
       case 'price-asc':
@@ -111,7 +113,7 @@ export default function App() {
     }
 
     return result;
-  }, [activeCategory, sortBy]);
+  }, [storeMode, sortBy]);
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,31 +149,51 @@ export default function App() {
     );
   };
 
+  const brandInfo = {
+    clothing: { title: 'Harsh Imporium', sub: 'Luxury Clothing' },
+    jewellery: { title: 'Anand Jewellars', sub: 'Fine Jewellery' }
+  }[storeMode];
+
   return (
     <div className="min-h-screen flex flex-col relative">
       {/* Navigation */}
       <nav className="border-b border-brand-ink/10 px-6 py-4 flex items-center justify-between sticky top-0 bg-brand-bg/90 backdrop-blur-md z-40">
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6 w-1/3">
           <button className="p-2 -ml-2 hover:bg-brand-ink/10 rounded-full transition-colors">
             <Menu className="w-5 h-5" />
           </button>
           <div className="hidden md:flex gap-8 text-xs uppercase tracking-widest font-medium">
-            <a href="#clothing" className="hover:text-brand-gold transition-colors">Clothing</a>
-            <a href="#jewellery" className="hover:text-brand-gold transition-colors">Jewellery</a>
             <a href="#shop" className="hover:text-brand-gold transition-colors">Shop</a>
+            <a href="#collections" className="hover:text-brand-gold transition-colors">Collections</a>
           </div>
         </div>
         
-        <div className="text-center">
-          <h1 className="font-serif text-2xl md:text-3xl leading-none tracking-tight text-brand-gold">
-            Harsh & Anand
+        <div className="text-center w-1/3 flex flex-col items-center">
+          <h1 className="font-serif text-2xl md:text-3xl leading-none tracking-tight text-brand-gold transition-all">
+            {brandInfo.title}
           </h1>
-          <p className="text-[9px] uppercase tracking-[0.2em] mt-1 text-brand-ink/60">
-            Cloth Imporium & Jewellars
+          <p className="text-[9px] uppercase tracking-[0.2em] mt-1 text-brand-ink/60 transition-all">
+            {brandInfo.sub}
           </p>
+          
+          {/* Store Mode Toggle */}
+          <div className="hidden md:flex bg-brand-ink/5 p-1 rounded-full text-[9px] uppercase tracking-widest mt-4 border border-brand-ink/10">
+            <button 
+              onClick={() => setStoreMode('clothing')}
+              className={`px-3 py-1.5 rounded-full transition-colors ${storeMode === 'clothing' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+            >
+              Clothing
+            </button>
+            <button 
+              onClick={() => setStoreMode('jewellery')}
+              className={`px-3 py-1.5 rounded-full transition-colors ${storeMode === 'jewellery' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+            >
+              Jewellery
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-end gap-4 w-1/3">
           <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors">
             <Search className="w-5 h-5" />
           </button>
@@ -182,68 +204,92 @@ export default function App() {
         </div>
       </nav>
 
+      {/* Mobile Store Mode Toggle (Visible only on small screens) */}
+      <div className="md:hidden flex justify-center bg-brand-bg border-b border-brand-ink/10 py-3">
+        <div className="flex bg-brand-ink/5 p-1 rounded-full text-[9px] uppercase tracking-widest border border-brand-ink/10">
+          <button 
+            onClick={() => setStoreMode('clothing')}
+            className={`px-3 py-1.5 rounded-full transition-colors ${storeMode === 'clothing' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+          >
+            Clothing
+          </button>
+          <button 
+            onClick={() => setStoreMode('jewellery')}
+            className={`px-3 py-1.5 rounded-full transition-colors ${storeMode === 'jewellery' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+          >
+            Jewellery
+          </button>
+        </div>
+      </div>
+
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative h-[85vh] flex flex-col md:flex-row border-b border-brand-ink/10">
           {/* Left: Clothing */}
-          <div className="flex-1 relative group overflow-hidden border-b md:border-b-0 md:border-r border-brand-ink/10">
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
-            <img 
-              src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1287&auto=format&fit=crop" 
-              alt="Harsh Cloth Imporium" 
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 z-20 p-8 md:p-12 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                <p className="text-xs uppercase tracking-[0.2em] mb-4 text-brand-gold">Harsh Cloth Imporium</p>
-                <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light mb-6">
-                  Elegance in <br /> Every Thread.
-                </h2>
-                <button 
-                  onClick={() => { setActiveCategory('Clothing'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
-                  className="flex items-center gap-3 text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
+          {storeMode === 'clothing' && (
+            <div className="relative group overflow-hidden border-brand-ink/10 w-full">
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
+              <img 
+                src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1287&auto=format&fit=crop" 
+                alt="Harsh Cloth Imporium" 
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 z-20 p-8 md:p-12 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  key={`hero-clothing-${storeMode}`}
                 >
-                  Explore Collection
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
-              </motion.div>
+                  <p className="text-xs uppercase tracking-[0.2em] mb-4 text-brand-gold">Harsh Cloth Imporium</p>
+                  <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light mb-6">
+                    Elegance in <br /> Every Thread.
+                  </h2>
+                  <button 
+                    onClick={() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                    className="flex items-center gap-3 text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
+                  >
+                    Explore Collection
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                </motion.div>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Right: Jewellery */}
-          <div className="flex-1 relative group overflow-hidden">
-            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
-            <img 
-              src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1470&auto=format&fit=crop" 
-              alt="Anand Jewellars" 
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 z-20 p-8 md:p-12 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                <p className="text-xs uppercase tracking-[0.2em] mb-4 text-brand-gold">Anand Jewellars</p>
-                <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light mb-6">
-                  Timeless <br /> Brilliance.
-                </h2>
-                <button 
-                  onClick={() => { setActiveCategory('Jewellery'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
-                  className="flex items-center gap-3 text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
+          {storeMode === 'jewellery' && (
+            <div className="relative group overflow-hidden w-full">
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
+              <img 
+                src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1470&auto=format&fit=crop" 
+                alt="Anand Jewellars" 
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 z-20 p-8 md:p-12 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  key={`hero-jewellery-${storeMode}`}
                 >
-                  Discover Pieces
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
-              </motion.div>
+                  <p className="text-xs uppercase tracking-[0.2em] mb-4 text-brand-gold">Anand Jewellars</p>
+                  <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl font-light mb-6">
+                    Timeless <br /> Brilliance.
+                  </h2>
+                  <button 
+                    onClick={() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                    className="flex items-center gap-3 text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
+                  >
+                    Discover Pieces
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                </motion.div>
+              </div>
             </div>
-          </div>
+          )}
         </section>
 
         {/* Intro Section */}
@@ -253,12 +299,15 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
+            key={`intro-${storeMode}`}
           >
             <h3 className="font-serif text-3xl md:text-5xl font-light leading-tight mb-8">
-              A legacy of <span className="italic text-brand-gold">craftsmanship</span> and <span className="italic text-brand-gold">trust</span>, brought together under one roof.
+              {storeMode === 'clothing' && <>A legacy of <span className="italic text-brand-gold">elegance</span> and <span className="italic text-brand-gold">style</span>, woven into every thread.</>}
+              {storeMode === 'jewellery' && <>A legacy of <span className="italic text-brand-gold">brilliance</span> and <span className="italic text-brand-gold">trust</span>, crafted for eternity.</>}
             </h3>
             <p className="text-brand-ink/70 max-w-2xl mx-auto leading-relaxed">
-              Experience the perfect harmony of premium textiles from Harsh Cloth Imporium and exquisite ornaments from Anand Jewellars. We curate collections that celebrate tradition while embracing modern sophistication.
+              {storeMode === 'clothing' && 'Experience the finest premium textiles from Harsh Cloth Imporium. We curate collections that celebrate traditional weaving techniques while embracing modern sophistication and comfort.'}
+              {storeMode === 'jewellery' && 'Experience exquisite ornaments from Anand Jewellars. We curate collections that celebrate traditional craftsmanship while embracing modern sophistication and timeless brilliance.'}
             </p>
           </motion.div>
         </section>
@@ -268,17 +317,6 @@ export default function App() {
           <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
             <div>
               <h3 className="font-serif text-3xl md:text-4xl mb-6">Curated Collection</h3>
-              <div className="flex gap-6 text-sm uppercase tracking-widest">
-                {['All', 'Clothing', 'Jewellery'].map(cat => (
-                  <button 
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`pb-1 border-b-2 transition-colors ${activeCategory === cat ? 'border-brand-gold text-brand-gold' : 'border-transparent text-brand-ink/60 hover:text-brand-ink'}`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
             </div>
             
             <div className="flex items-center gap-3 text-sm">
@@ -307,56 +345,59 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-            {filteredProducts.map((product, idx) => {
-              const productReviews = reviews[product.id] || [];
-              const avgRating = productReviews.length > 0 
-                ? productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length 
-                : 0;
+            <AnimatePresence mode="popLayout">
+              {filteredProducts.map((product, idx) => {
+                const productReviews = reviews[product.id] || [];
+                const avgRating = productReviews.length > 0 
+                  ? productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length 
+                  : 0;
 
-              return (
-                <motion.div 
-                  key={product.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: (idx % 3) * 0.1 }}
-                  className="group cursor-pointer"
-                  onClick={() => setSelectedProduct(product)}
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-brand-surface">
-                    {product.isNew && (
-                      <div className="absolute top-4 left-4 z-10 bg-brand-gold text-brand-bg text-[10px] uppercase tracking-widest px-3 py-1 font-medium">
-                        New Arrival
-                      </div>
-                    )}
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <button className="bg-brand-bg/90 text-brand-gold text-xs uppercase tracking-widest px-6 py-3 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm">
-                        View Details & Reviews
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-[10px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
-                      <h4 className="font-serif text-lg text-brand-ink">{product.name}</h4>
-                      {productReviews.length > 0 && (
-                        <div className="flex items-center gap-2 mt-1">
-                          {renderStars(Math.round(avgRating))}
-                          <span className="text-xs text-brand-ink/50">({productReviews.length})</span>
+                return (
+                  <motion.div 
+                    key={product.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                    className="group cursor-pointer"
+                    onClick={() => setSelectedProduct(product)}
+                  >
+                    <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-brand-surface">
+                      {product.isNew && (
+                        <div className="absolute top-4 left-4 z-10 bg-brand-gold text-brand-bg text-[10px] uppercase tracking-widest px-3 py-1 font-medium">
+                          New Arrival
                         </div>
                       )}
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <button className="bg-brand-bg/90 text-brand-gold text-xs uppercase tracking-widest px-6 py-3 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm">
+                          View Details & Reviews
+                        </button>
+                      </div>
                     </div>
-                    <p className="text-sm tracking-wider text-brand-ink/80 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
+                        <h4 className="font-serif text-lg text-brand-ink">{product.name}</h4>
+                        {productReviews.length > 0 && (
+                          <div className="flex items-center gap-2 mt-1">
+                            {renderStars(Math.round(avgRating))}
+                            <span className="text-xs text-brand-ink/50">({productReviews.length})</span>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-sm tracking-wider text-brand-ink/80 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </div>
           
           {filteredProducts.length === 0 && (
@@ -368,47 +409,53 @@ export default function App() {
 
         {/* Featured Collections */}
         <section id="collections" className="py-12 border-t border-brand-ink/10 bg-brand-surface">
-          <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="grid grid-cols-1">
             
             {/* Clothing Collection */}
-            <div className="p-6 md:p-12 lg:p-20 border-b md:border-b-0 md:border-r border-brand-ink/10 flex flex-col justify-center">
-              <div className="flex items-center gap-4 mb-8">
-                <span className="w-12 h-px bg-brand-gold"></span>
-                <span className="text-xs uppercase tracking-widest font-medium text-brand-gold">Harsh Imporium</span>
+            {storeMode === 'clothing' && (
+              <div className="p-6 md:p-12 lg:p-20 border-brand-ink/10 flex flex-col justify-center items-center text-center">
+                <div className="flex items-center gap-4 mb-8">
+                  <span className="w-12 h-px bg-brand-gold"></span>
+                  <span className="text-xs uppercase tracking-widest font-medium text-brand-gold">Harsh Imporium</span>
+                  <span className="w-12 h-px bg-brand-gold"></span>
+                </div>
+                <h3 className="font-serif text-4xl md:text-5xl mb-6">The Silk Route</h3>
+                <p className="text-brand-ink/70 mb-10 leading-relaxed max-w-md">
+                  Discover our latest collection of hand-woven silks and premium fabrics, designed for those who appreciate the finer details in everyday wear.
+                </p>
+                <div className="aspect-[3/4] relative w-full max-w-sm mx-auto md:mx-0 oval-mask overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=1287&auto=format&fit=crop" 
+                    alt="Silk Collection" 
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
               </div>
-              <h3 className="font-serif text-4xl md:text-5xl mb-6">The Silk Route</h3>
-              <p className="text-brand-ink/70 mb-10 leading-relaxed max-w-md">
-                Discover our latest collection of hand-woven silks and premium fabrics, designed for those who appreciate the finer details in everyday wear.
-              </p>
-              <div className="aspect-[3/4] relative w-full max-w-sm mx-auto md:mx-0 oval-mask overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=1287&auto=format&fit=crop" 
-                  alt="Silk Collection" 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            </div>
+            )}
 
             {/* Jewellery Collection */}
-            <div className="p-6 md:p-12 lg:p-20 flex flex-col justify-center">
-              <div className="flex items-center gap-4 mb-8">
-                <span className="w-12 h-px bg-brand-gold"></span>
-                <span className="text-xs uppercase tracking-widest font-medium text-brand-gold">Anand Jewellars</span>
+            {storeMode === 'jewellery' && (
+              <div className="p-6 md:p-12 lg:p-20 flex flex-col justify-center items-center text-center">
+                <div className="flex items-center gap-4 mb-8">
+                  <span className="w-12 h-px bg-brand-gold"></span>
+                  <span className="text-xs uppercase tracking-widest font-medium text-brand-gold">Anand Jewellars</span>
+                  <span className="w-12 h-px bg-brand-gold"></span>
+                </div>
+                <h3 className="font-serif text-4xl md:text-5xl mb-6">Bridal Heritage</h3>
+                <p className="text-brand-ink/70 mb-10 leading-relaxed max-w-md">
+                  Intricately crafted gold and diamond sets that capture the essence of your most special moments. A testament to generations of artistry.
+                </p>
+                <div className="aspect-[3/4] relative w-full max-w-sm mx-auto md:mx-0 oval-mask overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1599643478524-fb66f70a00ea?q=80&w=1287&auto=format&fit=crop" 
+                    alt="Bridal Jewellery" 
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
               </div>
-              <h3 className="font-serif text-4xl md:text-5xl mb-6">Bridal Heritage</h3>
-              <p className="text-brand-ink/70 mb-10 leading-relaxed max-w-md">
-                Intricately crafted gold and diamond sets that capture the essence of your most special moments. A testament to generations of artistry.
-              </p>
-              <div className="aspect-[3/4] relative w-full max-w-sm mx-auto md:mx-0 oval-mask overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1599643478524-fb66f70a00ea?q=80&w=1287&auto=format&fit=crop" 
-                  alt="Bridal Jewellery" 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            </div>
+            )}
 
           </div>
         </section>
@@ -418,10 +465,18 @@ export default function App() {
           <div className="flex whitespace-nowrap animate-[marquee_20s_linear_infinite]">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="flex items-center">
-                <span className="font-serif text-3xl italic px-8">Harsh Cloth Imporium</span>
-                <span className="w-2 h-2 rounded-full bg-brand-ink/20"></span>
-                <span className="font-serif text-3xl italic px-8">Anand Jewellars</span>
-                <span className="w-2 h-2 rounded-full bg-brand-ink/20"></span>
+                {storeMode === 'clothing' && (
+                  <>
+                    <span className="font-serif text-3xl italic px-8">Harsh Cloth Imporium</span>
+                    <span className="w-2 h-2 rounded-full bg-brand-ink/20"></span>
+                  </>
+                )}
+                {storeMode === 'jewellery' && (
+                  <>
+                    <span className="font-serif text-3xl italic px-8">Anand Jewellars</span>
+                    <span className="w-2 h-2 rounded-full bg-brand-ink/20"></span>
+                  </>
+                )}
               </div>
             ))}
           </div>
@@ -432,10 +487,11 @@ export default function App() {
       <footer className="bg-brand-surface pt-20 pb-10 px-6 md:px-12 border-t border-brand-ink/10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-2">
-            <h2 className="font-serif text-3xl mb-2 text-brand-gold">Harsh & Anand</h2>
-            <p className="text-xs uppercase tracking-widest text-brand-ink/60 mb-6">Cloth Imporium & Jewellars</p>
+            <h2 className="font-serif text-3xl mb-2 text-brand-gold">{brandInfo.title}</h2>
+            <p className="text-xs uppercase tracking-widest text-brand-ink/60 mb-6">{brandInfo.sub}</p>
             <p className="text-sm text-brand-ink/70 max-w-sm leading-relaxed">
-              Your premier destination for luxury clothing and exquisite jewellery. We bring elegance and brilliance to your everyday life.
+              {storeMode === 'clothing' && 'Your premier destination for luxury clothing. We bring elegance and style to your everyday life.'}
+              {storeMode === 'jewellery' && 'Your premier destination for exquisite jewellery. We bring brilliance and timeless beauty to your everyday life.'}
             </p>
           </div>
           
@@ -461,7 +517,7 @@ export default function App() {
         </div>
         
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-8 border-t border-brand-ink/10 text-xs text-brand-ink/50 uppercase tracking-wider">
-          <p>&copy; {new Date().getFullYear()} Harsh & Anand. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {brandInfo.title}. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <a href="#" className="hover:text-brand-ink transition-colors">Instagram</a>
             <a href="#" className="hover:text-brand-ink transition-colors">Facebook</a>
