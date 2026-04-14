@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter } from 'lucide-react';
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
@@ -27,14 +27,14 @@ export type Product = {
 const PRODUCTS: Product[] = [
   {
     id: 'c1',
-    name: 'Banarasi Silk Saree',
+    name: 'Smocked strappy dress',
     category: 'Clothing',
-    price: 15000,
-    image: 'https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop',
+    price: 1500,
+    image: 'https://image.hm.com/assets/hm/e4/e3/e4e3a52016071db7561418f47646037827e44bc7.jpg?imwidth=2160',
     images: [
-      'https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1610116306796-6fea9f4fae38?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1583391733958-61982c4eb0e0?q=80&w=800&auto=format&fit=crop'
+      'https://image.hm.com/assets/hm/fe/51/fe518e61ec358ce58cad5bba0d61ca4a1efe1adf.jpg?imwidth=2160',
+      'https://image.hm.com/assets/hm/1e/f8/1ef8ae431836ce609b5f1a5e5116ceed5b831fb9.jpg?imwidth=2160',
+      'https://image.hm.com/assets/hm/1d/e9/1de9c7f11cbd002542733f626e7aeea89b82b90d.jpg?imwidth=2160'
     ],
     isNew: true,
     sales: 120,
@@ -47,10 +47,10 @@ const PRODUCTS: Product[] = [
     id: 'j1',
     name: 'Kundan Bridal Set',
     category: 'Jewellery',
-    price: 125000,
-    image: 'https://images.unsplash.com/photo-1599643478524-fb66f70a00ea?q=80&w=800&auto=format&fit=crop',
+    price: 1250,
+    image: 'https://i.etsystatic.com/30916859/r/il/d45fec/3903175250/il_600x600.3903175250_qkb7.jpg',
     images: [
-      'https://images.unsplash.com/photo-1599643478524-fb66f70a00ea?q=80&w=800&auto=format&fit=crop',
+      'https://i.etsystatic.com/30916859/r/il/d45fec/3903175250/il_600x600.3903175250_qkb7.jpg',
       'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=800&auto=format&fit=crop'
     ],
@@ -66,12 +66,12 @@ const PRODUCTS: Product[] = [
     id: 'c2',
     name: 'Velvet Embroidered Lehenga',
     category: 'Clothing',
-    price: 45000,
-    image: 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800&auto=format&fit=crop',
+    price: 4500,
+    image: 'https://tse1.mm.bing.net/th/id/OIP.0KXqDbQ53cVcGX8bQDiQDgHaKL?rs=1&pid=ImgDetMain&o=7&rm=3',
     images: [
-      'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop'
+      'https://www.kollybollyethnics.com/image/catalog/data/14Feb2022/Maroon-velvet-embroidered-bridal-lehenga-choli-8103.jpg',
+      'https://tse3.mm.bing.net/th/id/OIP.sQTqeGvVSwoQbrZR_osnSAHaKL?rs=1&pid=ImgDetMain&o=7&rm=3',
+      'https://tse3.mm.bing.net/th/id/OIP.VwIoZYR6kWn966ypwM8ePwHaKt?w=1000&h=1447&rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
     isNew: false,
     sales: 300,
@@ -104,12 +104,12 @@ const PRODUCTS: Product[] = [
     id: 'c3',
     name: 'Pashmina Shawl',
     category: 'Clothing',
-    price: 8500,
-    image: 'https://images.unsplash.com/photo-1583391733958-61982c4eb0e0?q=80&w=800&auto=format&fit=crop',
+    price: 850,
+    image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop',
     images: [
-      'https://images.unsplash.com/photo-1583391733958-61982c4eb0e0?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1604644401890-0bd678c83788?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1604644401890-0bd678c83788?q=80&w=800&auto=format&fit=crop',
+      'https://picsum.photos/id/91/800/1000'
     ],
     isNew: false,
     sales: 80,
@@ -123,11 +123,11 @@ const PRODUCTS: Product[] = [
     name: 'Polki Drop Earrings',
     category: 'Jewellery',
     price: 35000,
-    image: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop',
     images: [
-      'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?q=80&w=800&auto=format&fit=crop',
+      'https://i.pinimg.com/originals/ec/64/07/ec6407340f34578f10022152446aa597.jpg'
     ],
     isNew: true,
     sales: 150,
@@ -162,6 +162,7 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [toast, setToast] = useState<{message: string, id: number} | null>(null);
   
   // Profile State
   const [profileData, setProfileData] = useState<{ displayName: string; phone: string; address: string }>({ displayName: '', phone: '', address: '' });
@@ -274,6 +275,7 @@ export default function App() {
 
   const addToCart = (e: React.MouseEvent, productId: string, variants?: Record<string, string>) => {
     e.stopPropagation();
+    const product = PRODUCTS.find(p => p.id === productId);
     setCart(prev => {
       // Check if item with same product ID and same variants exists
       const existingIndex = prev.findIndex(item => {
@@ -296,6 +298,12 @@ export default function App() {
       }
       return [...prev, { productId, quantity: 1, variants }];
     });
+    
+    const id = Date.now();
+    setToast({ message: `${product?.name || 'Item'} added to cart`, id });
+    setTimeout(() => {
+      setToast(prev => prev?.id === id ? null : prev);
+    }, 3000);
   };
 
   const saveProfile = async (e: React.FormEvent) => {
@@ -409,6 +417,67 @@ export default function App() {
     );
   };
 
+  const shareProduct = (e: React.MouseEvent, product: Product, platform: string) => {
+    e.stopPropagation();
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent(`Check out ${product.name} at Harsh Imporium!`);
+    
+    let shareUrl = '';
+    switch (platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+        break;
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${text} ${url}`;
+        break;
+    }
+    
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+  };
+
+  const ShareMenu = ({ product, className = "", iconClassName = "" }: { product: Product, className?: string, iconClassName?: string }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    
+    return (
+      <div className={`${className}`} onClick={(e) => e.stopPropagation()}>
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className={`p-2 rounded-full transition-colors ${iconClassName}`}
+        >
+          <Share2 className="w-4 h-4" />
+        </button>
+        
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              className={`absolute top-full right-0 mt-2 bg-brand-surface border border-brand-ink/10 shadow-xl rounded-lg p-2 flex gap-2 z-50`}
+            >
+              <button onClick={(e) => { shareProduct(e, product, 'facebook'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on Facebook">
+                <Facebook className="w-4 h-4" />
+              </button>
+              <button onClick={(e) => { shareProduct(e, product, 'twitter'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on Twitter">
+                <Twitter className="w-4 h-4" />
+              </button>
+              <button onClick={(e) => { shareProduct(e, product, 'whatsapp'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on WhatsApp">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
+
   const renderProductCard = (product: typeof PRODUCTS[0]) => {
     const productReviews = reviews[product.id] || [];
     const avgRating = productReviews.length > 0 
@@ -445,19 +514,26 @@ export default function App() {
               New Arrival
             </div>
           )}
-          <button 
-            onClick={(e) => toggleWishlist(e, product.id)}
-            className="absolute top-3 right-3 md:top-4 md:right-4 z-20 p-2 bg-brand-bg/80 hover:bg-brand-bg rounded-full text-brand-ink transition-colors backdrop-blur-md"
-          >
-            <Heart className={`w-4 h-4 ${isSaved ? 'fill-brand-gold text-brand-gold' : ''}`} />
-          </button>
+          <div className="absolute top-3 right-3 md:top-4 md:right-4 z-20 flex flex-col gap-2">
+            <button 
+              onClick={(e) => toggleWishlist(e, product.id)}
+              className="p-2 bg-brand-bg/80 hover:bg-brand-bg rounded-full text-brand-ink transition-colors backdrop-blur-md"
+            >
+              <Heart className={`w-4 h-4 ${isSaved ? 'fill-brand-gold text-brand-gold' : ''}`} />
+            </button>
+            <ShareMenu 
+              product={product} 
+              className="relative"
+              iconClassName="bg-brand-bg/80 hover:bg-brand-bg text-brand-ink backdrop-blur-md"
+            />
+          </div>
           <img 
             src={product.image} 
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 pointer-events-none">
+          <div className="hidden md:flex absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-col items-center justify-center gap-3 pointer-events-none">
             <button className="bg-brand-bg/90 text-brand-gold text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]">
               View Details
             </button>
@@ -751,7 +827,7 @@ export default function App() {
             <div className="relative group overflow-hidden border-brand-ink/10 w-full h-full">
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
               <img 
-                src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1287&auto=format&fit=crop" 
+                src="https://picsum.photos/id/64/1280/800" 
                 alt="Harsh Cloth Imporium" 
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
@@ -784,7 +860,7 @@ export default function App() {
             <div className="relative group overflow-hidden w-full h-full">
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
               <img 
-                src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1470&auto=format&fit=crop" 
+                src="https://picsum.photos/id/65/1280/800" 
                 alt="Anand Jewellars" 
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
@@ -837,7 +913,8 @@ export default function App() {
         <section id="shop" className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto border-t border-brand-ink/10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-6">
             <div>
-              <h3 className="font-serif text-2xl md:text-4xl">Curated Collection</h3>
+              <h3 className="font-serif text-2xl md:text-4xl mb-3">Curated Collection</h3>
+              <div className="w-12 h-px bg-brand-gold"></div>
             </div>
             
             <div className="flex items-center gap-3 text-sm w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-brand-ink/10 pt-4 md:pt-0">
@@ -896,13 +973,34 @@ export default function App() {
                 <p className="text-sm md:text-base text-brand-ink/70 mb-8 md:mb-10 leading-relaxed max-w-md">
                   Discover our latest collection of hand-woven silks and premium fabrics, designed for those who appreciate the finer details in everyday wear.
                 </p>
-                <div className="aspect-[3/4] relative w-full max-w-xs md:max-w-sm mx-auto oval-mask overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=1287&auto=format&fit=crop" 
-                    alt="Silk Collection" 
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                    referrerPolicy="no-referrer"
-                  />
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-6xl mx-auto mt-4 md:mt-8">
+                  <div className="md:col-span-2 aspect-[4/3] md:aspect-auto md:h-[600px] relative overflow-hidden group">
+                    <img 
+                      src="https://assets-jiocdn.ajio.com/medias/sys_master/root/20240112/4WH5/65a12c3854c30e6276a64ba9/-473Wx593H-469551799-blue-MODEL.jpg" 
+                      alt="Silk Collection Main" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-4 md:gap-6 md:h-[600px]">
+                    <div className="flex-1 relative overflow-hidden group">
+                      <img 
+                        src="https://assets-jiocdn.ajio.com/medias/sys_master/root/20240102/psW8/65942933afa4cf41f5fd413d/-473Wx593H-469551799-blue-MODEL3.jpg" 
+                        alt="Silk Detail 1" 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    <div className="flex-1 relative overflow-hidden group">
+                      <img 
+                        src="https://assets-jiocdn.ajio.com/medias/sys_master/root/20240102/lDGY/659424f3ddf7791519fcfc31/-473Wx593H-469551799-blue-MODEL5.jpg" 
+                        alt="Silk Detail 2" 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -919,13 +1017,34 @@ export default function App() {
                 <p className="text-sm md:text-base text-brand-ink/70 mb-8 md:mb-10 leading-relaxed max-w-md">
                   Intricately crafted gold and diamond sets that capture the essence of your most special moments. A testament to generations of artistry.
                 </p>
-                <div className="aspect-[3/4] relative w-full max-w-xs md:max-w-sm mx-auto oval-mask overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1599643478524-fb66f70a00ea?q=80&w=1287&auto=format&fit=crop" 
-                    alt="Bridal Jewellery" 
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                    referrerPolicy="no-referrer"
-                  />
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-6xl mx-auto mt-4 md:mt-8">
+                  <div className="flex flex-col gap-4 md:gap-6 md:h-[600px] order-2 md:order-1">
+                    <div className="flex-1 relative overflow-hidden group">
+                      <img 
+                        src="https://picsum.photos/id/75/800/1000" 
+                        alt="Jewellery Detail 1" 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    <div className="flex-1 relative overflow-hidden group">
+                      <img 
+                        src="https://www.livemint.com/lm-img/img/2025/01/08/1600x900/income_tax_on_jewellery_1736310991057_1736310991609.jpg" 
+                        alt="Jewellery Detail 2" 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                  </div>
+                  <div className="md:col-span-2 aspect-[4/3] md:aspect-auto md:h-[600px] relative overflow-hidden group order-1 md:order-2">
+                    <img 
+                      src="https://www.financialexpress.com/wp-content/uploads/2023/11/Untitled-design-14-1.png" 
+                      alt="Bridal Jewellery Main" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -1195,7 +1314,7 @@ export default function App() {
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-brand-surface border-t md:border border-brand-ink/20 w-full max-w-5xl h-[90vh] md:h-auto md:max-h-[90vh] overflow-y-auto flex flex-col md:flex-row shadow-2xl relative rounded-t-2xl md:rounded-none"
+              className="bg-brand-surface border-t md:border border-brand-ink/20 w-full max-w-5xl h-[90vh] md:h-auto md:max-h-[90vh] overflow-y-auto custom-scrollbar flex flex-col md:flex-row shadow-2xl relative rounded-t-2xl md:rounded-none"
             >
               {/* Mobile Drag Handle */}
               <div className="w-full flex justify-center py-3 md:hidden absolute top-0 left-0 z-20 bg-gradient-to-b from-black/50 to-transparent">
@@ -1303,6 +1422,13 @@ export default function App() {
                       <Heart className={`w-4 h-4 ${wishlist.includes(selectedProduct.id) ? 'fill-current' : ''}`} />
                       {wishlist.includes(selectedProduct.id) ? 'Saved to Wishlist' : 'Add to Wishlist'}
                     </button>
+                    <div className="flex items-center justify-center">
+                      <ShareMenu 
+                        product={selectedProduct} 
+                        className="relative"
+                        iconClassName="border border-brand-ink/20 hover:border-brand-gold text-brand-ink hover:text-brand-gold"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1376,6 +1502,22 @@ export default function App() {
         )}
       </AnimatePresence>
       
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            key={toast.id}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] bg-brand-ink text-brand-bg px-6 py-3 shadow-2xl flex items-center gap-3 text-xs md:text-sm uppercase tracking-widest whitespace-nowrap"
+          >
+            <ShoppingBag className="w-4 h-4 text-brand-gold" />
+            {toast.message}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes marquee {
           0% { transform: translateX(0); }
