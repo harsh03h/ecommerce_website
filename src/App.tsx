@@ -1077,7 +1077,7 @@ export default function App() {
             <div className="relative group overflow-hidden border-brand-ink/10 w-full h-full">
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
               <img 
-                src="https://picsum.photos/id/64/1280/800" 
+                src="https://png.pngtree.com/background/20230519/original/pngtree-the-interior-of-a-clothing-store-with-clothing-on-display-picture-image_2654940.jpg" 
                 alt="Harsh Cloth Imporium" 
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
@@ -1110,7 +1110,7 @@ export default function App() {
             <div className="relative group overflow-hidden w-full h-full">
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
               <img 
-                src="https://picsum.photos/id/65/1280/800" 
+                src="https://media.istockphoto.com/id/1406447764/photo/jewellery.jpg?b=1&s=170667a&w=0&k=20&c=buNQFmJqJiaw_RJOCJgASnAZyA_0R0Pq-Ex0BuYi4-I=" 
                 alt="Anand Jewellars" 
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
@@ -1169,9 +1169,9 @@ export default function App() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
               {[
                 { name: 'Gold', image: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=600&auto=format&fit=crop' },
-                { name: 'Silver', image: 'https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=600&auto=format&fit=crop' },
-                { name: 'Bridal', image: 'https://images.unsplash.com/photo-1599643478514-46b1406a4517?q=80&w=600&auto=format&fit=crop' },
-                { name: 'Rings', image: 'https://images.unsplash.com/photo-1605100804763-247f6612228e?q=80&w=600&auto=format&fit=crop' }
+                { name: 'Silver', image: 'https://static.wixstatic.com/media/b69f5d_07a8d811cd4b4a21b3af31e4bbdcef6b~mv2.jpg/v1/fill/w_1000,h_1000,al_c,q_85,usm_0.66_1.00_0.01/b69f5d_07a8d811cd4b4a21b3af31e4bbdcef6b~mv2.jpg' },
+                { name: 'Bridal', image: 'https://i.pinimg.com/originals/9f/04/f3/9f04f36ab336cc562381a07293611dfc.jpg' },
+                { name: 'Rings', image: 'https://images.pexels.com/photos/1395306/pexels-photo-1395306.jpeg?cs=srgb&dl=pexels-martabranco-1395306.jpg&fm=jpg' }
               ].map((cat) => (
                 <button 
                   key={cat.name}
