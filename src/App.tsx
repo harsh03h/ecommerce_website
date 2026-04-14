@@ -1123,7 +1123,7 @@ export default function App() {
             <div className="relative group overflow-hidden w-full h-full">
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
               <img 
-                src="https://media.istockphoto.com/id/1406447764/photo/jewellery.jpg?b=1&s=170667a&w=0&k=20&c=buNQFmJqJiaw_RJOCJgASnAZyA_0R0Pq-Ex0BuYi4-I=" 
+                src="https://i.pinimg.com/736x/90/a8/a0/90a8a061bc471f400e3e8bc2816582fe.jpg" 
                 alt="Anand Jewellars" 
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
