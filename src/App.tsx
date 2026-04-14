@@ -107,15 +107,15 @@ const PRODUCTS: Product[] = [
   },
   {
     id: 'c3',
-    name: 'Pashmina Shawl',
+    name: 'Sweatshirts',
     category: 'Clothing',
-    department: 'Women',
+    department: 'Men',
     price: 850,
     image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop',
     images: [
-      'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop',
+      'https://engine.com.pk/cdn/shop/products/MT3237-TEL_1.jpg?v=1700224175',
       'https://images.unsplash.com/photo-1604644401890-0bd678c83788?q=80&w=800&auto=format&fit=crop',
-      'https://picsum.photos/id/91/800/1000'
+      'https://tse1.mm.bing.net/th/id/OIP.wWZmc1AuxHM42shwTHtGOwHaJh?rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
     isNew: false,
     sales: 80,
@@ -130,10 +130,10 @@ const PRODUCTS: Product[] = [
     category: 'Jewellery',
     department: 'Gold',
     price: 35000,
-    image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop',
+    image: 'https://tse3.mm.bing.net/th/id/OIP.jvOVBLwN0htTjYCZQAiTrwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
     images: [
-      'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?q=80&w=800&auto=format&fit=crop',
+      'https://tse1.mm.bing.net/th/id/OIP.cQofW8Q2xZmnrV2Oi8ql4QHaHa?w=1000&h=1000&rs=1&pid=ImgDetMain&o=7&rm=3',
+      'https://shop.southindiajewels.com/wp-content/uploads/2024/04/Imitation-Sparkling-Victorian-Polki-Drop-Earrings_1-scaled.jpg',
       'https://i.pinimg.com/originals/ec/64/07/ec6407340f34578f10022152446aa597.jpg'
     ],
     isNew: true,
@@ -146,11 +146,11 @@ const PRODUCTS: Product[] = [
     category: 'Clothing',
     department: 'Men',
     price: 2500,
-    image: 'https://picsum.photos/seed/kurta1/800/1000',
+    image: 'https://www.libas.in/cdn/shop/files/green-yoke-design-silk-blend-straight-kurta-with-trousers-and-dupatta-libas-1-27531263770774_1400x.jpg?v=1694512762',
     images: [
-      'https://picsum.photos/seed/kurta1/800/1000',
-      'https://picsum.photos/seed/kurta2/800/1000',
-      'https://picsum.photos/seed/kurta3/800/1000'
+      'https://www.libas.in/cdn/shop/files/green-yoke-design-silk-blend-straight-kurta-with-trousers-and-dupatta-libas-1-27531263770774_1400x.jpg?v=1694512762',
+      'https://assets0.mirraw.com/images/11972064/image_zoom.jpeg?1706792452',
+      'https://img.faballey.com/images/Product/XKS09183A/d4.jpg'
     ],
     isNew: true,
     sales: 45,
@@ -165,11 +165,11 @@ const PRODUCTS: Product[] = [
     category: 'Jewellery',
     department: 'Gold',
     price: 45000,
-    image: 'https://picsum.photos/seed/necklace1/800/1000',
+    image: 'https://i.pinimg.com/originals/ac/11/9e/ac119e6f01360ef96f5d7a64171fad51.jpg',
     images: [
-      'https://picsum.photos/seed/necklace1/800/1000',
-      'https://picsum.photos/seed/necklace2/800/1000',
-      'https://picsum.photos/seed/necklace3/800/1000'
+      'https://i.pinimg.com/originals/ac/11/9e/ac119e6f01360ef96f5d7a64171fad51.jpg',
+      'https://i.pinimg.com/originals/ad/08/c0/ad08c0f148af2d360ef095d05996e9ab.jpg',
+      'https://tse2.mm.bing.net/th/id/OIP.YBocOgHCb4RnHrCEuDqPDwHaJi?rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
     isNew: false,
     sales: 89,
@@ -181,11 +181,11 @@ const PRODUCTS: Product[] = [
     category: 'Clothing',
     department: 'Women',
     price: 3200,
-    image: 'https://picsum.photos/seed/anarkali1/800/1000',
+    image: 'https://medias.utsavfashion.com/media/catalog/product/cache/1/image/1000x/040ec09b1e35df139433887a97daa66f/p/r/printed-pure-cotton-anarkali-suit-in-white-v1-kmqs146.jpg',
     images: [
-      'https://picsum.photos/seed/anarkali1/800/1000',
-      'https://picsum.photos/seed/anarkali2/800/1000',
-      'https://picsum.photos/seed/anarkali3/800/1000'
+      'https://medias.utsavfashion.com/media/catalog/product/cache/1/image/1000x/040ec09b1e35df139433887a97daa66f/p/r/printed-pure-cotton-anarkali-suit-in-white-v1-kmqs146.jpg',
+      'https://i.pinimg.com/originals/1a/61/83/1a61836d6a9274507bde2de060ba4b57.jpg',
+      'https://th.bing.com/th/id/R.456962bdf2abde2c9b9ffa761eedebbd?rik=D2C%2bjYpE%2fuqQpw&riu=http%3a%2f%2fpeachmode.com%2fcdn%2fshop%2fproducts%2flavender-floral-printed-pure-cotton-anarkali-suit-peachmode-1.jpg%3fv%3d1669070327&ehk=4tPf%2bJFFYm8L8zgic5JYH%2b2LRIbktSanVR7c%2fLKLU0w%3d&risl=&pid=ImgRaw&r=0'
     ],
     isNew: false,
     sales: 210,
@@ -200,11 +200,11 @@ const PRODUCTS: Product[] = [
     category: 'Jewellery',
     department: 'Silver',
     price: 850,
-    image: 'https://picsum.photos/seed/jhumka1/800/1000',
+    image: 'https://i.pinimg.com/originals/f9/d6/0b/f9d60bc1bc6a482b32a51b2e03ed0663.jpg',
     images: [
-      'https://picsum.photos/seed/jhumka1/800/1000',
-      'https://picsum.photos/seed/jhumka2/800/1000',
-      'https://picsum.photos/seed/jhumka3/800/1000'
+      'https://i.pinimg.com/originals/f9/d6/0b/f9d60bc1bc6a482b32a51b2e03ed0663.jpg',
+      'https://i.etsystatic.com/16916043/r/il/7cebdf/2111585969/il_fullxfull.2111585969_jquu.jpg',
+      'https://assets0.mirraw.com/images/8854182/image_zoom.jpeg?1616861497'
     ],
     isNew: true,
     sales: 450,
@@ -216,11 +216,11 @@ const PRODUCTS: Product[] = [
     category: 'Clothing',
     department: 'Women',
     price: 1200,
-    image: 'https://picsum.photos/seed/dupatta1/800/1000',
+    image: 'https://i.etsystatic.com/24145065/r/il/7fd8be/3346348133/il_300x300.3346348133_8ja7.jpg',
     images: [
-      'https://picsum.photos/seed/dupatta1/800/1000',
-      'https://picsum.photos/seed/dupatta2/800/1000',
-      'https://picsum.photos/seed/dupatta3/800/1000'
+      'https://i.etsystatic.com/24145065/r/il/7fd8be/3346348133/il_300x300.3346348133_8ja7.jpg',
+      'https://cdn.shopify.com/s/files/1/0009/3510/0467/products/banarasi_silk_dupatta_red_DUP5731032012505547_1500x.jpg?v=1603799506',
+      'https://tse3.mm.bing.net/th/id/OIP.Uhq_AwQc8lk888X_wB5DHgHaHa?rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
     isNew: false,
     sales: 180,
@@ -235,11 +235,11 @@ const PRODUCTS: Product[] = [
     category: 'Jewellery',
     department: 'Bridal',
     price: 12500,
-    image: 'https://picsum.photos/seed/pearl1/800/1000',
+    image: 'https://shop.southindiajewels.com/wp-content/uploads/2024/09/1805.5-scaled.jpg',
     images: [
-      'https://picsum.photos/seed/pearl1/800/1000',
-      'https://picsum.photos/seed/pearl2/800/1000',
-      'https://picsum.photos/seed/pearl3/800/1000'
+      'https://shop.southindiajewels.com/wp-content/uploads/2024/09/1805.5-scaled.jpg',
+      'https://tse2.mm.bing.net/th/id/OIP.20Y4_nQzuexxAEbKDzCVKwHaHa?pid=ImgDet&w=474&h=474&rs=1&o=7&rm=3',
+      'https://tse4.mm.bing.net/th/id/OIP.JIFaSw4xjytE6Vghqw9-cAHaHa?pid=ImgDet&w=474&h=474&rs=1&o=7&rm=3'
     ],
     isNew: false,
     sales: 65,
@@ -250,11 +250,11 @@ const PRODUCTS: Product[] = [
     name: 'Solitaire Engagement Ring',
     category: 'Jewellery',
     department: 'Rings',
-    price: 150000,
-    image: 'https://images.unsplash.com/photo-1605100804763-247f6612228e?q=80&w=800&auto=format&fit=crop',
+    price: 15000,
+    image: 'https://i.pinimg.com/originals/cf/89/fb/cf89fb1c5ef28ad531d4e870a096e9c7.jpg',
     images: [
-      'https://images.unsplash.com/photo-1605100804763-247f6612228e?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1605100804763-247f6612228e?q=80&w=800&auto=format&fit=crop'
+      'https://i.pinimg.com/originals/4b/55/7e/4b557eda262fba5dba66ed59bbce35cc.jpg',
+      'https://i.pinimg.com/originals/99/74/48/997448bbd54661a85d4bac59a405a517.jpg'
     ],
     isNew: true,
     sales: 30,
@@ -269,11 +269,11 @@ const PRODUCTS: Product[] = [
     category: 'Clothing',
     department: 'Kids',
     price: 1500,
-    image: 'https://picsum.photos/seed/kids1/800/1000',
+    image: 'https://5.imimg.com/data5/SELLER/Default/2022/9/VR/BZ/IV/2421381/dark-peach-gold-printed-festive-kurta-with-off-white-pajama-for-boys-1000x1000.jpg',
     images: [
-      'https://picsum.photos/seed/kids1/800/1000',
-      'https://picsum.photos/seed/kids2/800/1000',
-      'https://picsum.photos/seed/kids3/800/1000'
+      'https://5.imimg.com/data5/SELLER/Default/2022/9/VR/BZ/IV/2421381/dark-peach-gold-printed-festive-kurta-with-off-white-pajama-for-boys-1000x1000.jpg',
+      'https://tse2.mm.bing.net/th/id/OIP.KCDkQGt-lA8D1tSW44XidwHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3',
+      'https://tse4.mm.bing.net/th/id/OIP.gW0vdKQBK45CQ5JryUBhTQHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
     isNew: true,
     sales: 120,
@@ -288,11 +288,11 @@ const PRODUCTS: Product[] = [
     category: 'Clothing',
     department: 'Men',
     price: 1800,
-    image: 'https://picsum.photos/seed/menshirt1/800/1000',
+    image: 'https://cdna.lystit.com/photos/b9a1-2016/02/05/john-varvatos-lichen-green-linen-shirt-green-product-0-792906595-normal.jpeg',
     images: [
-      'https://picsum.photos/seed/menshirt1/800/1000',
-      'https://picsum.photos/seed/menshirt2/800/1000',
-      'https://picsum.photos/seed/menshirt3/800/1000'
+      'https://cdna.lystit.com/photos/b9a1-2016/02/05/john-varvatos-lichen-green-linen-shirt-green-product-0-792906595-normal.jpeg',
+      'https://th.bing.com/th/id/R.c77e852f879c5f6127d9e65c893bcc58?rik=brV8L4octnNN0A&riu=http%3a%2f%2fmagiclinen.com%2fcdn%2fshop%2fproducts%2fmens-linen-shirt-nevada-in-matcha-green-1.jpg%3fv%3d1661172505&ehk=Z5SlVGy6MMGC%2bjRT%2bkoCT5Cb9rh7bGHAFNeGolIi0R4%3d&risl=&pid=ImgRaw&r=0',
+      'https://cdn.shopify.com/s/files/1/0511/8771/2157/files/Sunnyshirt2.png?v=1716363284'
     ],
     isNew: false,
     sales: 340,
@@ -307,11 +307,11 @@ const PRODUCTS: Product[] = [
 // Mock Initial Reviews
 const INITIAL_REVIEWS: Record<string, { id: string; author: string; rating: number; comment: string; date: string }[]> = {
   'c1': [
-    { id: 'r1', author: 'Priya S.', rating: 5, comment: 'Absolutely stunning saree! The silk is incredibly soft and the zari work is flawless.', date: 'Oct 12, 2023' },
-    { id: 'r2', author: 'Anjali M.', rating: 4, comment: 'Beautiful color, exactly as shown in the pictures. Drapes very well.', date: 'Sep 28, 2023' }
+    { id: 'r1', author: 'Yash', rating: 5, comment: 'Absolutely stunning saree! The silk is incredibly soft and the zari work is flawless.', date: 'Apr 12, 2026' },
+    { id: 'r2', author: 'Shriti', rating: 4, comment: 'Beautiful color, exactly as shown in the pictures. Drapes very well.', date: 'Jan 28, 2026' }
   ],
   'j1': [
-    { id: 'r3', author: 'Neha K.', rating: 5, comment: 'Wore this for my wedding and felt like a queen. The craftsmanship is premium.', date: 'Nov 05, 2023' }
+    { id: 'r3', author: 'Deesha', rating: 5, comment: 'Wore this for my wedding and felt like a queen. The craftsmanship is premium.', date: 'Nov 05, 2025' }
   ]
 };
 
