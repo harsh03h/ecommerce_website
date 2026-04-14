@@ -530,8 +530,9 @@ export default function App() {
   const [department, setDepartment] = useState<'All' | 'Men' | 'Women' | 'Kids'>('All');
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [sortBy, setSortBy] = useState('featured');
+  const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about'>('home');
   
   // Auth State
   const [user, setUser] = useState<User | null>(null);
@@ -756,6 +757,17 @@ export default function App() {
       result = result.filter(p => p.department === department);
     }
 
+    // Filter by Search Query
+    if (searchQuery.trim() !== '') {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        (p.description && p.description.toLowerCase().includes(query)) ||
+        p.category.toLowerCase().includes(query) ||
+        (p.department && p.department.toLowerCase().includes(query))
+      );
+    }
+
     switch (sortBy) {
       case 'price-asc':
         result.sort((a, b) => a.price - b.price);
@@ -822,6 +834,7 @@ export default function App() {
                 <X className="w-6 h-6" />
               </button>
             </div>
+
             <div className="flex flex-col gap-8 text-lg uppercase tracking-widest font-medium">
               <a href="#shop" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Shop</a>
               <a href="#collections" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Collections</a>
@@ -1292,112 +1305,7 @@ export default function App() {
           )}
         </section>
 
-        {/* Featured Collections */}
-        <section id="collections" className="py-12 border-t border-brand-ink/10 bg-brand-surface">
-          <div className="grid grid-cols-1">
-            
-            {/* Clothing Collection */}
-            {storeMode === 'clothing' && (
-              <div className="p-6 md:p-12 lg:p-20 border-brand-ink/10 flex flex-col justify-center items-center text-center">
-                <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
-                  <span className="w-8 md:w-12 h-px bg-brand-gold"></span>
-                  <span className="text-[10px] md:text-xs uppercase tracking-widest font-medium text-brand-gold">Harsh Imporium</span>
-                  <span className="w-8 md:w-12 h-px bg-brand-gold"></span>
-                </div>
-                <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-6">The Silk Route</h3>
-                <p className="text-sm md:text-base text-brand-ink/70 mb-8 md:mb-10 leading-relaxed max-w-md">
-                  Discover our latest collection of hand-woven silks and premium fabrics, designed for those who appreciate the finer details in everyday wear.
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-7xl mx-auto mt-4 md:mt-8">
-                  <div className="md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto md:h-[800px] relative overflow-hidden group">
-                    <img 
-                      src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop" 
-                      alt="Fashion Collection Main" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <div className="md:col-span-1 md:row-span-1 relative overflow-hidden group aspect-square md:aspect-auto md:h-[388px]">
-                    <img 
-                      src="https://images.unsplash.com/photo-1583391733958-d15314714f5d?q=80&w=800&auto=format&fit=crop" 
-                      alt="Men's Collection" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <div className="md:col-span-1 md:row-span-1 relative overflow-hidden group aspect-square md:aspect-auto md:h-[388px]">
-                    <img 
-                      src="https://images.unsplash.com/photo-1550614000-4b95d415dc96?q=80&w=800&auto=format&fit=crop" 
-                      alt="Women's Collection" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <div className="md:col-span-2 md:row-span-1 relative overflow-hidden group aspect-[2/1] md:aspect-auto md:h-[388px]">
-                    <img 
-                      src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" 
-                      alt="Accessories Collection" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
 
-            {/* Jewellery Collection */}
-            {storeMode === 'jewellery' && (
-              <div className="p-6 md:p-12 lg:p-20 flex flex-col justify-center items-center text-center">
-                <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
-                  <span className="w-8 md:w-12 h-px bg-brand-gold"></span>
-                  <span className="text-[10px] md:text-xs uppercase tracking-widest font-medium text-brand-gold">Anand Jewellars</span>
-                  <span className="w-8 md:w-12 h-px bg-brand-gold"></span>
-                </div>
-                <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-6">Bridal Heritage</h3>
-                <p className="text-sm md:text-base text-brand-ink/70 mb-8 md:mb-10 leading-relaxed max-w-md">
-                  Intricately crafted gold and diamond sets that capture the essence of your most special moments. A testament to generations of artistry.
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-7xl mx-auto mt-4 md:mt-8">
-                  <div className="md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto md:h-[800px] relative overflow-hidden group order-1 md:order-2">
-                    <img 
-                      src="https://images.unsplash.com/photo-1599643478514-46b1406a4517?q=80&w=1200&auto=format&fit=crop" 
-                      alt="Bridal Jewellery Main" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <div className="md:col-span-1 md:row-span-1 relative overflow-hidden group aspect-square md:aspect-auto md:h-[388px] order-2 md:order-1">
-                    <img 
-                      src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop" 
-                      alt="Jewellery Detail 1" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <div className="md:col-span-1 md:row-span-1 relative overflow-hidden group aspect-square md:aspect-auto md:h-[388px] order-3 md:order-3">
-                    <img 
-                      src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800&auto=format&fit=crop" 
-                      alt="Jewellery Detail 2" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <div className="md:col-span-2 md:row-span-1 relative overflow-hidden group aspect-[2/1] md:aspect-auto md:h-[388px] order-4 md:order-4">
-                    <img 
-                      src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop" 
-                      alt="Jewellery Detail 3" 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-        </section>
 
         {/* Marquee Section */}
         <section className="py-6 md:py-8 border-y border-brand-ink/10 overflow-hidden bg-brand-bg text-brand-gold">
@@ -1619,6 +1527,60 @@ export default function App() {
               </div>
             )}
           </section>
+        ) : currentView === 'about' ? (
+          <section className="py-16 md:py-24 px-6 md:px-12 max-w-4xl mx-auto min-h-[60vh]">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-16"
+            >
+              <h2 className="font-serif text-4xl md:text-6xl mb-6">Our Story</h2>
+              <div className="w-16 h-px bg-brand-gold mx-auto"></div>
+            </motion.div>
+            
+            <div className="space-y-12 md:space-y-20 text-brand-ink/80 leading-relaxed">
+              <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+                <div>
+                  <h3 className="font-serif text-2xl md:text-3xl mb-4 text-brand-ink">A Legacy of Craftsmanship</h3>
+                  <p className="mb-4">
+                    Founded with a passion for preserving traditional artistry, {brandInfo.title} has grown from a small family atelier into a premier destination for luxury fashion and exquisite jewellery.
+                  </p>
+                  <p>
+                    For generations, we have worked closely with master artisans across India, ensuring that every thread woven and every stone set carries the weight of history and the brilliance of modern design.
+                  </p>
+                </div>
+                <div className="aspect-[4/5] bg-brand-surface relative overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=800&auto=format&fit=crop" 
+                    alt="Craftsmanship" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+                <div className="aspect-[4/5] bg-brand-surface relative overflow-hidden order-2 md:order-1">
+                  <img 
+                    src="https://images.unsplash.com/photo-1571867424488-4565932edb41?q=80&w=800&auto=format&fit=crop" 
+                    alt="Our Ethos" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <div className="order-1 md:order-2">
+                  <h3 className="font-serif text-2xl md:text-3xl mb-4 text-brand-ink">Our Ethos</h3>
+                  <p className="mb-4">
+                    We believe that true luxury lies in authenticity and sustainability. Our commitment extends beyond aesthetics to the ethical sourcing of materials and the fair treatment of our artisans.
+                  </p>
+                  <p>
+                    Whether you are exploring our curated clothing lines or our bespoke bridal jewellery, you are experiencing a piece of art that was created with integrity, passion, and an unwavering dedication to quality.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
         ) : null}
       </main>
 
@@ -1640,7 +1602,7 @@ export default function App() {
               <li><a href="#" className="hover:text-brand-gold transition-colors">New Arrivals</a></li>
               <li><a href="#shop" className="hover:text-brand-gold transition-colors">Shop All</a></li>
               <li><a href="#collections" className="hover:text-brand-gold transition-colors">Collections</a></li>
-              <li><a href="#" className="hover:text-brand-gold transition-colors">Our Story</a></li>
+              <li><button onClick={() => { setCurrentView('about'); window.scrollTo(0,0); }} className="hover:text-brand-gold transition-colors">Our Story</button></li>
             </ul>
           </div>
 
