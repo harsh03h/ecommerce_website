@@ -142,9 +142,9 @@ const PRODUCTS: Product[] = [
   },
   {
     id: 'c4',
-    name: 'Silk Blend Kurta Set',
+    name: 'Women Wedding Suit ',
     category: 'Clothing',
-    department: 'Men',
+    department: 'Women',
     price: 2500,
     image: 'https://www.libas.in/cdn/shop/files/green-yoke-design-silk-blend-straight-kurta-with-trousers-and-dupatta-libas-1-27531263770774_1400x.jpg?v=1694512762',
     images: [
@@ -154,7 +154,7 @@ const PRODUCTS: Product[] = [
     ],
     isNew: true,
     sales: 45,
-    description: 'Elegant silk blend kurta set with intricate embroidery and matching trousers.',
+    description: 'Elegant silk blend Suit set with intricate embroidery and matching Suit.',
     variants: [
       { name: 'Size', options: ['M', 'L', 'XL', 'XXL'] }
     ]
