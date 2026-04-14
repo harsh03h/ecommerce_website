@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon } from 'lucide-react';
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
@@ -15,6 +15,7 @@ export type Product = {
   id: string;
   name: string;
   category: string;
+  department?: 'Men' | 'Women' | 'Kids' | 'Gold' | 'Silver' | 'Bridal' | 'Rings';
   price: number;
   image: string;
   images: string[];
@@ -29,6 +30,7 @@ const PRODUCTS: Product[] = [
     id: 'c1',
     name: 'Smocked strappy dress',
     category: 'Clothing',
+    department: 'Women',
     price: 1500,
     image: 'https://image.hm.com/assets/hm/e4/e3/e4e3a52016071db7561418f47646037827e44bc7.jpg?imwidth=2160',
     images: [
@@ -47,6 +49,7 @@ const PRODUCTS: Product[] = [
     id: 'j1',
     name: 'Kundan Bridal Set',
     category: 'Jewellery',
+    department: 'Bridal',
     price: 1250,
     image: 'https://i.etsystatic.com/30916859/r/il/d45fec/3903175250/il_600x600.3903175250_qkb7.jpg',
     images: [
@@ -66,6 +69,7 @@ const PRODUCTS: Product[] = [
     id: 'c2',
     name: 'Velvet Embroidered Lehenga',
     category: 'Clothing',
+    department: 'Women',
     price: 4500,
     image: 'https://tse1.mm.bing.net/th/id/OIP.0KXqDbQ53cVcGX8bQDiQDgHaKL?rs=1&pid=ImgDetMain&o=7&rm=3',
     images: [
@@ -85,6 +89,7 @@ const PRODUCTS: Product[] = [
     id: 'j2',
     name: 'Diamond Tennis Bracelet',
     category: 'Jewellery',
+    department: 'Silver',
     price: 85000,
     image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800&auto=format&fit=crop',
     images: [
@@ -104,6 +109,7 @@ const PRODUCTS: Product[] = [
     id: 'c3',
     name: 'Pashmina Shawl',
     category: 'Clothing',
+    department: 'Women',
     price: 850,
     image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop',
     images: [
@@ -122,6 +128,7 @@ const PRODUCTS: Product[] = [
     id: 'j3',
     name: 'Polki Drop Earrings',
     category: 'Jewellery',
+    department: 'Gold',
     price: 35000,
     image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop',
     images: [
@@ -132,6 +139,168 @@ const PRODUCTS: Product[] = [
     isNew: true,
     sales: 150,
     description: 'Stunning uncut diamond (Polki) drop earrings with emerald accents and pearl hangings.'
+  },
+  {
+    id: 'c4',
+    name: 'Silk Blend Kurta Set',
+    category: 'Clothing',
+    department: 'Men',
+    price: 2500,
+    image: 'https://picsum.photos/seed/kurta1/800/1000',
+    images: [
+      'https://picsum.photos/seed/kurta1/800/1000',
+      'https://picsum.photos/seed/kurta2/800/1000',
+      'https://picsum.photos/seed/kurta3/800/1000'
+    ],
+    isNew: true,
+    sales: 45,
+    description: 'Elegant silk blend kurta set with intricate embroidery and matching trousers.',
+    variants: [
+      { name: 'Size', options: ['M', 'L', 'XL', 'XXL'] }
+    ]
+  },
+  {
+    id: 'j4',
+    name: 'Gold Temple Necklace',
+    category: 'Jewellery',
+    department: 'Gold',
+    price: 45000,
+    image: 'https://picsum.photos/seed/necklace1/800/1000',
+    images: [
+      'https://picsum.photos/seed/necklace1/800/1000',
+      'https://picsum.photos/seed/necklace2/800/1000',
+      'https://picsum.photos/seed/necklace3/800/1000'
+    ],
+    isNew: false,
+    sales: 89,
+    description: 'Traditional 22k gold temple jewellery necklace with intricate deity motifs.'
+  },
+  {
+    id: 'c5',
+    name: 'Cotton Anarkali Suit',
+    category: 'Clothing',
+    department: 'Women',
+    price: 3200,
+    image: 'https://picsum.photos/seed/anarkali1/800/1000',
+    images: [
+      'https://picsum.photos/seed/anarkali1/800/1000',
+      'https://picsum.photos/seed/anarkali2/800/1000',
+      'https://picsum.photos/seed/anarkali3/800/1000'
+    ],
+    isNew: false,
+    sales: 210,
+    description: 'Comfortable and stylish block-printed cotton Anarkali suit, perfect for everyday elegance.',
+    variants: [
+      { name: 'Size', options: ['S', 'M', 'L'] }
+    ]
+  },
+  {
+    id: 'j5',
+    name: 'Oxidized Silver Jhumkas',
+    category: 'Jewellery',
+    department: 'Silver',
+    price: 850,
+    image: 'https://picsum.photos/seed/jhumka1/800/1000',
+    images: [
+      'https://picsum.photos/seed/jhumka1/800/1000',
+      'https://picsum.photos/seed/jhumka2/800/1000',
+      'https://picsum.photos/seed/jhumka3/800/1000'
+    ],
+    isNew: true,
+    sales: 450,
+    description: 'Handcrafted oxidized silver jhumka earrings with tribal motifs and ghungroo drops.'
+  },
+  {
+    id: 'c6',
+    name: 'Chanderi Silk Dupatta',
+    category: 'Clothing',
+    department: 'Women',
+    price: 1200,
+    image: 'https://picsum.photos/seed/dupatta1/800/1000',
+    images: [
+      'https://picsum.photos/seed/dupatta1/800/1000',
+      'https://picsum.photos/seed/dupatta2/800/1000',
+      'https://picsum.photos/seed/dupatta3/800/1000'
+    ],
+    isNew: false,
+    sales: 180,
+    description: 'Lightweight Chanderi silk dupatta with golden zari border and delicate floral motifs.',
+    variants: [
+      { name: 'Color', options: ['Mustard Yellow', 'Mint Green', 'Peach'] }
+    ]
+  },
+  {
+    id: 'j6',
+    name: 'Pearl Choker Set',
+    category: 'Jewellery',
+    department: 'Bridal',
+    price: 12500,
+    image: 'https://picsum.photos/seed/pearl1/800/1000',
+    images: [
+      'https://picsum.photos/seed/pearl1/800/1000',
+      'https://picsum.photos/seed/pearl2/800/1000',
+      'https://picsum.photos/seed/pearl3/800/1000'
+    ],
+    isNew: false,
+    sales: 65,
+    description: 'Elegant multi-strand freshwater pearl choker with a central kundan pendant.'
+  },
+  {
+    id: 'j7',
+    name: 'Solitaire Engagement Ring',
+    category: 'Jewellery',
+    department: 'Rings',
+    price: 150000,
+    image: 'https://images.unsplash.com/photo-1605100804763-247f6612228e?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1605100804763-247f6612228e?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1605100804763-247f6612228e?q=80&w=800&auto=format&fit=crop'
+    ],
+    isNew: true,
+    sales: 30,
+    description: 'Stunning 1-carat solitaire diamond engagement ring set in platinum.',
+    variants: [
+      { name: 'Ring Size', options: ['5', '6', '7', '8', '9'] }
+    ]
+  },
+  {
+    id: 'c7',
+    name: 'Boys Festive Kurta Pajama',
+    category: 'Clothing',
+    department: 'Kids',
+    price: 1500,
+    image: 'https://picsum.photos/seed/kids1/800/1000',
+    images: [
+      'https://picsum.photos/seed/kids1/800/1000',
+      'https://picsum.photos/seed/kids2/800/1000',
+      'https://picsum.photos/seed/kids3/800/1000'
+    ],
+    isNew: true,
+    sales: 120,
+    description: 'Comfortable cotton kurta pajama set for boys, perfect for festive occasions.',
+    variants: [
+      { name: 'Age', options: ['2-3 Yrs', '4-5 Yrs', '6-7 Yrs'] }
+    ]
+  },
+  {
+    id: 'c8',
+    name: 'Mens Linen Shirt',
+    category: 'Clothing',
+    department: 'Men',
+    price: 1800,
+    image: 'https://picsum.photos/seed/menshirt1/800/1000',
+    images: [
+      'https://picsum.photos/seed/menshirt1/800/1000',
+      'https://picsum.photos/seed/menshirt2/800/1000',
+      'https://picsum.photos/seed/menshirt3/800/1000'
+    ],
+    isNew: false,
+    sales: 340,
+    description: 'Breathable pure linen shirt with a relaxed fit. Ideal for casual outings.',
+    variants: [
+      { name: 'Size', options: ['M', 'L', 'XL'] },
+      { name: 'Color', options: ['White', 'Navy Blue', 'Olive Green'] }
+    ]
   }
 ];
 
@@ -148,8 +317,218 @@ const INITIAL_REVIEWS: Record<string, { id: string; author: string; rating: numb
 
 type StoreMode = 'clothing' | 'jewellery';
 
+const shareProduct = (e: React.MouseEvent, product: Product, platform: string) => {
+  e.stopPropagation();
+  const url = encodeURIComponent(window.location.href);
+  const text = encodeURIComponent(`Check out ${product.name} at Harsh Imporium!`);
+  
+  let shareUrl = '';
+  switch (platform) {
+    case 'facebook':
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+      break;
+    case 'twitter':
+      shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+      break;
+    case 'whatsapp':
+      shareUrl = `https://wa.me/?text=${text} ${url}`;
+      break;
+  }
+  
+  if (shareUrl) {
+    window.open(shareUrl, '_blank', 'width=600,height=400');
+  }
+};
+
+const ShareMenu = ({ product, className = "", iconClassName = "" }: { product: Product, className?: string, iconClassName?: string }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div className={`${className}`} onClick={(e) => e.stopPropagation()}>
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className={`p-2 rounded-full transition-colors ${iconClassName}`}
+      >
+        <Share2 className="w-4 h-4" />
+      </button>
+      
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            className={`absolute top-full right-0 mt-2 bg-brand-surface border border-brand-ink/10 shadow-xl rounded-lg p-2 flex gap-2 z-50`}
+          >
+            <button onClick={(e) => { shareProduct(e, product, 'facebook'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on Facebook">
+              <Facebook className="w-4 h-4" />
+            </button>
+            <button onClick={(e) => { shareProduct(e, product, 'twitter'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on Twitter">
+              <Twitter className="w-4 h-4" />
+            </button>
+            <button onClick={(e) => { shareProduct(e, product, 'whatsapp'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on WhatsApp">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const renderStars = (rating: number, interactive = false, onRate?: (star: number) => void) => {
+  return (
+    <div className="flex gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star 
+          key={star} 
+          className={`w-3 h-3 md:w-4 md:h-4 ${interactive ? 'cursor-pointer transition-transform hover:scale-110' : ''} ${star <= rating ? 'fill-brand-gold text-brand-gold' : 'text-brand-ink/20'}`}
+          onClick={() => interactive && onRate && onRate(star)}
+        />
+      ))}
+    </div>
+  );
+};
+
+const ProductCard: React.FC<{
+  product: Product;
+  reviews: any[];
+  isSaved: boolean;
+  onSelect: (product: Product) => void;
+  onToggleWishlist: (e: React.MouseEvent, id: string) => Promise<void> | void;
+  onAddToCart: (e: React.MouseEvent, id: string, variants?: Record<string, string>) => void;
+}> = ({ 
+  product, 
+  reviews, 
+  isSaved, 
+  onSelect, 
+  onToggleWishlist, 
+  onAddToCart 
+}) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const avgRating = reviews.length > 0 
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length 
+    : 0;
+
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
+  };
+
+  const prevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+  };
+
+  return (
+    <motion.div 
+      layout
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.3 }}
+      className="group cursor-pointer"
+      onClick={() => onSelect(product)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setCurrentImageIndex(0);
+      }}
+    >
+      <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-brand-surface">
+        {product.isNew && (
+          <div className="absolute top-3 left-3 md:top-4 md:left-4 z-10 bg-brand-gold text-brand-bg text-[9px] md:text-[10px] uppercase tracking-widest px-2 py-1 md:px-3 md:py-1 font-medium">
+            New Arrival
+          </div>
+        )}
+        <div className="absolute top-3 right-3 md:top-4 md:right-4 z-20 flex flex-col gap-2">
+          <button 
+            onClick={(e) => onToggleWishlist(e, product.id)}
+            className="p-2 bg-brand-bg/80 hover:bg-brand-bg rounded-full text-brand-ink transition-colors backdrop-blur-md"
+          >
+            <Heart className={`w-4 h-4 ${isSaved ? 'fill-brand-gold text-brand-gold' : ''}`} />
+          </button>
+          <ShareMenu 
+            product={product} 
+            className="relative"
+            iconClassName="bg-brand-bg/80 hover:bg-brand-bg text-brand-ink backdrop-blur-md"
+          />
+        </div>
+
+        <img 
+          src={product.images[currentImageIndex] || product.image} 
+          alt={product.name}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          referrerPolicy="no-referrer"
+        />
+
+        {/* Image Navigation Arrows (Visible on Hover on Desktop, Always on Mobile) */}
+        {product.images.length > 1 && (
+          <div className="absolute inset-0 flex items-center justify-between px-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
+            <button 
+              onClick={prevImage}
+              className="w-8 h-8 rounded-full bg-white/80 text-brand-ink flex items-center justify-center hover:bg-white transition-colors shadow-sm pointer-events-auto"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={nextImage}
+              className="w-8 h-8 rounded-full bg-white/80 text-brand-ink flex items-center justify-center hover:bg-white transition-colors shadow-sm pointer-events-auto"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
+        {/* Image Dots */}
+        {product.images.length > 1 && (
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
+            {product.images.map((_, idx) => (
+              <div 
+                key={idx} 
+                className={`h-1 rounded-full transition-all duration-300 ${idx === currentImageIndex ? 'w-4 bg-white' : 'w-1.5 bg-white/50'}`}
+              />
+            ))}
+          </div>
+        )}
+
+        <div className="hidden md:flex absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-col items-center justify-center gap-3 pointer-events-none">
+          <button className="bg-brand-bg/90 text-brand-gold text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]">
+            View Details
+          </button>
+          <button 
+            onClick={(e) => onAddToCart(e, product.id)}
+            className="bg-brand-gold text-brand-bg text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-bg hover:text-brand-gold transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
+          <h4 className="font-serif text-base md:text-lg text-brand-ink">{product.name}</h4>
+          {reviews.length > 0 && (
+            <div className="flex items-center gap-1 md:gap-2 mt-1">
+              {renderStars(Math.round(avgRating))}
+              <span className="text-[10px] md:text-xs text-brand-ink/50">({reviews.length})</span>
+            </div>
+          )}
+        </div>
+        <p className="text-xs md:text-sm tracking-wider text-brand-ink/80 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
+      </div>
+    </motion.div>
+  );
+};
+
 export default function App() {
   const [storeMode, setStoreMode] = useState<StoreMode>('clothing');
+  const [department, setDepartment] = useState<'All' | 'Men' | 'Women' | 'Kids'>('All');
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [sortBy, setSortBy] = useState('featured');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders'>('home');
@@ -185,6 +564,15 @@ export default function App() {
     }
     return () => { document.body.style.overflow = 'unset'; };
   }, [selectedProduct, isMobileMenuOpen]);
+
+  // Handle Dark Mode
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.remove('light-mode');
+    } else {
+      document.documentElement.classList.add('light-mode');
+    }
+  }, [isDarkMode]);
 
   // Listen to Auth State
   useEffect(() => {
@@ -363,6 +751,11 @@ export default function App() {
     if (storeMode === 'clothing') result = result.filter(p => p.category === 'Clothing');
     if (storeMode === 'jewellery') result = result.filter(p => p.category === 'Jewellery');
 
+    // Filter by Department
+    if (department !== 'All') {
+      result = result.filter(p => p.department === department);
+    }
+
     switch (sortBy) {
       case 'price-asc':
         result.sort((a, b) => a.price - b.price);
@@ -381,7 +774,7 @@ export default function App() {
     }
 
     return result;
-  }, [storeMode, sortBy]);
+  }, [storeMode, sortBy, department]);
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -401,165 +794,6 @@ export default function App() {
     }));
 
     setReviewForm({ author: '', rating: 5, comment: '' });
-  };
-
-  const renderStars = (rating: number, interactive = false) => {
-    return (
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star 
-            key={star} 
-            className={`w-3 h-3 md:w-4 md:h-4 ${interactive ? 'cursor-pointer transition-transform hover:scale-110' : ''} ${star <= rating ? 'fill-brand-gold text-brand-gold' : 'text-brand-ink/20'}`}
-            onClick={() => interactive && setReviewForm(prev => ({ ...prev, rating: star }))}
-          />
-        ))}
-      </div>
-    );
-  };
-
-  const shareProduct = (e: React.MouseEvent, product: Product, platform: string) => {
-    e.stopPropagation();
-    const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(`Check out ${product.name} at Harsh Imporium!`);
-    
-    let shareUrl = '';
-    switch (platform) {
-      case 'facebook':
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-        break;
-      case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
-        break;
-      case 'whatsapp':
-        shareUrl = `https://wa.me/?text=${text} ${url}`;
-        break;
-    }
-    
-    if (shareUrl) {
-      window.open(shareUrl, '_blank', 'width=600,height=400');
-    }
-  };
-
-  const ShareMenu = ({ product, className = "", iconClassName = "" }: { product: Product, className?: string, iconClassName?: string }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    
-    return (
-      <div className={`${className}`} onClick={(e) => e.stopPropagation()}>
-        <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className={`p-2 rounded-full transition-colors ${iconClassName}`}
-        >
-          <Share2 className="w-4 h-4" />
-        </button>
-        
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className={`absolute top-full right-0 mt-2 bg-brand-surface border border-brand-ink/10 shadow-xl rounded-lg p-2 flex gap-2 z-50`}
-            >
-              <button onClick={(e) => { shareProduct(e, product, 'facebook'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on Facebook">
-                <Facebook className="w-4 h-4" />
-              </button>
-              <button onClick={(e) => { shareProduct(e, product, 'twitter'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on Twitter">
-                <Twitter className="w-4 h-4" />
-              </button>
-              <button onClick={(e) => { shareProduct(e, product, 'whatsapp'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on WhatsApp">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  };
-
-  const renderProductCard = (product: typeof PRODUCTS[0]) => {
-    const productReviews = reviews[product.id] || [];
-    const avgRating = productReviews.length > 0 
-      ? productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length 
-      : 0;
-    const isSaved = wishlist.includes(product.id);
-
-    return (
-      <motion.div 
-        key={product.id}
-        layout
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.3 }}
-        className="group cursor-pointer"
-        onClick={() => {
-          setSelectedProduct(product);
-          setSelectedImageIndex(0);
-          
-          // Initialize default variants
-          const defaultVariants: Record<string, string> = {};
-          if (product.variants) {
-            product.variants.forEach(v => {
-              defaultVariants[v.name] = v.options[0];
-            });
-          }
-          setSelectedVariants(defaultVariants);
-        }}
-      >
-        <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-brand-surface">
-          {product.isNew && (
-            <div className="absolute top-3 left-3 md:top-4 md:left-4 z-10 bg-brand-gold text-brand-bg text-[9px] md:text-[10px] uppercase tracking-widest px-2 py-1 md:px-3 md:py-1 font-medium">
-              New Arrival
-            </div>
-          )}
-          <div className="absolute top-3 right-3 md:top-4 md:right-4 z-20 flex flex-col gap-2">
-            <button 
-              onClick={(e) => toggleWishlist(e, product.id)}
-              className="p-2 bg-brand-bg/80 hover:bg-brand-bg rounded-full text-brand-ink transition-colors backdrop-blur-md"
-            >
-              <Heart className={`w-4 h-4 ${isSaved ? 'fill-brand-gold text-brand-gold' : ''}`} />
-            </button>
-            <ShareMenu 
-              product={product} 
-              className="relative"
-              iconClassName="bg-brand-bg/80 hover:bg-brand-bg text-brand-ink backdrop-blur-md"
-            />
-          </div>
-          <img 
-            src={product.image} 
-            alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            referrerPolicy="no-referrer"
-          />
-          <div className="hidden md:flex absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-col items-center justify-center gap-3 pointer-events-none">
-            <button className="bg-brand-bg/90 text-brand-gold text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]">
-              View Details
-            </button>
-            <button 
-              onClick={(e) => addToCart(e, product.id)}
-              className="bg-brand-gold text-brand-bg text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-bg hover:text-brand-gold transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between items-start">
-          <div>
-            <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
-            <h4 className="font-serif text-base md:text-lg text-brand-ink">{product.name}</h4>
-            {productReviews.length > 0 && (
-              <div className="flex items-center gap-1 md:gap-2 mt-1">
-                {renderStars(Math.round(avgRating))}
-                <span className="text-[10px] md:text-xs text-brand-ink/50">({productReviews.length})</span>
-              </div>
-            )}
-          </div>
-          <p className="text-xs md:text-sm tracking-wider text-brand-ink/80 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
-        </div>
-      </motion.div>
-    );
   };
 
   const brandInfo = {
@@ -604,7 +838,16 @@ export default function App() {
             </div>
             
             <div className="mt-auto pt-8 border-t border-brand-ink/10">
-              <p className="text-xs uppercase tracking-widest text-brand-ink/60 mb-4">Store Mode</p>
+              <div className="flex justify-between items-center mb-4">
+                <p className="text-xs uppercase tracking-widest text-brand-ink/60">Store Mode</p>
+                <button 
+                  onClick={() => setIsDarkMode(!isDarkMode)} 
+                  className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors"
+                  title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                >
+                  {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                </button>
+              </div>
               <div className="flex bg-brand-ink/5 p-1 rounded-full text-[10px] uppercase tracking-widest border border-brand-ink/10">
                 <button 
                   onClick={() => { setStoreMode('clothing'); setIsMobileMenuOpen(false); }}
@@ -665,6 +908,13 @@ export default function App() {
         </div>
 
         <div className="flex items-center justify-end gap-2 md:gap-4 w-1/3">
+          <button 
+            onClick={() => setIsDarkMode(!isDarkMode)} 
+            className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors hidden md:block"
+            title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
           {isAuthReady && user ? (
             <div className="relative group/auth hidden md:block">
               <button className="flex items-center gap-2 p-1 pr-3 hover:bg-brand-ink/10 rounded-full transition-colors border border-brand-ink/10">
@@ -909,12 +1159,77 @@ export default function App() {
           </motion.div>
         </section>
 
+        {/* Jewellery Categories */}
+        {storeMode === 'jewellery' && (
+          <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto border-t border-brand-ink/10">
+            <div className="text-center mb-12">
+              <h3 className="font-serif text-2xl md:text-4xl mb-3">Shop by Category</h3>
+              <div className="w-12 h-px bg-brand-gold mx-auto"></div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+              {[
+                { name: 'Gold', image: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=600&auto=format&fit=crop' },
+                { name: 'Silver', image: 'https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=600&auto=format&fit=crop' },
+                { name: 'Bridal', image: 'https://images.unsplash.com/photo-1599643478514-46b1406a4517?q=80&w=600&auto=format&fit=crop' },
+                { name: 'Rings', image: 'https://images.unsplash.com/photo-1605100804763-247f6612228e?q=80&w=600&auto=format&fit=crop' }
+              ].map((cat) => (
+                <button 
+                  key={cat.name}
+                  onClick={() => {
+                    setDepartment(cat.name as any);
+                    document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="group relative aspect-[4/5] overflow-hidden flex items-center justify-center"
+                >
+                  <img 
+                    src={cat.image} 
+                    alt={cat.name} 
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300"></div>
+                  <div className="relative z-10 bg-brand-bg/90 backdrop-blur-sm px-6 py-3 border border-brand-gold/30 group-hover:border-brand-gold transition-colors">
+                    <span className="font-serif text-lg md:text-xl text-brand-ink">{cat.name}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Shop / Filter Section */}
         <section id="shop" className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto border-t border-brand-ink/10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-6">
             <div>
               <h3 className="font-serif text-2xl md:text-4xl mb-3">Curated Collection</h3>
-              <div className="w-12 h-px bg-brand-gold"></div>
+              <div className="w-12 h-px bg-brand-gold mb-6"></div>
+              
+              {storeMode === 'clothing' && (
+                <div className="flex gap-4 md:gap-8 text-xs uppercase tracking-widest font-medium overflow-x-auto pb-2">
+                  {['All', 'Men', 'Women', 'Kids'].map((dept) => (
+                    <button
+                      key={dept}
+                      onClick={() => setDepartment(dept as any)}
+                      className={`whitespace-nowrap transition-colors pb-1 border-b-2 ${department === dept ? 'border-brand-gold text-brand-gold' : 'border-transparent text-brand-ink/60 hover:text-brand-ink'}`}
+                    >
+                      {dept}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {storeMode === 'jewellery' && (
+                <div className="flex gap-4 md:gap-8 text-xs uppercase tracking-widest font-medium overflow-x-auto pb-2">
+                  {['All', 'Gold', 'Silver', 'Bridal', 'Rings'].map((dept) => (
+                    <button
+                      key={dept}
+                      onClick={() => setDepartment(dept as any)}
+                      className={`whitespace-nowrap transition-colors pb-1 border-b-2 ${department === dept ? 'border-brand-gold text-brand-gold' : 'border-transparent text-brand-ink/60 hover:text-brand-ink'}`}
+                    >
+                      {dept}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             
             <div className="flex items-center gap-3 text-sm w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-brand-ink/10 pt-4 md:pt-0">
@@ -946,7 +1261,27 @@ export default function App() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-12">
             <AnimatePresence mode="popLayout">
-              {filteredProducts.map(renderProductCard)}
+              {filteredProducts.map(product => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  reviews={reviews[product.id] || []}
+                  isSaved={wishlist.includes(product.id)}
+                  onSelect={(p) => {
+                    setSelectedProduct(p);
+                    setSelectedImageIndex(0);
+                    const defaultVariants: Record<string, string> = {};
+                    if (p.variants) {
+                      p.variants.forEach(v => {
+                        defaultVariants[v.name] = v.options[0];
+                      });
+                    }
+                    setSelectedVariants(defaultVariants);
+                  }}
+                  onToggleWishlist={toggleWishlist}
+                  onAddToCart={addToCart}
+                />
+              ))}
             </AnimatePresence>
           </div>
           
@@ -974,32 +1309,38 @@ export default function App() {
                   Discover our latest collection of hand-woven silks and premium fabrics, designed for those who appreciate the finer details in everyday wear.
                 </p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-6xl mx-auto mt-4 md:mt-8">
-                  <div className="md:col-span-2 aspect-[4/3] md:aspect-auto md:h-[600px] relative overflow-hidden group">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-7xl mx-auto mt-4 md:mt-8">
+                  <div className="md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto md:h-[800px] relative overflow-hidden group">
                     <img 
-                      src="https://assets-jiocdn.ajio.com/medias/sys_master/root/20240112/4WH5/65a12c3854c30e6276a64ba9/-473Wx593H-469551799-blue-MODEL.jpg" 
-                      alt="Silk Collection Main" 
+                      src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop" 
+                      alt="Fashion Collection Main" 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       referrerPolicy="no-referrer"
                     />
                   </div>
-                  <div className="flex flex-col gap-4 md:gap-6 md:h-[600px]">
-                    <div className="flex-1 relative overflow-hidden group">
-                      <img 
-                        src="https://assets-jiocdn.ajio.com/medias/sys_master/root/20240102/psW8/65942933afa4cf41f5fd413d/-473Wx593H-469551799-blue-MODEL3.jpg" 
-                        alt="Silk Detail 1" 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                    <div className="flex-1 relative overflow-hidden group">
-                      <img 
-                        src="https://assets-jiocdn.ajio.com/medias/sys_master/root/20240102/lDGY/659424f3ddf7791519fcfc31/-473Wx593H-469551799-blue-MODEL5.jpg" 
-                        alt="Silk Detail 2" 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
+                  <div className="md:col-span-1 md:row-span-1 relative overflow-hidden group aspect-square md:aspect-auto md:h-[388px]">
+                    <img 
+                      src="https://images.unsplash.com/photo-1583391733958-d15314714f5d?q=80&w=800&auto=format&fit=crop" 
+                      alt="Men's Collection" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div className="md:col-span-1 md:row-span-1 relative overflow-hidden group aspect-square md:aspect-auto md:h-[388px]">
+                    <img 
+                      src="https://images.unsplash.com/photo-1550614000-4b95d415dc96?q=80&w=800&auto=format&fit=crop" 
+                      alt="Women's Collection" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div className="md:col-span-2 md:row-span-1 relative overflow-hidden group aspect-[2/1] md:aspect-auto md:h-[388px]">
+                    <img 
+                      src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" 
+                      alt="Accessories Collection" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
                   </div>
                 </div>
               </div>
@@ -1018,29 +1359,35 @@ export default function App() {
                   Intricately crafted gold and diamond sets that capture the essence of your most special moments. A testament to generations of artistry.
                 </p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full max-w-6xl mx-auto mt-4 md:mt-8">
-                  <div className="flex flex-col gap-4 md:gap-6 md:h-[600px] order-2 md:order-1">
-                    <div className="flex-1 relative overflow-hidden group">
-                      <img 
-                        src="https://picsum.photos/id/75/800/1000" 
-                        alt="Jewellery Detail 1" 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                    <div className="flex-1 relative overflow-hidden group">
-                      <img 
-                        src="https://www.livemint.com/lm-img/img/2025/01/08/1600x900/income_tax_on_jewellery_1736310991057_1736310991609.jpg" 
-                        alt="Jewellery Detail 2" 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        referrerPolicy="no-referrer"
-                      />
-                    </div>
-                  </div>
-                  <div className="md:col-span-2 aspect-[4/3] md:aspect-auto md:h-[600px] relative overflow-hidden group order-1 md:order-2">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-7xl mx-auto mt-4 md:mt-8">
+                  <div className="md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto md:h-[800px] relative overflow-hidden group order-1 md:order-2">
                     <img 
-                      src="https://www.financialexpress.com/wp-content/uploads/2023/11/Untitled-design-14-1.png" 
+                      src="https://images.unsplash.com/photo-1599643478514-46b1406a4517?q=80&w=1200&auto=format&fit=crop" 
                       alt="Bridal Jewellery Main" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div className="md:col-span-1 md:row-span-1 relative overflow-hidden group aspect-square md:aspect-auto md:h-[388px] order-2 md:order-1">
+                    <img 
+                      src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop" 
+                      alt="Jewellery Detail 1" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div className="md:col-span-1 md:row-span-1 relative overflow-hidden group aspect-square md:aspect-auto md:h-[388px] order-3 md:order-3">
+                    <img 
+                      src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800&auto=format&fit=crop" 
+                      alt="Jewellery Detail 2" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div className="md:col-span-2 md:row-span-1 relative overflow-hidden group aspect-[2/1] md:aspect-auto md:h-[388px] order-4 md:order-4">
+                    <img 
+                      src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop" 
+                      alt="Jewellery Detail 3" 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       referrerPolicy="no-referrer"
                     />
@@ -1088,7 +1435,27 @@ export default function App() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-12">
                 <AnimatePresence mode="popLayout">
-                  {PRODUCTS.filter(p => wishlist.includes(p.id)).map(renderProductCard)}
+                  {PRODUCTS.filter(p => wishlist.includes(p.id)).map(product => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      reviews={reviews[product.id] || []}
+                      isSaved={wishlist.includes(product.id)}
+                      onSelect={(p) => {
+                        setSelectedProduct(p);
+                        setSelectedImageIndex(0);
+                        const defaultVariants: Record<string, string> = {};
+                        if (p.variants) {
+                          p.variants.forEach(v => {
+                            defaultVariants[v.name] = v.options[0];
+                          });
+                        }
+                        setSelectedVariants(defaultVariants);
+                      }}
+                      onToggleWishlist={toggleWishlist}
+                      onAddToCart={addToCart}
+                    />
+                  ))}
                 </AnimatePresence>
               </div>
             )}
@@ -1329,23 +1696,41 @@ export default function App() {
               </button>
 
               {/* Left: Product Image Gallery */}
-              <div className="w-full md:w-2/5 flex flex-col bg-brand-bg">
-                <div className="w-full aspect-square md:aspect-auto md:flex-grow relative">
+              <div className="w-full md:w-1/2 flex flex-col bg-brand-bg relative group/gallery">
+                <div className="w-full aspect-[3/4] md:aspect-auto md:h-[800px] relative">
                   <img 
                     src={selectedProduct.images?.[selectedImageIndex] || selectedProduct.image} 
                     alt={selectedProduct.name}
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
                   />
+                  
+                  {/* Navigation Arrows */}
+                  {selectedProduct.images && selectedProduct.images.length > 1 && (
+                    <div className="absolute inset-0 flex items-center justify-between px-4 opacity-100 md:opacity-0 md:group-hover/gallery:opacity-100 transition-opacity duration-300 pointer-events-none">
+                      <button 
+                        onClick={() => setSelectedImageIndex(prev => prev === 0 ? selectedProduct.images!.length - 1 : prev - 1)}
+                        className="w-10 h-10 rounded-full bg-white/80 text-brand-ink flex items-center justify-center hover:bg-white transition-colors shadow-sm pointer-events-auto"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <button 
+                        onClick={() => setSelectedImageIndex(prev => prev === selectedProduct.images!.length - 1 ? 0 : prev + 1)}
+                        className="w-10 h-10 rounded-full bg-white/80 text-brand-ink flex items-center justify-center hover:bg-white transition-colors shadow-sm pointer-events-auto"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </div>
+                  )}
                 </div>
                 {/* Thumbnails */}
                 {selectedProduct.images && selectedProduct.images.length > 1 && (
-                  <div className="flex gap-2 md:gap-3 p-3 md:p-4 overflow-x-auto custom-scrollbar bg-brand-surface border-t border-brand-ink/10">
+                  <div className="flex justify-center flex-wrap gap-3 md:gap-4 p-4 md:p-6 bg-brand-bg border-t border-brand-ink/5">
                     {selectedProduct.images.map((img, idx) => (
                       <button 
                         key={idx}
                         onClick={() => setSelectedImageIndex(idx)}
-                        className={`relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0 transition-all ${selectedImageIndex === idx ? 'ring-2 ring-brand-gold ring-offset-2 ring-offset-brand-surface opacity-100' : 'opacity-60 hover:opacity-100'}`}
+                        className={`relative w-16 h-20 md:w-20 md:h-24 flex-shrink-0 transition-all overflow-hidden rounded-sm ${selectedImageIndex === idx ? 'ring-2 ring-brand-gold opacity-100 scale-105 shadow-md z-10' : 'opacity-50 hover:opacity-100'}`}
                       >
                         <img src={img} alt={`${selectedProduct.name} view ${idx + 1}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       </button>
@@ -1355,7 +1740,7 @@ export default function App() {
               </div>
 
               {/* Right: Details & Reviews */}
-              <div className="w-full md:w-3/5 p-6 md:p-12 flex flex-col">
+              <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col max-h-[800px] overflow-y-auto custom-scrollbar">
                 <div className="mb-6 md:mb-8 border-b border-brand-ink/10 pb-6 md:pb-8">
                   <nav className="flex items-center gap-2 text-[9px] md:text-[10px] uppercase tracking-widest mb-4 text-brand-ink/60">
                     <button 
@@ -1433,12 +1818,39 @@ export default function App() {
                 </div>
 
                 <div className="flex-grow">
-                  <h3 className="font-serif text-xl md:text-2xl mb-4 md:mb-6 flex items-center gap-3">
-                    Customer Reviews
-                    <span className="text-xs md:text-sm font-sans text-brand-ink/50 font-normal">
-                      ({(reviews[selectedProduct.id] || []).length})
-                    </span>
-                  </h3>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 md:mb-8 gap-4">
+                    <div>
+                      <h3 className="font-serif text-xl md:text-2xl mb-2 flex items-center gap-3">
+                        Customer Reviews
+                      </h3>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center">
+                          {renderStars(
+                            (reviews[selectedProduct.id] || []).length > 0
+                              ? (reviews[selectedProduct.id] || []).reduce((sum, r) => sum + r.rating, 0) / (reviews[selectedProduct.id] || []).length
+                              : 0
+                          )}
+                        </div>
+                        <span className="text-xs md:text-sm text-brand-ink/70">
+                          {((reviews[selectedProduct.id] || []).length > 0 ? ((reviews[selectedProduct.id] || []).reduce((sum, r) => sum + r.rating, 0) / (reviews[selectedProduct.id] || []).length).toFixed(1) : '0.0')} out of 5
+                        </span>
+                        <span className="text-xs md:text-sm text-brand-ink/50">
+                          ({(reviews[selectedProduct.id] || []).length} reviews)
+                        </span>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        const formElement = document.getElementById('review-form');
+                        if (formElement) {
+                          formElement.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="border border-brand-gold text-brand-gold px-4 py-2 text-xs uppercase tracking-widest font-medium hover:bg-brand-gold hover:text-brand-bg transition-colors self-start sm:self-auto"
+                    >
+                      Write a Review
+                    </button>
+                  </div>
 
                   {/* Reviews List */}
                   <div className="space-y-4 md:space-y-6 mb-8 md:mb-10 max-h-[250px] md:max-h-[300px] overflow-y-auto pr-2 md:pr-4 custom-scrollbar">
@@ -1461,12 +1873,12 @@ export default function App() {
                   </div>
 
                   {/* Write a Review Form */}
-                  <div className="bg-brand-bg p-5 md:p-6 border border-brand-ink/10">
+                  <div id="review-form" className="bg-brand-bg p-5 md:p-6 border border-brand-ink/10">
                     <h4 className="text-[10px] md:text-sm uppercase tracking-widest font-medium text-brand-gold mb-4 md:mb-6">Write a Review</h4>
                     <form onSubmit={handleReviewSubmit} className="space-y-4 md:space-y-5">
                       <div>
                         <label className="block text-[10px] md:text-xs uppercase tracking-wider text-brand-ink/60 mb-2">Rating</label>
-                        {renderStars(reviewForm.rating, true)}
+                        {renderStars(reviewForm.rating, true, (star) => setReviewForm(prev => ({ ...prev, rating: star })))}
                       </div>
                       <div>
                         <input 

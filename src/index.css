@@ -1,18 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
+:root {
+  /* Dark mode (default) */
+  --theme-bg: #0B1325;
+  --theme-surface: #131E3A;
+  --theme-ink: #F8F9FA;
+  --theme-gold: #D4AF37;
+}
+
+.light-mode {
+  --theme-bg: #F8F9FA;
+  --theme-surface: #FFFFFF;
+  --theme-ink: #0B1325;
+  --theme-gold: #B8860B;
+}
+
 @theme {
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
   
-  /* Deep Midnight Blue for Trust & Premium feel */
-  --color-brand-bg: #0B1325;
-  /* Slightly lighter blue for elevated surfaces */
-  --color-brand-surface: #131E3A;
-  /* Pearl White for crisp, elegant text */
-  --color-brand-ink: #F8F9FA;
-  /* Premium Gold for accents */
-  --color-brand-gold: #D4AF37;
+  --color-brand-bg: var(--theme-bg);
+  --color-brand-surface: var(--theme-surface);
+  --color-brand-ink: var(--theme-ink);
+  --color-brand-gold: var(--theme-gold);
 }
 
 body {
