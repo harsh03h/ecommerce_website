@@ -14,7 +14,7 @@
   --theme-bg: #F8F9FA;
   --theme-surface: #FFFFFF;
   --theme-ink: #0B1325;
-  --theme-gold: #B8860B;
+  --theme-gold: #8B6508; /* Darkened for WCAG AA contrast on light backgrounds */
 }
 
 @theme {
@@ -31,6 +31,16 @@ body {
   background-color: var(--color-brand-bg);
   color: var(--color-brand-ink);
   font-family: var(--font-sans);
+}
+
+/* Global focus styles for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--theme-gold);
+  outline-offset: 2px;
 }
 
 .font-serif {

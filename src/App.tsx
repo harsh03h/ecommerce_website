@@ -420,6 +420,8 @@ const ShareMenu = ({ product, className = "", iconClassName = "" }: { product: P
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={`p-2 rounded-full transition-colors ${iconClassName}`}
+        aria-label="Share product"
+        aria-expanded={isOpen}
       >
         <Share2 className="w-4 h-4" />
       </button>
@@ -432,10 +434,20 @@ const ShareMenu = ({ product, className = "", iconClassName = "" }: { product: P
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             className={`absolute top-full right-0 mt-2 bg-brand-surface border border-brand-ink/10 shadow-xl rounded-lg p-2 flex gap-2 z-50`}
           >
-            <button onClick={(e) => { shareProduct(e, product, 'facebook'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on Facebook">
+            <button 
+              onClick={(e) => { shareProduct(e, product, 'facebook'); setIsOpen(false); }} 
+              className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" 
+              title="Share on Facebook"
+              aria-label="Share on Facebook"
+            >
               <Facebook className="w-4 h-4" />
             </button>
-            <button onClick={(e) => { shareProduct(e, product, 'twitter'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on Twitter">
+            <button 
+              onClick={(e) => { shareProduct(e, product, 'twitter'); setIsOpen(false); }} 
+              className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" 
+              title="Share on Twitter"
+              aria-label="Share on Twitter"
+            >
               <Twitter className="w-4 h-4" />
             </button>
             <button onClick={(e) => { shareProduct(e, product, 'whatsapp'); setIsOpen(false); }} className="p-2 hover:bg-brand-ink/5 rounded-full text-brand-ink hover:text-brand-gold transition-colors" title="Share on WhatsApp">
@@ -521,6 +533,7 @@ const ProductCard: React.FC<{
           <button 
             onClick={(e) => onToggleWishlist(e, product.id)}
             className="p-2 bg-brand-bg/80 hover:bg-brand-bg rounded-full text-brand-ink transition-colors backdrop-blur-md"
+            aria-label={isSaved ? "Remove from wishlist" : "Add to wishlist"}
           >
             <Heart className={`w-4 h-4 ${isSaved ? 'fill-brand-gold text-brand-gold' : ''}`} />
           </button>
@@ -544,13 +557,13 @@ const ProductCard: React.FC<{
             <button 
               onClick={prevImage}
               className="w-8 h-8 rounded-full bg-white/80 text-brand-ink flex items-center justify-center hover:bg-white transition-colors shadow-sm pointer-events-auto"
-            >
+             aria-label="Previous image">
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button 
               onClick={nextImage}
               className="w-8 h-8 rounded-full bg-white/80 text-brand-ink flex items-center justify-center hover:bg-white transition-colors shadow-sm pointer-events-auto"
-            >
+             aria-label="Next image">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -903,7 +916,11 @@ export default function App() {
                 <h2 className="font-serif text-2xl text-brand-gold">{brandInfo.title}</h2>
                 <p className="text-[9px] uppercase tracking-[0.2em] mt-1 text-brand-ink/60">{brandInfo.sub}</p>
               </div>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 hover:bg-brand-ink/10 rounded-full text-brand-ink">
+              <button 
+                onClick={() => setIsMobileMenuOpen(false)} 
+                className="p-2 hover:bg-brand-ink/10 rounded-full text-brand-ink"
+                aria-label="Close mobile menu"
+              >
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -930,6 +947,7 @@ export default function App() {
                   onClick={() => setIsDarkMode(!isDarkMode)} 
                   className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors"
                   title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                  aria-label={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
                 >
                   {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </button>
@@ -937,14 +955,14 @@ export default function App() {
               <div className="flex bg-[#F5EFE6] p-1 rounded-full text-[10px] font-bold tracking-widest border border-[#E8DCC8] shadow-sm">
                 <button 
                   onClick={() => { setStoreMode('clothing'); setIsMobileMenuOpen(false); }}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-[#A0522D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
                 >
                   <Sparkles className="w-3 h-3" />
                   CLOTHING
                 </button>
                 <button 
                   onClick={() => { setStoreMode('jewellery'); setIsMobileMenuOpen(false); }}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'jewellery' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'jewellery' ? 'bg-[#A0522D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
                 >
                   <Star className="w-3 h-3" />
                   JEWELLERY
@@ -961,13 +979,14 @@ export default function App() {
           <button 
             onClick={() => setIsMobileMenuOpen(true)}
             className="p-2 -ml-2 hover:bg-brand-ink/10 rounded-full transition-colors md:hidden"
+            aria-label="Open mobile menu"
           >
             <Menu className="w-5 h-5" />
           </button>
           <div className="hidden md:flex gap-8 text-[15px] font-medium">
-            <button onClick={() => setCurrentView('home')} className={`transition-colors ${currentView === 'home' ? 'text-[#C67A3D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Home</button>
+            <button onClick={() => setCurrentView('home')} className={`transition-colors ${currentView === 'home' ? 'text-[#A0522D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Home</button>
             <button onClick={() => { setCurrentView('home'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-brand-ink/70 hover:text-brand-ink transition-colors">Products</button>
-            <button onClick={() => setCurrentView('contact')} className={`transition-colors ${currentView === 'contact' ? 'text-[#C67A3D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Contact</button>
+            <button onClick={() => setCurrentView('contact')} className={`transition-colors ${currentView === 'contact' ? 'text-[#A0522D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Contact</button>
           </div>
         </div>
         
@@ -983,14 +1002,14 @@ export default function App() {
           <div className="hidden md:flex bg-[#F5EFE6] p-1 rounded-full text-[11px] font-bold tracking-widest mt-4 border border-[#E8DCC8] shadow-sm">
             <button 
               onClick={() => setStoreMode('clothing')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
+              className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-[#A0522D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
             >
               <Sparkles className="w-3.5 h-3.5" />
               CLOTHING
             </button>
             <button 
               onClick={() => setStoreMode('jewellery')}
-              className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all duration-300 ${storeMode === 'jewellery' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
+              className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all duration-300 ${storeMode === 'jewellery' ? 'bg-[#A0522D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
             >
               <Star className="w-3.5 h-3.5" />
               JEWELLERY
@@ -1003,6 +1022,7 @@ export default function App() {
             onClick={() => setIsDarkMode(!isDarkMode)} 
             className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors hidden md:block"
             title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            aria-label={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
@@ -1036,10 +1056,18 @@ export default function App() {
               Log In
             </button>
           )}
-          <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors md:hidden">
-            <UserIcon className="w-5 h-5" onClick={() => setIsMobileMenuOpen(true)} />
+          <button 
+            className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors md:hidden"
+            onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Open user menu"
+          >
+            <UserIcon className="w-5 h-5" />
           </button>
-          <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors relative" onClick={() => setIsCartOpen(true)}>
+          <button 
+            className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors relative" 
+            onClick={() => setIsCartOpen(true)}
+            aria-label={`Open cart, ${cart.reduce((sum, item) => sum + item.quantity, 0)} items`}
+          >
             <ShoppingBag className="w-5 h-5" />
             {cart.reduce((sum, item) => sum + item.quantity, 0) > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-bg text-[10px] font-bold rounded-full flex items-center justify-center">
@@ -1070,7 +1098,11 @@ export default function App() {
             >
               <div className="p-6 border-b border-brand-ink/10 flex justify-between items-center">
                 <h2 className="font-serif text-2xl text-brand-ink">Your Cart</h2>
-                <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-brand-ink/10 rounded-full">
+                <button 
+                  onClick={() => setIsCartOpen(false)} 
+                  className="p-2 hover:bg-brand-ink/10 rounded-full"
+                  aria-label="Close cart"
+                >
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -1151,14 +1183,14 @@ export default function App() {
         <div className="flex w-full max-w-xs bg-[#F5EFE6] p-1 rounded-full text-[10px] font-bold tracking-widest border border-[#E8DCC8] shadow-sm">
           <button 
             onClick={() => setStoreMode('clothing')}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-[#A0522D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
           >
             <Sparkles className="w-3 h-3" />
             CLOTHING
           </button>
           <button 
             onClick={() => setStoreMode('jewellery')}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'jewellery' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'jewellery' ? 'bg-[#A0522D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
           >
             <Star className="w-3 h-3" />
             JEWELLERY
@@ -1262,7 +1294,7 @@ export default function App() {
         {currentView === 'home' && (
           <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto bg-[#FDFBF7]">
             <div className="text-center mb-10">
-              <p className="text-[10px] md:text-xs uppercase tracking-widest text-[#C67A3D] mb-3 font-semibold">BROWSE BY</p>
+              <p className="text-[10px] md:text-xs uppercase tracking-widest text-[#A0522D] mb-3 font-semibold">BROWSE BY</p>
               <h2 className="font-serif text-3xl md:text-4xl text-[#0B1325]">
                 {storeMode === 'clothing' ? 'Browse Our Clothing' : 'Browse Our Jewellery'}
               </h2>
@@ -1517,7 +1549,7 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-4 md:px-12">
             <div className="text-center mb-12 md:mb-16">
               <div className="inline-block border border-[#E8DCC8] rounded-full px-6 py-2 mb-6 bg-[#FDFBF7]">
-                <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#C67A3D] font-bold">CUSTOMER LOVE</p>
+                <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#A0522D] font-bold">CUSTOMER LOVE</p>
               </div>
               <h2 className="font-serif text-3xl md:text-5xl text-[#0B1325] mb-4">What Our Customers Say</h2>
               <p className="text-[#0B1325]/60 max-w-xl mx-auto text-sm md:text-base">
@@ -1535,7 +1567,7 @@ export default function App() {
                 <p className="text-[#0B1325]/80 leading-relaxed mb-8 flex-grow">
                   I bought my wedding lehenga from Harsh Cloth Emporium and I could not be happier! The fabric quality is outstanding and the embroidery work is stunning. Highly recommended!
                 </p>
-                <div className="inline-block bg-[#FDFBF7] text-[#C67A3D] text-xs font-medium px-4 py-1.5 rounded-full mb-6 self-start">
+                <div className="inline-block bg-[#FDFBF7] text-[#A0522D] text-xs font-medium px-4 py-1.5 rounded-full mb-6 self-start">
                   Bridal Lehenga
                 </div>
                 <div className="h-px bg-[#E8DCC8] w-full mb-6"></div>
@@ -1579,7 +1611,7 @@ export default function App() {
                 <p className="text-[#0B1325]/80 leading-relaxed mb-8 flex-grow">
                   Bought a sherwani for my brother's reception. The fit was perfect and the material quality was premium. The staff was super helpful in selecting the right piece.
                 </p>
-                <div className="inline-block bg-[#FDFBF7] text-[#C67A3D] text-xs font-medium px-4 py-1.5 rounded-full mb-6 self-start">
+                <div className="inline-block bg-[#FDFBF7] text-[#A0522D] text-xs font-medium px-4 py-1.5 rounded-full mb-6 self-start">
                   Men's Sherwani
                 </div>
                 <div className="h-px bg-[#E8DCC8] w-full mb-6"></div>
@@ -1668,7 +1700,7 @@ export default function App() {
                   <div className="space-y-6 mb-8">
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
-                        <MapPin className="w-5 h-5 text-[#C67A3D]" />
+                        <MapPin className="w-5 h-5 text-[#A0522D]" />
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Address</h3>
@@ -1681,7 +1713,7 @@ export default function App() {
 
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
-                        <Phone className="w-5 h-5 text-[#C67A3D]" />
+                        <Phone className="w-5 h-5 text-[#A0522D]" />
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Phone</h3>
@@ -1691,7 +1723,7 @@ export default function App() {
 
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
-                        <Mail className="w-5 h-5 text-[#C67A3D]" />
+                        <Mail className="w-5 h-5 text-[#A0522D]" />
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Email</h3>
@@ -1701,7 +1733,7 @@ export default function App() {
 
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
-                        <Clock className="w-5 h-5 text-[#C67A3D]" />
+                        <Clock className="w-5 h-5 text-[#A0522D]" />
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Hours</h3>
@@ -1735,7 +1767,7 @@ export default function App() {
                         <input 
                           type="text" 
                           required
-                          className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors"
+                          className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#A0522D] transition-colors"
                           placeholder="Your name"
                         />
                       </div>
@@ -1743,7 +1775,7 @@ export default function App() {
                         <label className="block text-xs text-[#0B1325] mb-2 font-medium">Phone Number</label>
                         <input 
                           type="tel" 
-                          className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors"
+                          className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#A0522D] transition-colors"
                           placeholder="+91 XXXXX XXXXX"
                         />
                       </div>
@@ -1754,7 +1786,7 @@ export default function App() {
                       <input 
                         type="email" 
                         required
-                        className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors"
+                        className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#A0522D] transition-colors"
                         placeholder="your@email.com"
                       />
                     </div>
@@ -1763,7 +1795,7 @@ export default function App() {
                       <label className="block text-xs text-[#0B1325] mb-2 font-medium">Subject</label>
                       <input 
                         type="text" 
-                        className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors"
+                        className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#A0522D] transition-colors"
                         placeholder="How can we help?"
                       />
                     </div>
@@ -1773,14 +1805,14 @@ export default function App() {
                       <textarea 
                         required
                         rows={4}
-                        className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors resize-y"
+                        className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#A0522D] transition-colors resize-y"
                         placeholder="Tell us about your requirements..."
                       ></textarea>
                     </div>
 
                     <button 
                       type="submit"
-                      className="w-full bg-[#D48127] hover:bg-[#C67A3D] text-white font-medium py-3.5 rounded transition-colors"
+                      className="w-full bg-[#D48127] hover:bg-[#A0522D] text-white font-medium py-3.5 rounded transition-colors"
                     >
                       Send Message
                     </button>
@@ -2117,6 +2149,7 @@ export default function App() {
               <button 
                 onClick={() => setSelectedProduct(null)}
                 className="absolute top-4 right-4 z-30 p-2 bg-brand-bg/80 hover:bg-brand-bg rounded-full text-brand-ink transition-colors backdrop-blur-md"
+                aria-label="Close product details"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -2137,12 +2170,14 @@ export default function App() {
                       <button 
                         onClick={() => setSelectedImageIndex(prev => prev === 0 ? selectedProduct.images!.length - 1 : prev - 1)}
                         className="w-10 h-10 rounded-full bg-white/80 text-brand-ink flex items-center justify-center hover:bg-white transition-colors shadow-sm pointer-events-auto"
+                        aria-label="Previous image"
                       >
                         <ChevronLeft className="w-5 h-5" />
                       </button>
                       <button 
                         onClick={() => setSelectedImageIndex(prev => prev === selectedProduct.images!.length - 1 ? 0 : prev + 1)}
                         className="w-10 h-10 rounded-full bg-white/80 text-brand-ink flex items-center justify-center hover:bg-white transition-colors shadow-sm pointer-events-auto"
+                        aria-label="Next image"
                       >
                         <ChevronRight className="w-5 h-5" />
                       </button>
@@ -2242,11 +2277,14 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-
-                <div className="flex-grow">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 md:mb-8 gap-4">
+              </div>
+              
+              {/* Bottom: Dedicated Reviews Section */}
+              <div className="w-full border-t border-brand-ink/10 bg-[#FDFBF7] p-6 md:p-12">
+                <div className="max-w-4xl mx-auto">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 md:mb-12 gap-6">
                     <div>
-                      <h3 className="font-serif text-xl md:text-2xl mb-2 flex items-center gap-3">
+                      <h3 className="font-serif text-2xl md:text-3xl mb-3 text-[#0B1325]">
                         Customer Reviews
                       </h3>
                       <div className="flex items-center gap-3">
@@ -2257,10 +2295,10 @@ export default function App() {
                               : 0
                           )}
                         </div>
-                        <span className="text-xs md:text-sm text-brand-ink/70">
+                        <span className="text-sm md:text-base text-[#0B1325]/70">
                           {((reviews[selectedProduct.id] || []).length > 0 ? ((reviews[selectedProduct.id] || []).reduce((sum, r) => sum + r.rating, 0) / (reviews[selectedProduct.id] || []).length).toFixed(1) : '0.0')} out of 5
                         </span>
-                        <span className="text-xs md:text-sm text-brand-ink/50">
+                        <span className="text-sm md:text-base text-[#0B1325]/50">
                           ({(reviews[selectedProduct.id] || []).length} reviews)
                         </span>
                       </div>
@@ -2272,70 +2310,76 @@ export default function App() {
                           formElement.scrollIntoView({ behavior: 'smooth' });
                         }
                       }}
-                      className="border border-brand-gold text-brand-gold px-4 py-2 text-xs uppercase tracking-widest font-medium hover:bg-brand-gold hover:text-brand-bg transition-colors self-start sm:self-auto"
+                      className="border border-[#A0522D] text-[#A0522D] px-6 py-3 text-xs uppercase tracking-widest font-medium hover:bg-[#A0522D] hover:text-white transition-colors self-start sm:self-auto"
                     >
                       Write a Review
                     </button>
                   </div>
 
-                  {/* Reviews List */}
-                  <div className="space-y-4 md:space-y-6 mb-8 md:mb-10 max-h-[250px] md:max-h-[300px] overflow-y-auto pr-2 md:pr-4 custom-scrollbar">
-                    {(reviews[selectedProduct.id] || []).length === 0 ? (
-                      <p className="text-sm text-brand-ink/50 italic">No reviews yet. Be the first to review this piece.</p>
-                    ) : (
-                      (reviews[selectedProduct.id] || []).map(review => (
-                        <div key={review.id} className="bg-brand-bg/50 p-4 rounded-sm border border-brand-ink/5">
-                          <div className="flex justify-between items-start mb-2">
-                            <div>
-                              <p className="text-sm font-medium text-brand-ink">{review.author}</p>
-                              <p className="text-[10px] text-brand-ink/40 mt-0.5">{review.date}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    {/* Reviews List */}
+                    <div>
+                      <div className="space-y-6 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+                        {(reviews[selectedProduct.id] || []).length === 0 ? (
+                          <p className="text-base text-[#0B1325]/50 italic">No reviews yet. Be the first to review this piece.</p>
+                        ) : (
+                          (reviews[selectedProduct.id] || []).map(review => (
+                            <div key={review.id} className="bg-white p-6 rounded-lg border border-[#E8DCC8] shadow-sm">
+                              <div className="flex justify-between items-start mb-4">
+                                <div>
+                                  <p className="text-base font-medium text-[#0B1325]">{review.author}</p>
+                                  <p className="text-xs text-[#0B1325]/40 mt-1">{review.date}</p>
+                                </div>
+                                {renderStars(review.rating)}
+                              </div>
+                              <p className="text-sm text-[#0B1325]/80 leading-relaxed">{review.comment}</p>
                             </div>
-                            {renderStars(review.rating)}
-                          </div>
-                          <p className="text-sm text-brand-ink/80 leading-relaxed mt-3">{review.comment}</p>
-                        </div>
-                      ))
-                    )}
-                  </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
 
-                  {/* Write a Review Form */}
-                  <div id="review-form" className="bg-[#FDFBF7] p-6 md:p-8 border border-brand-ink/10 mt-8">
-                    <h4 className="text-sm uppercase tracking-widest font-medium text-[#C67A3D] mb-6">Write a Review</h4>
-                    <form onSubmit={handleReviewSubmit} className="space-y-6">
-                      <div>
-                        <label className="block text-xs uppercase tracking-wider text-brand-ink/60 mb-3">Rating</label>
-                        {renderStars(reviewForm.rating, true, (star) => setReviewForm(prev => ({ ...prev, rating: star })))}
+                    {/* Write a Review Form */}
+                    <div>
+                      <div id="review-form" className="bg-white p-6 md:p-8 rounded-lg border border-[#E8DCC8] shadow-sm sticky top-0">
+                        <h4 className="text-sm uppercase tracking-widest font-medium text-[#A0522D] mb-6">Write a Review</h4>
+                        <form onSubmit={handleReviewSubmit} className="space-y-6">
+                          <div>
+                            <label className="block text-xs uppercase tracking-wider text-[#0B1325]/60 mb-3">Rating</label>
+                            {renderStars(reviewForm.rating, true, (star) => setReviewForm(prev => ({ ...prev, rating: star })))}
+                          </div>
+                          
+                          {!user && (
+                            <div>
+                              <input 
+                                type="text" 
+                                placeholder="Your Name" 
+                                value={reviewForm.author}
+                                onChange={(e) => setReviewForm(prev => ({ ...prev, author: e.target.value }))}
+                                className="w-full bg-transparent border-b border-[#0B1325]/20 py-3 text-sm text-[#0B1325] focus:outline-none focus:border-[#A0522D] transition-colors placeholder:text-[#0B1325]/40"
+                                required
+                              />
+                            </div>
+                          )}
+                          
+                          <div>
+                            <textarea 
+                              placeholder="Share your thoughts about this piece..." 
+                              value={reviewForm.comment}
+                              onChange={(e) => setReviewForm(prev => ({ ...prev, comment: e.target.value }))}
+                              className="w-full bg-transparent border-b border-[#0B1325]/20 py-3 text-sm text-[#0B1325] focus:outline-none focus:border-[#A0522D] transition-colors placeholder:text-[#0B1325]/40 resize-none h-24"
+                              required
+                            />
+                          </div>
+                          <button 
+                            type="submit"
+                            className="bg-[#A0522D] text-white text-xs uppercase tracking-widest px-8 py-3.5 font-medium hover:bg-[#8B4513] transition-colors w-full mt-4"
+                          >
+                            Submit Review
+                          </button>
+                        </form>
                       </div>
-                      
-                      {!user && (
-                        <div>
-                          <input 
-                            type="text" 
-                            placeholder="Your Name" 
-                            value={reviewForm.author}
-                            onChange={(e) => setReviewForm(prev => ({ ...prev, author: e.target.value }))}
-                            className="w-full bg-transparent border-b border-brand-ink/20 py-3 text-sm text-brand-ink focus:outline-none focus:border-[#C67A3D] transition-colors placeholder:text-brand-ink/40"
-                            required
-                          />
-                        </div>
-                      )}
-                      
-                      <div>
-                        <textarea 
-                          placeholder="Share your thoughts about this piece..." 
-                          value={reviewForm.comment}
-                          onChange={(e) => setReviewForm(prev => ({ ...prev, comment: e.target.value }))}
-                          className="w-full bg-transparent border-b border-brand-ink/20 py-3 text-sm text-brand-ink focus:outline-none focus:border-[#C67A3D] transition-colors placeholder:text-brand-ink/40 resize-none h-24"
-                          required
-                        />
-                      </div>
-                      <button 
-                        type="submit"
-                        className="bg-[#C67A3D] text-white text-xs uppercase tracking-widest px-8 py-3.5 font-medium hover:bg-[#B56A2D] transition-colors w-full md:w-auto mt-4"
-                      >
-                        Submit Review
-                      </button>
-                    </form>
+                    </div>
                   </div>
                 </div>
               </div>
