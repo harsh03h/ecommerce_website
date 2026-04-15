@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen } from 'lucide-react';
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
@@ -892,7 +892,6 @@ export default function App() {
           <div className="hidden md:flex gap-8 text-[15px] font-medium">
             <button onClick={() => setCurrentView('home')} className={`transition-colors ${currentView === 'home' ? 'text-[#C67A3D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Home</button>
             <button onClick={() => { setCurrentView('home'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-brand-ink/70 hover:text-brand-ink transition-colors">Products</button>
-            <button onClick={() => setIsCartOpen(true)} className="text-brand-ink/70 hover:text-brand-ink transition-colors">Cart</button>
             <button className="text-brand-ink/70 hover:text-brand-ink transition-colors">Contact</button>
           </div>
         </div>
@@ -1001,9 +1000,18 @@ export default function App() {
               
               <div className="flex-grow overflow-y-auto p-6 flex flex-col gap-6 custom-scrollbar">
                 {cart.length === 0 ? (
-                  <div className="text-center py-12">
-                    <ShoppingBag className="w-12 h-12 text-brand-ink/20 mx-auto mb-4" />
-                    <p className="text-brand-ink/60">Your cart is empty.</p>
+                  <div className="text-center py-16 flex flex-col items-center justify-center h-full">
+                    <div className="w-20 h-20 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
+                      <ShoppingCart className="w-10 h-10 text-brand-ink/40" />
+                    </div>
+                    <h3 className="font-serif text-2xl text-brand-ink mb-2">Your cart is empty</h3>
+                    <p className="text-brand-ink/60 mb-8 max-w-[250px] mx-auto text-sm">Looks like you haven't added anything to your cart yet.</p>
+                    <button 
+                      onClick={() => { setIsCartOpen(false); setCurrentView('home'); }} 
+                      className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors w-full sm:w-auto"
+                    >
+                      Start Shopping
+                    </button>
                   </div>
                 ) : (
                   cart.map((item, idx) => {
@@ -1397,11 +1405,14 @@ export default function App() {
           <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto min-h-[60vh]">
             <h2 className="font-serif text-3xl md:text-5xl mb-8">My Wishlist</h2>
             {wishlist.length === 0 ? (
-              <div className="text-center py-20 bg-brand-surface border border-brand-ink/10">
-                <Heart className="w-12 h-12 text-brand-ink/20 mx-auto mb-4" />
-                <p className="text-brand-ink/60 mb-6">Your wishlist is empty.</p>
-                <button onClick={() => setCurrentView('home')} className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors">
-                  Continue Shopping
+              <div className="text-center py-24 bg-brand-surface border border-brand-ink/10 flex flex-col items-center justify-center rounded-sm">
+                <div className="w-24 h-24 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
+                  <Heart className="w-12 h-12 text-brand-ink/30" />
+                </div>
+                <h3 className="font-serif text-3xl text-brand-ink mb-3">No favorites yet</h3>
+                <p className="text-brand-ink/60 mb-8 max-w-md mx-auto text-sm md:text-base">Save the items you love here so you can easily find them later. Tap the heart icon on any product to add it to your wishlist.</p>
+                <button onClick={() => setCurrentView('home')} className="bg-brand-gold text-brand-bg px-10 py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors">
+                  Discover Products
                 </button>
               </div>
             ) : (
@@ -1534,10 +1545,13 @@ export default function App() {
           <section className="py-12 md:py-20 px-4 md:px-12 max-w-5xl mx-auto min-h-[60vh]">
             <h2 className="font-serif text-3xl md:text-5xl mb-8">Order History</h2>
             {orders.length === 0 ? (
-              <div className="text-center py-20 bg-brand-surface border border-brand-ink/10">
-                <ShoppingBag className="w-12 h-12 text-brand-ink/20 mx-auto mb-4" />
-                <p className="text-brand-ink/60 mb-6">You haven't placed any orders yet.</p>
-                <button onClick={() => setCurrentView('home')} className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors">
+              <div className="text-center py-24 bg-brand-surface border border-brand-ink/10 flex flex-col items-center justify-center rounded-sm">
+                <div className="w-24 h-24 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
+                  <PackageOpen className="w-12 h-12 text-brand-ink/30" />
+                </div>
+                <h3 className="font-serif text-3xl text-brand-ink mb-3">No orders found</h3>
+                <p className="text-brand-ink/60 mb-8 max-w-md mx-auto text-sm md:text-base">You haven't placed any orders yet. Once you make a purchase, your order details and status will appear here.</p>
+                <button onClick={() => setCurrentView('home')} className="bg-brand-gold text-brand-bg px-10 py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors">
                   Start Shopping
                 </button>
               </div>
