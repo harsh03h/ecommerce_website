@@ -301,6 +301,78 @@ const PRODUCTS: Product[] = [
       { name: 'Size', options: ['M', 'L', 'XL'] },
       { name: 'Color', options: ['White', 'Navy Blue', 'Olive Green'] }
     ]
+  },
+  {
+    id: 'c9',
+    name: 'Silk Saree',
+    category: 'Clothing',
+    department: 'Women',
+    price: 5500,
+    image: 'https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1583391733958-d15ce69c87eb?q=80&w=800&auto=format&fit=crop'
+    ],
+    isNew: true,
+    sales: 150,
+    description: 'Beautiful silk saree with golden zari border.',
+    variants: [
+      { name: 'Color', options: ['Red', 'Green', 'Blue'] }
+    ]
+  },
+  {
+    id: 'c10',
+    name: 'Designer Lehenga',
+    category: 'Clothing',
+    department: 'Women',
+    price: 12500,
+    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?q=80&w=800&auto=format&fit=crop'
+    ],
+    isNew: false,
+    sales: 80,
+    description: 'Stunning designer lehenga for weddings and special occasions.',
+    variants: [
+      { name: 'Size', options: ['S', 'M', 'L'] }
+    ]
+  },
+  {
+    id: 'c11',
+    name: 'Mens Sherwani',
+    category: 'Clothing',
+    department: 'Men',
+    price: 8500,
+    image: 'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=800&auto=format&fit=crop'
+    ],
+    isNew: true,
+    sales: 45,
+    description: 'Classic mens sherwani with intricate embroidery.',
+    variants: [
+      { name: 'Size', options: ['M', 'L', 'XL'] }
+    ]
+  },
+  {
+    id: 'c12',
+    name: 'Kids Party Dress',
+    category: 'Clothing',
+    department: 'Kids',
+    price: 1200,
+    image: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1622290319146-7b63df48a635?q=80&w=800&auto=format&fit=crop'
+    ],
+    isNew: false,
+    sales: 220,
+    description: 'Cute and comfortable party dress for kids.',
+    variants: [
+      { name: 'Age', options: ['3-4 Yrs', '5-6 Yrs', '7-8 Yrs'] }
+    ]
   }
 ];
 
@@ -1179,41 +1251,125 @@ export default function App() {
           </motion.div>
         </section>
 
-        {/* Jewellery Categories */}
-        {storeMode === 'jewellery' && (
-          <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto border-t border-brand-ink/10">
-            <div className="text-center mb-12">
-              <h3 className="font-serif text-2xl md:text-4xl mb-3">Shop by Category</h3>
-              <div className="w-12 h-px bg-brand-gold mx-auto"></div>
+        {/* Browse By Section */}
+        {currentView === 'home' && (
+          <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto bg-[#FDFBF7]">
+            <div className="text-center mb-10">
+              <p className="text-[10px] md:text-xs uppercase tracking-widest text-[#C67A3D] mb-3 font-semibold">BROWSE BY</p>
+              <h2 className="font-serif text-3xl md:text-4xl text-[#0B1325]">
+                {storeMode === 'clothing' ? 'Browse Our Clothing' : 'Browse Our Jewellery'}
+              </h2>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-              {[
-                { name: 'Gold', image: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=600&auto=format&fit=crop' },
-                { name: 'Silver', image: 'https://static.wixstatic.com/media/b69f5d_07a8d811cd4b4a21b3af31e4bbdcef6b~mv2.jpg/v1/fill/w_1000,h_1000,al_c,q_85,usm_0.66_1.00_0.01/b69f5d_07a8d811cd4b4a21b3af31e4bbdcef6b~mv2.jpg' },
-                { name: 'Bridal', image: 'https://i.pinimg.com/originals/9f/04/f3/9f04f36ab336cc562381a07293611dfc.jpg' },
-                { name: 'Rings', image: 'https://images.pexels.com/photos/1395306/pexels-photo-1395306.jpeg?cs=srgb&dl=pexels-martabranco-1395306.jpg&fm=jpg' }
-              ].map((cat) => (
-                <button 
-                  key={cat.name}
-                  onClick={() => {
-                    setDepartment(cat.name as any);
-                    document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="group relative aspect-[4/5] overflow-hidden flex items-center justify-center"
+            
+            {storeMode === 'clothing' ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Sarees */}
+                <div 
+                  className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
+                  onClick={() => { setDepartment('Women'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
                 >
-                  <img 
-                    src={cat.image} 
-                    alt={cat.name} 
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300"></div>
-                  <div className="relative z-10 bg-brand-bg/90 backdrop-blur-sm px-6 py-3 border border-brand-gold/30 group-hover:border-brand-gold transition-colors">
-                    <span className="font-serif text-lg md:text-xl text-brand-ink">{cat.name}</span>
+                  <img src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop" alt="Sarees" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-white font-bold text-xl mb-1">Sarees</h3>
+                    <p className="text-[#D4AF37] text-xs font-medium">120+ styles</p>
                   </div>
-                </button>
-              ))}
-            </div>
+                </div>
+                
+                {/* Suits & Kurtas */}
+                <div 
+                  className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
+                  onClick={() => { setDepartment('Women'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                >
+                  <img src="https://images.unsplash.com/photo-1583391733958-d15ce69c87eb?q=80&w=800&auto=format&fit=crop" alt="Suits & Kurtas" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-white font-bold text-xl mb-1">Suits & Kurtas</h3>
+                    <p className="text-[#D4AF37] text-xs font-medium">200+ styles</p>
+                  </div>
+                </div>
+                
+                {/* Lehengas */}
+                <div 
+                  className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
+                  onClick={() => { setDepartment('Women'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                >
+                  <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop" alt="Lehengas" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-white font-bold text-xl mb-1">Lehengas</h3>
+                    <p className="text-[#D4AF37] text-xs font-medium">80+ styles</p>
+                  </div>
+                </div>
+                
+                {/* Sherwanis */}
+                <div 
+                  className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
+                  onClick={() => { setDepartment('Men'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                >
+                  <img src="https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=800&auto=format&fit=crop" alt="Sherwanis" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-white font-bold text-xl mb-1">Sherwanis</h3>
+                    <p className="text-[#D4AF37] text-xs font-medium">50+ styles</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Gold Sets */}
+                <div 
+                  className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
+                  onClick={() => { setDepartment('Gold'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                >
+                  <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800&auto=format&fit=crop" alt="Gold Sets" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-white font-bold text-xl mb-1">Gold Sets</h3>
+                    <p className="text-[#D4AF37] text-xs font-medium">150+ styles</p>
+                  </div>
+                </div>
+                
+                {/* Silver */}
+                <div 
+                  className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
+                  onClick={() => { setDepartment('Silver'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                >
+                  <img src="https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?q=80&w=800&auto=format&fit=crop" alt="Silver" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-white font-bold text-xl mb-1">Silver</h3>
+                    <p className="text-[#D4AF37] text-xs font-medium">200+ styles</p>
+                  </div>
+                </div>
+                
+                {/* Bridal */}
+                <div 
+                  className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
+                  onClick={() => { setDepartment('Bridal'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                >
+                  <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop" alt="Bridal" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-white font-bold text-xl mb-1">Bridal</h3>
+                    <p className="text-[#D4AF37] text-xs font-medium">90+ styles</p>
+                  </div>
+                </div>
+                
+                {/* Rings */}
+                <div 
+                  className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
+                  onClick={() => { setDepartment('Rings'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                >
+                  <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800&auto=format&fit=crop" alt="Rings" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-white font-bold text-xl mb-1">Rings</h3>
+                    <p className="text-[#D4AF37] text-xs font-medium">300+ styles</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </section>
         )}
 
