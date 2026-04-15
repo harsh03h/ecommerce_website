@@ -73,9 +73,9 @@ select:focus-visible {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(248, 249, 250, 0.2); /* brand-ink with opacity */
+  background: #88888880; /* Neutral gray with opacity */
   border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(248, 249, 250, 0.4);
+  background: #888888b3;
 }
