@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
@@ -604,7 +604,7 @@ export default function App() {
   const [sortBy, setSortBy] = useState('featured');
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about' | 'contact'>('home');
   
   // Auth State
   const [user, setUser] = useState<User | null>(null);
@@ -964,7 +964,7 @@ export default function App() {
           <div className="hidden md:flex gap-8 text-[15px] font-medium">
             <button onClick={() => setCurrentView('home')} className={`transition-colors ${currentView === 'home' ? 'text-[#C67A3D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Home</button>
             <button onClick={() => { setCurrentView('home'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-brand-ink/70 hover:text-brand-ink transition-colors">Products</button>
-            <button className="text-brand-ink/70 hover:text-brand-ink transition-colors">Contact</button>
+            <button onClick={() => setCurrentView('contact')} className={`transition-colors ${currentView === 'contact' ? 'text-[#C67A3D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Contact</button>
           </div>
         </div>
         
@@ -1557,6 +1557,149 @@ export default function App() {
           </div>
         </section>
           </>
+        ) : currentView === 'contact' ? (
+          <section className="min-h-[70vh] bg-[#FDFBF7]">
+            {/* Header */}
+            <div className="bg-[#3E1C00] py-12 md:py-16 px-4 md:px-12">
+              <div className="max-w-7xl mx-auto">
+                <h1 className="font-serif text-4xl md:text-5xl text-white mb-2">Contact Us</h1>
+                <p className="text-[#D4AF37] text-sm md:text-base">We'd love to hear from you</p>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="max-w-7xl mx-auto px-4 md:px-12 py-12 md:py-16">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24">
+                
+                {/* Left Column - Info */}
+                <div>
+                  <h2 className="font-serif text-2xl text-[#0B1325] mb-8">Visit Our Store</h2>
+                  
+                  <div className="space-y-6 mb-8">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
+                        <MapPin className="w-5 h-5 text-[#C67A3D]" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Address</h3>
+                        <p className="text-[#0B1325]/70 text-sm leading-relaxed">
+                          Paltan Bazaar, Dehradun,<br />
+                          Uttarakhand 248001
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
+                        <Phone className="w-5 h-5 text-[#C67A3D]" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Phone</h3>
+                        <p className="text-[#0B1325]/70 text-sm">+91 98765 43210</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
+                        <Mail className="w-5 h-5 text-[#C67A3D]" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Email</h3>
+                        <p className="text-[#0B1325]/70 text-sm">info@harshcloth.com</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
+                        <Clock className="w-5 h-5 text-[#C67A3D]" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Hours</h3>
+                        <p className="text-[#0B1325]/70 text-sm">Mon–Sun: 10:00 AM – 8:00 PM</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Map Image Placeholder */}
+                  <div className="rounded-lg overflow-hidden border border-brand-ink/10 h-48 md:h-64 relative">
+                    <img 
+                      src="https://tse2.mm.bing.net/th/id/OIP.t9Q5l1H1tQ4z8a3Cj-c5XQHaEK?rs=1&pid=ImgDetMain" 
+                      alt="Map of Dehradun" 
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute top-4 left-4 bg-white px-3 py-1.5 rounded shadow-sm text-sm font-medium text-blue-600 flex items-center gap-1 cursor-pointer hover:bg-gray-50">
+                      Maps <ArrowRight className="w-3 h-3 -rotate-45" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column - Form */}
+                <div className="bg-white p-8 md:p-10 rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-brand-ink/5">
+                  <h2 className="font-serif text-2xl text-[#0B1325] mb-8">Send Us a Message</h2>
+                  
+                  <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); setToast({ message: 'Message sent successfully!', id: Date.now() }); }}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-xs text-[#0B1325] mb-2 font-medium">Full Name *</label>
+                        <input 
+                          type="text" 
+                          required
+                          className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors"
+                          placeholder="Your name"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-[#0B1325] mb-2 font-medium">Phone Number</label>
+                        <input 
+                          type="tel" 
+                          className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors"
+                          placeholder="+91 XXXXX XXXXX"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs text-[#0B1325] mb-2 font-medium">Email Address *</label>
+                      <input 
+                        type="email" 
+                        required
+                        className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs text-[#0B1325] mb-2 font-medium">Subject</label>
+                      <input 
+                        type="text" 
+                        className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors"
+                        placeholder="How can we help?"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs text-[#0B1325] mb-2 font-medium">Message *</label>
+                      <textarea 
+                        required
+                        rows={4}
+                        className="w-full border border-brand-ink/20 rounded px-4 py-3 text-sm focus:outline-none focus:border-[#C67A3D] transition-colors resize-y"
+                        placeholder="Tell us about your requirements..."
+                      ></textarea>
+                    </div>
+
+                    <button 
+                      type="submit"
+                      className="w-full bg-[#D48127] hover:bg-[#C67A3D] text-white font-medium py-3.5 rounded transition-colors"
+                    >
+                      Send Message
+                    </button>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          </section>
         ) : currentView === 'wishlist' ? (
           <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto min-h-[60vh]">
             <h2 className="font-serif text-3xl md:text-5xl mb-8">My Wishlist</h2>
