@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones } from 'lucide-react';
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
@@ -511,7 +511,7 @@ const ProductCard: React.FC<{
       <div className="flex justify-between items-start">
         <div>
           <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
-          <h4 className="font-serif text-base md:text-lg text-brand-ink">{product.name}</h4>
+          <h4 className="font-serif text-sm md:text-lg text-brand-ink line-clamp-2">{product.name}</h4>
           {reviews.length > 0 && (
             <div className="flex items-center gap-1 md:gap-2 mt-1">
               {renderStars(Math.round(avgRating))}
@@ -528,7 +528,7 @@ const ProductCard: React.FC<{
 export default function App() {
   const [storeMode, setStoreMode] = useState<StoreMode>('clothing');
   const [department, setDepartment] = useState<'All' | 'Men' | 'Women' | 'Kids'>('All');
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [sortBy, setSortBy] = useState('featured');
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -896,7 +896,7 @@ export default function App() {
         </div>
         
         <div className="text-center w-1/3 flex flex-col items-center cursor-pointer" onClick={() => setCurrentView('home')}>
-          <h1 className="font-serif text-xl md:text-3xl leading-none tracking-tight text-brand-gold transition-all">
+          <h1 className="font-serif text-base sm:text-xl md:text-3xl leading-none tracking-tight text-brand-gold transition-all">
             {brandInfo.title}
           </h1>
           <p className="hidden md:block text-[9px] uppercase tracking-[0.2em] mt-1 text-brand-ink/60 transition-all">
@@ -961,9 +961,6 @@ export default function App() {
           <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors md:hidden">
             <UserIcon className="w-5 h-5" onClick={() => setIsMobileMenuOpen(true)} />
           </button>
-          <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors">
-            <Search className="w-5 h-5" />
-          </button>
           <button className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors relative" onClick={() => setIsCartOpen(true)}>
             <ShoppingBag className="w-5 h-5" />
             {cart.reduce((sum, item) => sum + item.quantity, 0) > 0 && (
@@ -1014,7 +1011,7 @@ export default function App() {
                       <div key={idx} className="flex gap-4 border-b border-brand-ink/10 pb-6">
                         <img src={product.image} alt={product.name} className="w-20 h-24 object-cover" referrerPolicy="no-referrer" />
                         <div className="flex-grow">
-                          <h4 className="font-serif text-lg text-brand-ink">{product.name}</h4>
+                          <h4 className="font-serif text-base md:text-lg text-brand-ink">{product.name}</h4>
                           <p className="text-sm text-brand-ink/70 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
                           {item.variants && Object.entries(item.variants).map(([key, val]) => (
                             <p key={key} className="text-[10px] uppercase tracking-widest text-brand-ink/50 mt-1">{key}: {val}</p>
@@ -1214,6 +1211,19 @@ export default function App() {
         <section id="shop" className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto border-t border-brand-ink/10">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-6">
             <div>
+              <nav className="flex items-center gap-2 text-[9px] md:text-[10px] uppercase tracking-widest mb-4 text-brand-ink/60">
+                <button onClick={() => { setCurrentView('home'); setDepartment('All'); }} className="hover:text-brand-gold transition-colors">Home</button>
+                <span>/</span>
+                <button onClick={() => setDepartment('All')} className={`transition-colors ${department === 'All' ? 'text-brand-gold' : 'hover:text-brand-gold'}`}>
+                  {storeMode === 'clothing' ? 'Clothing' : 'Jewellery'}
+                </button>
+                {department !== 'All' && (
+                  <>
+                    <span>/</span>
+                    <span className="text-brand-gold">{department}</span>
+                  </>
+                )}
+              </nav>
               <h3 className="font-serif text-2xl md:text-4xl mb-3">Curated Collection</h3>
               <div className="w-12 h-px bg-brand-gold mb-6"></div>
               
@@ -1272,7 +1282,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-10">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map(product => (
                 <ProductCard
@@ -1328,6 +1338,58 @@ export default function App() {
             ))}
           </div>
         </section>
+
+        {/* Why Shop With Us Section */}
+        <section className="py-16 md:py-24 bg-[#3E1C00] text-white">
+          <div className="max-w-7xl mx-auto px-4 md:px-12">
+            <div className="text-center mb-12 md:mb-16">
+              <p className="text-[10px] md:text-xs uppercase tracking-widest text-[#D4AF37] mb-4 font-semibold">Why Shop With Us</p>
+              <h2 className="font-serif text-3xl md:text-5xl text-white">The Harsh & Anand Promise</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8 text-center">
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-[#A0522D] flex items-center justify-center mb-6 text-[#D4AF37]">
+                  <ShieldCheck className="w-8 h-8" />
+                </div>
+                <h3 className="font-serif text-xl mb-3">100% Authentic</h3>
+                <p className="text-sm text-white/80 leading-relaxed max-w-xs mx-auto">
+                  Every product is handpicked for quality and authenticity. We guarantee genuine fabrics and real jewellery.
+                </p>
+              </div>
+              
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-[#A0522D] flex items-center justify-center mb-6 text-[#D4AF37]">
+                  <Truck className="w-8 h-8" />
+                </div>
+                <h3 className="font-serif text-xl mb-3">Fast Delivery</h3>
+                <p className="text-sm text-white/80 leading-relaxed max-w-xs mx-auto">
+                  Same-day delivery in Dehradun. Pan-India shipping within 3-5 business days.
+                </p>
+              </div>
+              
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-[#A0522D] flex items-center justify-center mb-6 text-[#D4AF37]">
+                  <RefreshCw className="w-8 h-8" />
+                </div>
+                <h3 className="font-serif text-xl mb-3">Easy Returns</h3>
+                <p className="text-sm text-white/80 leading-relaxed max-w-xs mx-auto">
+                  7-day hassle-free return policy. Not satisfied? We make it right.
+                </p>
+              </div>
+              
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-[#A0522D] flex items-center justify-center mb-6 text-[#D4AF37]">
+                  <Headphones className="w-8 h-8" />
+                </div>
+                <h3 className="font-serif text-xl mb-3">24/7 Support</h3>
+                <p className="text-sm text-white/80 leading-relaxed max-w-xs mx-auto">
+                  Our team is always here to help you find the perfect piece for any occasion.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
           </>
         ) : currentView === 'wishlist' ? (
           <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto min-h-[60vh]">
@@ -1341,7 +1403,7 @@ export default function App() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-12">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-10">
                 <AnimatePresence mode="popLayout">
                   {PRODUCTS.filter(p => wishlist.includes(p.id)).map(product => (
                     <ProductCard
@@ -1374,9 +1436,9 @@ export default function App() {
             <div className="bg-brand-surface border border-brand-ink/10 p-6 md:p-10">
               <div className="flex items-center gap-6 mb-8 pb-8 border-b border-brand-ink/10">
                 {user.photoURL ? (
-                  <img src={user.photoURL} alt="Profile" className="w-20 h-20 rounded-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={user.photoURL} alt="Profile" className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover" referrerPolicy="no-referrer" />
                 ) : (
-                  <div className="w-20 h-20 rounded-full bg-brand-gold text-brand-bg flex items-center justify-center text-3xl font-serif">
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-brand-gold text-brand-bg flex items-center justify-center text-2xl md:text-3xl font-serif">
                     {user.displayName?.charAt(0) || user.email?.charAt(0) || 'U'}
                   </div>
                 )}
@@ -1417,18 +1479,18 @@ export default function App() {
                       placeholder="Enter your full delivery address"
                     />
                   </div>
-                  <div className="flex gap-4 pt-4">
+                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
                     <button 
                       type="submit" 
                       disabled={isSavingProfile}
-                      className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors disabled:opacity-50"
+                      className="w-full sm:w-auto bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors disabled:opacity-50"
                     >
                       {isSavingProfile ? 'Saving...' : 'Save Changes'}
                     </button>
                     <button 
                       type="button" 
                       onClick={() => setIsEditingProfile(false)}
-                      className="border border-brand-ink/20 text-brand-ink px-8 py-3 text-xs uppercase tracking-widest font-medium hover:border-brand-ink transition-colors"
+                      className="w-full sm:w-auto border border-brand-ink/20 text-brand-ink px-8 py-3 text-xs uppercase tracking-widest font-medium hover:border-brand-ink transition-colors"
                     >
                       Cancel
                     </button>
@@ -1511,7 +1573,7 @@ export default function App() {
                           <div key={idx} className="flex gap-4 md:gap-6">
                             <img src={product.image} alt={product.name} className="w-20 h-24 md:w-24 md:h-32 object-cover" referrerPolicy="no-referrer" />
                             <div className="flex-grow">
-                              <h4 className="font-serif text-lg md:text-xl text-brand-ink">{product.name}</h4>
+                              <h4 className="font-serif text-base md:text-xl text-brand-ink">{product.name}</h4>
                               <p className="text-sm text-brand-ink/70 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
                               {item.variants && Object.entries(item.variants).map(([key, val]) => (
                                 <p key={key} className="text-[10px] uppercase tracking-widest text-brand-ink/50 mt-1">{key}: {val as string}</p>
@@ -1552,7 +1614,7 @@ export default function App() {
                 </div>
                 <div className="aspect-[4/5] bg-brand-surface relative overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=800&auto=format&fit=crop" 
+                    src="https://infifashion.com/wp-content/uploads/2023/09/image-61-1024x682.webp" 
                     alt="Craftsmanship" 
                     className="absolute inset-0 w-full h-full object-cover"
                     referrerPolicy="no-referrer"
@@ -1620,9 +1682,6 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-6 md:pt-8 border-t border-brand-ink/10 text-[10px] md:text-xs text-brand-ink/50 uppercase tracking-wider gap-4 md:gap-0">
           <p className="text-center md:text-left">&copy; {new Date().getFullYear()} {brandInfo.title}. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-brand-ink transition-colors">Instagram</a>
-            <a href="#" className="hover:text-brand-ink transition-colors">Facebook</a>
-            <a href="#" className="hover:text-brand-ink transition-colors">Pinterest</a>
           </div>
         </div>
       </footer>
@@ -1659,7 +1718,7 @@ export default function App() {
 
               {/* Left: Product Image Gallery */}
               <div className="w-full md:w-1/2 flex flex-col bg-brand-bg relative group/gallery">
-                <div className="w-full aspect-[3/4] md:aspect-auto md:h-[800px] relative">
+                <div className="w-full aspect-[4/5] md:aspect-auto md:h-[800px] relative">
                   <img 
                     src={selectedProduct.images?.[selectedImageIndex] || selectedProduct.image} 
                     alt={selectedProduct.name}
@@ -1884,7 +1943,7 @@ export default function App() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] bg-brand-ink text-brand-bg px-6 py-3 shadow-2xl flex items-center gap-3 text-xs md:text-sm uppercase tracking-widest whitespace-nowrap"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] bg-brand-ink text-brand-bg px-6 py-3 shadow-2xl flex items-center gap-3 text-xs md:text-sm uppercase tracking-widest w-[90%] md:w-auto max-w-md justify-center text-center"
           >
             <ShoppingBag className="w-4 h-4 text-brand-gold" />
             {toast.message}

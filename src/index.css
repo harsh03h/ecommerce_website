@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Dark mode (default) */
+  /* Dark mode */
   --theme-bg: #0B1325;
   --theme-surface: #131E3A;
   --theme-ink: #F8F9FA;
@@ -10,6 +10,7 @@
 }
 
 .light-mode {
+  /* Light mode (default) */
   --theme-bg: #F8F9FA;
   --theme-surface: #FFFFFF;
   --theme-ink: #0B1325;
