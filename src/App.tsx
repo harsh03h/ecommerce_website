@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles } from 'lucide-react';
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
@@ -934,18 +934,20 @@ export default function App() {
                   {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </button>
               </div>
-              <div className="flex bg-brand-ink/5 p-1 rounded-full text-[10px] uppercase tracking-widest border border-brand-ink/10">
+              <div className="flex bg-[#F5EFE6] p-1 rounded-full text-[10px] font-bold tracking-widest border border-[#E8DCC8] shadow-sm">
                 <button 
                   onClick={() => { setStoreMode('clothing'); setIsMobileMenuOpen(false); }}
-                  className={`flex-1 py-2 rounded-full transition-colors ${storeMode === 'clothing' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
                 >
-                  Clothing
+                  <Sparkles className="w-3 h-3" />
+                  CLOTHING
                 </button>
                 <button 
                   onClick={() => { setStoreMode('jewellery'); setIsMobileMenuOpen(false); }}
-                  className={`flex-1 py-2 rounded-full transition-colors ${storeMode === 'jewellery' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'jewellery' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
                 >
-                  Jewellery
+                  <Star className="w-3 h-3" />
+                  JEWELLERY
                 </button>
               </div>
             </div>
@@ -978,18 +980,20 @@ export default function App() {
           </p>
           
           {/* Desktop Store Mode Toggle */}
-          <div className="hidden md:flex bg-brand-ink/5 p-1 rounded-full text-[9px] uppercase tracking-widest mt-4 border border-brand-ink/10">
+          <div className="hidden md:flex bg-[#F5EFE6] p-1 rounded-full text-[11px] font-bold tracking-widest mt-4 border border-[#E8DCC8] shadow-sm">
             <button 
               onClick={() => setStoreMode('clothing')}
-              className={`px-3 py-1.5 rounded-full transition-colors ${storeMode === 'clothing' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+              className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
             >
-              Clothing
+              <Sparkles className="w-3.5 h-3.5" />
+              CLOTHING
             </button>
             <button 
               onClick={() => setStoreMode('jewellery')}
-              className={`px-3 py-1.5 rounded-full transition-colors ${storeMode === 'jewellery' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+              className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all duration-300 ${storeMode === 'jewellery' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
             >
-              Jewellery
+              <Star className="w-3.5 h-3.5" />
+              JEWELLERY
             </button>
           </div>
         </div>
@@ -1144,18 +1148,20 @@ export default function App() {
 
       {/* Mobile Store Mode Toggle (Visible only on small screens below nav) */}
       <div className="md:hidden flex justify-center bg-brand-bg border-b border-brand-ink/10 py-3 px-4">
-        <div className="flex w-full max-w-xs bg-brand-ink/5 p-1 rounded-full text-[9px] uppercase tracking-widest border border-brand-ink/10">
+        <div className="flex w-full max-w-xs bg-[#F5EFE6] p-1 rounded-full text-[10px] font-bold tracking-widest border border-[#E8DCC8] shadow-sm">
           <button 
             onClick={() => setStoreMode('clothing')}
-            className={`flex-1 py-1.5 rounded-full transition-colors ${storeMode === 'clothing' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
           >
-            Clothing
+            <Sparkles className="w-3 h-3" />
+            CLOTHING
           </button>
           <button 
             onClick={() => setStoreMode('jewellery')}
-            className={`flex-1 py-1.5 rounded-full transition-colors ${storeMode === 'jewellery' ? 'bg-brand-gold text-brand-bg' : 'hover:text-brand-gold'}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'jewellery' ? 'bg-[#C67A3D] text-white shadow-md' : 'text-[#8A5A2B] hover:bg-[#E8DCC8]/50'}`}
           >
-            Jewellery
+            <Star className="w-3 h-3" />
+            JEWELLERY
           </button>
         </div>
       </div>
@@ -1584,8 +1590,8 @@ export default function App() {
                       <div>
                         <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Address</h3>
                         <p className="text-[#0B1325]/70 text-sm leading-relaxed">
-                          Paltan Bazaar, Dehradun,<br />
-                          Uttarakhand 248001
+                          Ambedkar Nagar, Uttar Pradesh,<br />
+                          Uttar Pradesh 224132
                         </p>
                       </div>
                     </div>
@@ -1596,7 +1602,7 @@ export default function App() {
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Phone</h3>
-                        <p className="text-[#0B1325]/70 text-sm">+91 98765 43210</p>
+                        <p className="text-[#0B1325]/70 text-sm">+91 8875810604</p>
                       </div>
                     </div>
 
@@ -1606,7 +1612,7 @@ export default function App() {
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-[#0B1325] mb-1">Email</h3>
-                        <p className="text-[#0B1325]/70 text-sm">info@harshcloth.com</p>
+                        <p className="text-[#0B1325]/70 text-sm">harshgupta07h@gmail.com</p>
                       </div>
                     </div>
 
@@ -1625,7 +1631,7 @@ export default function App() {
                   <div className="rounded-lg overflow-hidden border border-brand-ink/10 h-48 md:h-64 relative">
                     <img 
                       src="https://tse2.mm.bing.net/th/id/OIP.t9Q5l1H1tQ4z8a3Cj-c5XQHaEK?rs=1&pid=ImgDetMain" 
-                      alt="Map of Dehradun" 
+                      alt="Map of Uttar Pradesh" 
                       className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
                     />
