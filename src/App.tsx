@@ -889,9 +889,11 @@ export default function App() {
           >
             <Menu className="w-5 h-5" />
           </button>
-          <div className="hidden md:flex gap-8 text-xs uppercase tracking-widest font-medium">
-            <a href="#shop" className="hover:text-brand-gold transition-colors">Shop</a>
-            <a href="#collections" className="hover:text-brand-gold transition-colors">Collections</a>
+          <div className="hidden md:flex gap-8 text-[15px] font-medium">
+            <button onClick={() => setCurrentView('home')} className={`transition-colors ${currentView === 'home' ? 'text-[#C67A3D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Home</button>
+            <button onClick={() => { setCurrentView('home'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-brand-ink/70 hover:text-brand-ink transition-colors">Products</button>
+            <button onClick={() => setIsCartOpen(true)} className="text-brand-ink/70 hover:text-brand-ink transition-colors">Cart</button>
+            <button className="text-brand-ink/70 hover:text-brand-ink transition-colors">Contact</button>
           </div>
         </div>
         
