@@ -308,10 +308,10 @@ const PRODUCTS: Product[] = [
     category: 'Clothing',
     department: 'Women',
     price: 5500,
-    image: 'https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop',
+    image: 'https://www.noblehousecreations.net/wp-content/uploads/2021/01/Paithani-Silk-Saree.jpg',
     images: [
-      'https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1583391733958-d15ce69c87eb?q=80&w=800&auto=format&fit=crop'
+      'https://assets2.andaazfashion.com/media/catalog/product/cache/1/image/500x750/a12781a7f2ccb3d663f7fd01e1bd2e4e/b/u/burgundy-maroon-banarasi-silk-woven-zari-saree-sarv115379-1.jpg',
+      'https://www.karagiri.com/cdn/shop/products/silk-saree-scarlet-red-silk-saree-silk-saree-online-32564358119617_450x.jpg?v=1655809317'
     ],
     isNew: true,
     sales: 150,
@@ -1268,7 +1268,7 @@ export default function App() {
                   className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
                   onClick={() => { setDepartment('Women'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
                 >
-                  <img src="https://images.unsplash.com/photo-1610030469983-98e550d615ef?q=80&w=800&auto=format&fit=crop" alt="Sarees" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <img src="https://tse1.explicit.bing.net/th/id/OIP.CuO9E3RfGo-7RYwc0OJ44gHaKt?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Sarees" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Sarees</h3>
@@ -1281,7 +1281,7 @@ export default function App() {
                   className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
                   onClick={() => { setDepartment('Women'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
                 >
-                  <img src="https://images.unsplash.com/photo-1583391733958-d15ce69c87eb?q=80&w=800&auto=format&fit=crop" alt="Suits & Kurtas" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <img src="https://i.pinimg.com/736x/58/1a/05/581a050a55d0be374af6cc7053c9c8b6.jpg" alt=" Suits & Kurtas" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Suits & Kurtas</h3>
@@ -1294,7 +1294,7 @@ export default function App() {
                   className="relative h-[300px] md:h-[350px] rounded-lg overflow-hidden group cursor-pointer"
                   onClick={() => { setDepartment('Women'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
                 >
-                  <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop" alt="Lehengas" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
+                  <img src="https://tse3.mm.bing.net/th/id/OIP.1O6OLaqd-eWOAS6avNkFJAHaI4?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Lehengas" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Lehengas</h3>
