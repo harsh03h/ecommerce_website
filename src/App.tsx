@@ -862,11 +862,12 @@ export default function App() {
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedProduct || !reviewForm.author.trim() || !reviewForm.comment.trim()) return;
+    const authorName = user ? (profileData.displayName || user.displayName || 'User') : reviewForm.author;
+    if (!selectedProduct || !authorName.trim() || !reviewForm.comment.trim()) return;
 
     const newReview = {
       id: Date.now().toString(),
-      author: reviewForm.author,
+      author: authorName,
       rating: reviewForm.rating,
       comment: reviewForm.comment,
       date: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -2209,35 +2210,39 @@ export default function App() {
                   </div>
 
                   {/* Write a Review Form */}
-                  <div id="review-form" className="bg-brand-bg p-5 md:p-6 border border-brand-ink/10">
-                    <h4 className="text-[10px] md:text-sm uppercase tracking-widest font-medium text-brand-gold mb-4 md:mb-6">Write a Review</h4>
-                    <form onSubmit={handleReviewSubmit} className="space-y-4 md:space-y-5">
+                  <div id="review-form" className="bg-[#FDFBF7] p-6 md:p-8 border border-brand-ink/10 mt-8">
+                    <h4 className="text-sm uppercase tracking-widest font-medium text-[#C67A3D] mb-6">Write a Review</h4>
+                    <form onSubmit={handleReviewSubmit} className="space-y-6">
                       <div>
-                        <label className="block text-[10px] md:text-xs uppercase tracking-wider text-brand-ink/60 mb-2">Rating</label>
+                        <label className="block text-xs uppercase tracking-wider text-brand-ink/60 mb-3">Rating</label>
                         {renderStars(reviewForm.rating, true, (star) => setReviewForm(prev => ({ ...prev, rating: star })))}
                       </div>
-                      <div>
-                        <input 
-                          type="text" 
-                          placeholder="Your Name" 
-                          value={reviewForm.author}
-                          onChange={(e) => setReviewForm(prev => ({ ...prev, author: e.target.value }))}
-                          className="w-full bg-transparent border-b border-brand-ink/20 py-2 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors placeholder:text-brand-ink/30"
-                          required
-                        />
-                      </div>
+                      
+                      {!user && (
+                        <div>
+                          <input 
+                            type="text" 
+                            placeholder="Your Name" 
+                            value={reviewForm.author}
+                            onChange={(e) => setReviewForm(prev => ({ ...prev, author: e.target.value }))}
+                            className="w-full bg-transparent border-b border-brand-ink/20 py-3 text-sm text-brand-ink focus:outline-none focus:border-[#C67A3D] transition-colors placeholder:text-brand-ink/40"
+                            required
+                          />
+                        </div>
+                      )}
+                      
                       <div>
                         <textarea 
                           placeholder="Share your thoughts about this piece..." 
                           value={reviewForm.comment}
                           onChange={(e) => setReviewForm(prev => ({ ...prev, comment: e.target.value }))}
-                          className="w-full bg-transparent border-b border-brand-ink/20 py-2 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors placeholder:text-brand-ink/30 resize-none h-20"
+                          className="w-full bg-transparent border-b border-brand-ink/20 py-3 text-sm text-brand-ink focus:outline-none focus:border-[#C67A3D] transition-colors placeholder:text-brand-ink/40 resize-none h-24"
                           required
                         />
                       </div>
                       <button 
                         type="submit"
-                        className="bg-brand-gold text-brand-bg text-[10px] md:text-xs uppercase tracking-widest px-6 md:px-8 py-3 font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors w-full md:w-auto"
+                        className="bg-[#C67A3D] text-white text-xs uppercase tracking-widest px-8 py-3.5 font-medium hover:bg-[#B56A2D] transition-colors w-full md:w-auto mt-4"
                       >
                         Submit Review
                       </button>
