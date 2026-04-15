@@ -1512,6 +1512,89 @@ export default function App() {
           </div>
         </section>
 
+        {/* Customer Love Section */}
+        <section className="py-16 md:py-24 bg-[#FDFBF7]">
+          <div className="max-w-7xl mx-auto px-4 md:px-12">
+            <div className="text-center mb-12 md:mb-16">
+              <div className="inline-block border border-[#E8DCC8] rounded-full px-6 py-2 mb-6 bg-[#FDFBF7]">
+                <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#C67A3D] font-bold">CUSTOMER LOVE</p>
+              </div>
+              <h2 className="font-serif text-3xl md:text-5xl text-[#0B1325] mb-4">What Our Customers Say</h2>
+              <p className="text-[#0B1325]/60 max-w-xl mx-auto text-sm md:text-base">
+                Real stories from real customers who found their perfect piece with us.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              {/* Testimonial 1 */}
+              <div className="bg-white p-8 rounded-2xl border border-[#E8DCC8] shadow-sm flex flex-col h-full">
+                <div className="text-[#F4D03F] text-4xl font-serif leading-none mb-6">"</div>
+                <div className="flex gap-1 mb-6">
+                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#F4D03F] text-[#F4D03F]" />)}
+                </div>
+                <p className="text-[#0B1325]/80 leading-relaxed mb-8 flex-grow">
+                  I bought my wedding lehenga from Harsh Cloth Emporium and I could not be happier! The fabric quality is outstanding and the embroidery work is stunning. Highly recommended!
+                </p>
+                <div className="inline-block bg-[#FDFBF7] text-[#C67A3D] text-xs font-medium px-4 py-1.5 rounded-full mb-6 self-start">
+                  Bridal Lehenga
+                </div>
+                <div className="h-px bg-[#E8DCC8] w-full mb-6"></div>
+                <div className="flex items-center gap-4">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop" alt="Priya Sharma" className="w-12 h-12 rounded-full object-cover" />
+                  <div>
+                    <h4 className="font-bold text-[#0B1325] text-sm">Priya Sharma</h4>
+                    <p className="text-xs text-[#0B1325]/50">Dehradun</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Testimonial 2 (Highlighted) */}
+              <div className="bg-[#3E1C00] p-8 rounded-2xl shadow-lg flex flex-col h-full transform md:-translate-y-4">
+                <div className="text-[#F4D03F] text-4xl font-serif leading-none mb-6">"</div>
+                <div className="flex gap-1 mb-6">
+                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#F4D03F] text-[#F4D03F]" />)}
+                </div>
+                <p className="text-white/90 leading-relaxed mb-8 flex-grow">
+                  Anand Jewellers is our go-to for every family occasion. The kundan necklace set for our daughter's wedding was absolutely breathtaking. Excellent craftsmanship!
+                </p>
+                <div className="inline-block bg-[#A0522D] text-white text-xs font-medium px-4 py-1.5 rounded-full mb-6 self-start">
+                  Kundan Set
+                </div>
+                <div className="h-px bg-white/10 w-full mb-6"></div>
+                <div className="flex items-center gap-4">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="Ravi Agarwal" className="w-12 h-12 rounded-full object-cover" />
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Ravi Agarwal</h4>
+                    <p className="text-xs text-white/60">Haridwar</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Testimonial 3 */}
+              <div className="bg-white p-8 rounded-2xl border border-[#E8DCC8] shadow-sm flex flex-col h-full">
+                <div className="text-[#F4D03F] text-4xl font-serif leading-none mb-6">"</div>
+                <div className="flex gap-1 mb-6">
+                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#F4D03F] text-[#F4D03F]" />)}
+                </div>
+                <p className="text-[#0B1325]/80 leading-relaxed mb-8 flex-grow">
+                  Bought a sherwani for my brother's reception. The fit was perfect and the material quality was premium. The staff was super helpful in selecting the right piece.
+                </p>
+                <div className="inline-block bg-[#FDFBF7] text-[#C67A3D] text-xs font-medium px-4 py-1.5 rounded-full mb-6 self-start">
+                  Men's Sherwani
+                </div>
+                <div className="h-px bg-[#E8DCC8] w-full mb-6"></div>
+                <div className="flex items-center gap-4">
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&auto=format&fit=crop" alt="Amit Verma" className="w-12 h-12 rounded-full object-cover" />
+                  <div>
+                    <h4 className="font-bold text-[#0B1325] text-sm">Amit Verma</h4>
+                    <p className="text-xs text-[#0B1325]/50">Dehradun</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Why Shop With Us Section */}
         <section className="py-16 md:py-24 bg-[#3E1C00] text-white">
           <div className="max-w-7xl mx-auto px-4 md:px-12">
