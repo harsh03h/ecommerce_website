@@ -952,7 +952,7 @@ export default function App() {
                   {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 </button>
               </div>
-              <div className="flex bg-[#F5EFE6] p-1 rounded-full text-[10px] font-bold tracking-widest border border-[#E8DCC8] shadow-sm">
+              <div className="flex bg-brand-surface p-1 rounded-full text-[10px] font-bold tracking-widest border border-brand-ink/10 shadow-sm">
                 <button 
                   onClick={() => { setStoreMode('clothing'); setIsMobileMenuOpen(false); }}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-brand-gold text-brand-bg shadow-md' : 'text-brand-gold hover:bg-brand-gold/10'}`}
@@ -984,9 +984,9 @@ export default function App() {
             <Menu className="w-5 h-5" />
           </button>
           <div className="hidden md:flex gap-8 text-[15px] font-medium">
-            <button onClick={() => setCurrentView('home')} className={`transition-colors ${currentView === 'home' ? 'text-[#A0522D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Home</button>
+            <button onClick={() => setCurrentView('home')} className={`transition-colors ${currentView === 'home' ? 'text-brand-gold' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Home</button>
             <button onClick={() => { setCurrentView('home'); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-brand-ink/70 hover:text-brand-ink transition-colors">Products</button>
-            <button onClick={() => setCurrentView('contact')} className={`transition-colors ${currentView === 'contact' ? 'text-[#A0522D]' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Contact</button>
+            <button onClick={() => setCurrentView('contact')} className={`transition-colors ${currentView === 'contact' ? 'text-brand-gold' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Contact</button>
           </div>
         </div>
         
@@ -999,7 +999,7 @@ export default function App() {
           </p>
           
           {/* Desktop Store Mode Toggle */}
-          <div className="hidden md:flex bg-[#F5EFE6] p-1 rounded-full text-[11px] font-bold tracking-widest mt-4 border border-[#E8DCC8] shadow-sm">
+          <div className="hidden md:flex bg-brand-surface p-1 rounded-full text-[11px] font-bold tracking-widest mt-4 border border-brand-ink/10 shadow-sm">
             <button 
               onClick={() => setStoreMode('clothing')}
               className={`flex items-center gap-2 px-5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-brand-gold text-brand-bg shadow-md' : 'text-brand-gold hover:bg-brand-gold/10'}`}
@@ -1180,7 +1180,7 @@ export default function App() {
 
       {/* Mobile Store Mode Toggle (Visible only on small screens below nav) */}
       <div className="md:hidden flex justify-center bg-brand-bg border-b border-brand-ink/10 py-3 px-4">
-        <div className="flex w-full max-w-xs bg-[#F5EFE6] p-1 rounded-full text-[10px] font-bold tracking-widest border border-[#E8DCC8] shadow-sm">
+        <div className="flex w-full max-w-xs bg-brand-surface p-1 rounded-full text-[10px] font-bold tracking-widest border border-brand-ink/10 shadow-sm">
           <button 
             onClick={() => setStoreMode('clothing')}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-full transition-all duration-300 ${storeMode === 'clothing' ? 'bg-brand-gold text-brand-bg shadow-md' : 'text-brand-gold hover:bg-brand-gold/10'}`}
@@ -1292,9 +1292,9 @@ export default function App() {
 
         {/* Browse By Section */}
         {currentView === 'home' && (
-          <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto bg-[#FDFBF7]">
+          <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto bg-brand-bg">
             <div className="text-center mb-10">
-              <p className="text-[10px] md:text-xs uppercase tracking-widest text-[#A0522D] mb-3 font-semibold">BROWSE BY</p>
+              <p className="text-[10px] md:text-xs uppercase tracking-widest text-brand-gold mb-3 font-semibold">BROWSE BY</p>
               <h2 className="font-serif text-3xl md:text-4xl text-brand-ink">
                 {storeMode === 'clothing' ? 'Browse Our Clothing' : 'Browse Our Jewellery'}
               </h2>
@@ -1311,7 +1311,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Sarees</h3>
-                    <p className="text-[#D4AF37] text-xs font-medium">120+ styles</p>
+                    <p className="text-brand-gold text-xs font-medium">120+ styles</p>
                   </div>
                 </div>
                 
@@ -1324,7 +1324,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Suits & Kurtas</h3>
-                    <p className="text-[#D4AF37] text-xs font-medium">200+ styles</p>
+                    <p className="text-brand-gold text-xs font-medium">200+ styles</p>
                   </div>
                 </div>
                 
@@ -1337,7 +1337,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Lehengas</h3>
-                    <p className="text-[#D4AF37] text-xs font-medium">80+ styles</p>
+                    <p className="text-brand-gold text-xs font-medium">80+ styles</p>
                   </div>
                 </div>
                 
@@ -1350,7 +1350,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Sherwanis</h3>
-                    <p className="text-[#D4AF37] text-xs font-medium">50+ styles</p>
+                    <p className="text-brand-gold text-xs font-medium">50+ styles</p>
                   </div>
                 </div>
               </div>
@@ -1365,7 +1365,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Gold Sets</h3>
-                    <p className="text-[#D4AF37] text-xs font-medium">150+ styles</p>
+                    <p className="text-brand-gold text-xs font-medium">150+ styles</p>
                   </div>
                 </div>
                 
@@ -1378,7 +1378,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Silver</h3>
-                    <p className="text-[#D4AF37] text-xs font-medium">200+ styles</p>
+                    <p className="text-brand-gold text-xs font-medium">200+ styles</p>
                   </div>
                 </div>
                 
@@ -1391,7 +1391,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Bridal</h3>
-                    <p className="text-[#D4AF37] text-xs font-medium">90+ styles</p>
+                    <p className="text-brand-gold text-xs font-medium">90+ styles</p>
                   </div>
                 </div>
                 
@@ -1404,7 +1404,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                   <div className="absolute bottom-6 left-6">
                     <h3 className="text-white font-bold text-xl mb-1">Rings</h3>
-                    <p className="text-[#D4AF37] text-xs font-medium">300+ styles</p>
+                    <p className="text-brand-gold text-xs font-medium">300+ styles</p>
                   </div>
                 </div>
               </div>
@@ -1545,11 +1545,11 @@ export default function App() {
         </section>
 
         {/* Customer Love Section */}
-        <section className="py-16 md:py-24 bg-[#FDFBF7]">
+        <section className="py-16 md:py-24 bg-brand-bg">
           <div className="max-w-7xl mx-auto px-4 md:px-12">
             <div className="text-center mb-12 md:mb-16">
-              <div className="inline-block border border-[#E8DCC8] rounded-full px-6 py-2 mb-6 bg-[#FDFBF7]">
-                <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#A0522D] font-bold">CUSTOMER LOVE</p>
+              <div className="inline-block border border-brand-ink/10 rounded-full px-6 py-2 mb-6 bg-brand-bg">
+                <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-brand-gold font-bold">CUSTOMER LOVE</p>
               </div>
               <h2 className="font-serif text-3xl md:text-5xl text-brand-ink mb-4">What Our Customers Say</h2>
               <p className="text-brand-ink/60 max-w-xl mx-auto text-sm md:text-base">
@@ -1699,8 +1699,8 @@ export default function App() {
                   
                   <div className="space-y-6 mb-8">
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
-                        <MapPin className="w-5 h-5 text-[#A0522D]" />
+                      <div className="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center flex-shrink-0 mt-1">
+                        <MapPin className="w-5 h-5 text-brand-gold" />
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-brand-ink mb-1">Address</h3>
@@ -1712,8 +1712,8 @@ export default function App() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
-                        <Phone className="w-5 h-5 text-[#A0522D]" />
+                      <div className="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center flex-shrink-0 mt-1">
+                        <Phone className="w-5 h-5 text-brand-gold" />
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-brand-ink mb-1">Phone</h3>
@@ -1722,8 +1722,8 @@ export default function App() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
-                        <Mail className="w-5 h-5 text-[#A0522D]" />
+                      <div className="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center flex-shrink-0 mt-1">
+                        <Mail className="w-5 h-5 text-brand-gold" />
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-brand-ink mb-1">Email</h3>
@@ -1732,8 +1732,8 @@ export default function App() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0 mt-1">
-                        <Clock className="w-5 h-5 text-[#A0522D]" />
+                      <div className="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center flex-shrink-0 mt-1">
+                        <Clock className="w-5 h-5 text-brand-gold" />
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-brand-ink mb-1">Hours</h3>
@@ -2229,7 +2229,7 @@ export default function App() {
                     <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest mb-4 text-brand-ink/60">
                       <button 
                         onClick={() => { setSelectedProduct(null); setCurrentView('home'); }}
-                        className="hover:text-[#2874F0] transition-colors"
+                        className="hover:text-brand-gold transition-colors"
                       >
                         Home
                       </button>
@@ -2240,7 +2240,7 @@ export default function App() {
                           setCurrentView('home');
                           setStoreMode(selectedProduct.category.toLowerCase() as StoreMode);
                         }}
-                        className="hover:text-[#2874F0] transition-colors"
+                        className="hover:text-brand-gold transition-colors"
                       >
                         {selectedProduct.category}
                       </button>
@@ -2278,7 +2278,7 @@ export default function App() {
                                   onClick={() => setSelectedVariants(prev => ({ ...prev, [variant.name]: option }))}
                                   className={`px-4 py-2 text-sm font-medium border transition-colors ${
                                     selectedVariants[variant.name] === option 
-                                      ? 'border-[#2874F0] text-[#2874F0] bg-[#2874F0]/5' 
+                                      ? 'border-brand-gold text-brand-gold bg-brand-gold/5' 
                                       : 'border-brand-ink/20 text-brand-ink hover:border-brand-ink/50'
                                   }`}
                                 >
@@ -2315,15 +2315,15 @@ export default function App() {
                     <div className="flex items-center gap-6 mt-6">
                       <button 
                         onClick={(e) => toggleWishlist(e, selectedProduct.id)}
-                        className="flex items-center gap-2 text-sm font-medium text-brand-ink/70 hover:text-[#2874F0] transition-colors"
+                        className="flex items-center gap-2 text-sm font-medium text-brand-ink/70 hover:text-brand-gold transition-colors"
                       >
-                        <Heart className={`w-5 h-5 ${wishlist.includes(selectedProduct.id) ? 'fill-[#2874F0] text-[#2874F0]' : ''}`} />
+                        <Heart className={`w-5 h-5 ${wishlist.includes(selectedProduct.id) ? 'fill-brand-gold text-brand-gold' : ''}`} />
                         {wishlist.includes(selectedProduct.id) ? 'Saved' : 'Save for later'}
                       </button>
                       <ShareMenu 
                         product={selectedProduct} 
                         className="relative"
-                        iconClassName="text-brand-ink/70 hover:text-[#2874F0]"
+                        iconClassName="text-brand-ink/70 hover:text-brand-gold"
                       />
                     </div>
 
@@ -2362,16 +2362,16 @@ export default function App() {
                             />
                             <button 
                               onClick={(e) => { e.stopPropagation(); toggleWishlist(e, product.id); }}
-                              className="absolute top-3 right-3 p-1.5 bg-brand-surface rounded-full text-brand-ink/40 hover:text-[#2874F0] transition-colors shadow-sm"
+                              className="absolute top-3 right-3 p-1.5 bg-brand-surface rounded-full text-brand-ink/40 hover:text-brand-gold transition-colors shadow-sm"
                               aria-label={isSaved ? "Remove from wishlist" : "Add to wishlist"}
                             >
-                              <Heart className={`w-4 h-4 ${isSaved ? 'fill-[#2874F0] text-[#2874F0]' : ''}`} />
+                              <Heart className={`w-4 h-4 ${isSaved ? 'fill-brand-gold text-brand-gold' : ''}`} />
                             </button>
                           </div>
                           <div className="p-4 flex flex-col flex-grow">
                             <h3 className="text-sm text-brand-ink/80 font-medium truncate mb-1">{product.name}</h3>
                             <div className="flex items-center gap-2 mb-2">
-                              <div className="flex items-center bg-[#388E3C] text-white px-1.5 py-0.5 rounded-sm text-[10px] font-bold gap-0.5">
+                              <div className="flex items-center bg-green-600 text-white px-1.5 py-0.5 rounded-sm text-[10px] font-bold gap-0.5">
                                 {((reviews[product.id] || []).length > 0 ? ((reviews[product.id] || []).reduce((sum, r) => sum + r.rating, 0) / (reviews[product.id] || []).length).toFixed(1) : '0.0')}
                                 <Star className="w-2.5 h-2.5 fill-current" />
                               </div>
@@ -2397,7 +2397,7 @@ export default function App() {
                           {((reviews[selectedProduct.id] || []).length > 0 ? ((reviews[selectedProduct.id] || []).reduce((sum, r) => sum + r.rating, 0) / (reviews[selectedProduct.id] || []).length).toFixed(1) : '0.0')}
                         </div>
                         <div>
-                          <div className="flex items-center gap-1 mb-1 text-[#388E3C]">
+                          <div className="flex items-center gap-1 mb-1 text-green-600">
                             {renderStars(
                               (reviews[selectedProduct.id] || []).length > 0
                                 ? (reviews[selectedProduct.id] || []).reduce((sum, r) => sum + r.rating, 0) / (reviews[selectedProduct.id] || []).length
@@ -2435,7 +2435,7 @@ export default function App() {
                           (reviews[selectedProduct.id] || []).map(review => (
                             <div key={review.id} className="py-6 border-b border-brand-ink/10 last:border-0">
                               <div className="flex items-center gap-3 mb-3">
-                                <div className="flex items-center bg-[#388E3C] text-white px-1.5 py-0.5 rounded-sm text-xs font-bold gap-1">
+                                <div className="flex items-center bg-green-600 text-white px-1.5 py-0.5 rounded-sm text-xs font-bold gap-1">
                                   {review.rating}
                                   <Star className="w-3 h-3 fill-current" />
                                 </div>
@@ -2468,7 +2468,7 @@ export default function App() {
                                   onClick={() => setReviewForm(prev => ({ ...prev, rating: star }))}
                                   className="focus:outline-none"
                                 >
-                                  <Star className={`w-8 h-8 ${star <= reviewForm.rating ? 'fill-[#388E3C] text-[#388E3C]' : 'text-brand-ink/20'}`} />
+                                  <Star className={`w-8 h-8 ${star <= reviewForm.rating ? 'fill-green-600 text-green-600' : 'text-brand-ink/20'}`} />
                                 </button>
                               ))}
                             </div>
