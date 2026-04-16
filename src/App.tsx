@@ -673,6 +673,16 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [checkoutStep, setCheckoutStep] = useState<'cart' | 'address' | 'payment'>('cart');
+  const [checkoutData, setCheckoutData] = useState({
+    address: '',
+    city: '',
+    zip: '',
+    paymentMethod: 'card',
+    cardNumber: '',
+    expiry: '',
+    cvv: ''
+  });
   const [toast, setToast] = useState<{message: string, id: number} | null>(null);
   
   // Profile State
@@ -844,12 +854,25 @@ export default function App() {
     }
   };
 
-  const checkout = async () => {
+  const proceedToCheckout = () => {
     if (!user) {
-      signInWithGoogle();
+      setCurrentView('login');
+      setIsCartOpen(false);
       return;
     }
     if (cart.length === 0) return;
+    
+    // Pre-fill address if available
+    if (profileData.address) {
+      setCheckoutData(prev => ({ ...prev, address: profileData.address }));
+    }
+    
+    setCheckoutStep('address');
+  };
+
+  const completeCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || cart.length === 0) return;
     
     setIsCheckingOut(true);
     try {
@@ -863,14 +886,26 @@ export default function App() {
         items: cart,
         totalAmount,
         status: 'pending',
+        shippingAddress: {
+          address: checkoutData.address,
+          city: checkoutData.city,
+          zip: checkoutData.zip
+        },
+        paymentMethod: checkoutData.paymentMethod,
         createdAt: serverTimestamp()
       });
       
       setCart([]);
+      setCheckoutStep('cart');
       setIsCartOpen(false);
       setCurrentView('orders');
+      
+      const id = Date.now();
+      setToast({ message: "Order placed successfully!", id });
+      setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
     } catch (error) {
       console.error("Error creating order", error);
+      alert("Failed to place order. Please try again.");
     } finally {
       setIsCheckingOut(false);
     }
@@ -988,6 +1023,22 @@ export default function App() {
               </button>
             </div>
 
+            <div className="mb-8 relative">
+              <Search className="w-5 h-5 text-brand-ink/60 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input 
+                type="text" 
+                placeholder="Search products..." 
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentView('home');
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                }}
+                className="w-full bg-brand-surface border border-brand-ink/20 rounded-full py-3 pl-10 pr-4 focus:outline-none focus:border-brand-gold text-brand-ink placeholder:text-brand-ink/40"
+              />
+            </div>
+
             <div className="flex flex-col gap-8 text-lg uppercase tracking-widest font-medium">
               <a href="#shop" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Shop</a>
               <a href="#collections" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Collections</a>
@@ -1084,6 +1135,20 @@ export default function App() {
         </div>
 
         <div className="flex items-center justify-end gap-2 md:gap-4 w-1/3">
+          <div className="hidden md:flex items-center bg-brand-surface border border-brand-ink/20 rounded-full px-3 py-1.5 focus-within:border-brand-gold transition-colors">
+            <Search className="w-4 h-4 text-brand-ink/60" />
+            <input 
+              type="text" 
+              placeholder="Search products..." 
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentView('home');
+                document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="bg-transparent border-none focus:outline-none text-xs ml-2 w-32 lg:w-48 text-brand-ink placeholder:text-brand-ink/40"
+            />
+          </div>
           <button 
             onClick={() => setIsDarkMode(!isDarkMode)} 
             className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors hidden md:block"
@@ -1166,9 +1231,11 @@ export default function App() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-6 border-b border-brand-ink/10 flex justify-between items-center">
-                <h2 className="font-serif text-2xl text-brand-ink">Your Cart</h2>
+                <h2 className="font-serif text-2xl text-brand-ink">
+                  {checkoutStep === 'cart' ? 'Your Cart' : checkoutStep === 'address' ? 'Shipping Address' : 'Payment'}
+                </h2>
                 <button 
-                  onClick={() => setIsCartOpen(false)} 
+                  onClick={() => { setIsCartOpen(false); setCheckoutStep('cart'); }} 
                   className="p-2 hover:bg-brand-ink/10 rounded-full"
                   aria-label="Close cart"
                 >
@@ -1177,55 +1244,129 @@ export default function App() {
               </div>
               
               <div className="flex-grow overflow-y-auto p-6 flex flex-col gap-6 custom-scrollbar">
-                {cart.length === 0 ? (
-                  <div className="text-center py-16 flex flex-col items-center justify-center h-full">
-                    <div className="w-20 h-20 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
-                      <ShoppingCart className="w-10 h-10 text-brand-ink/40" />
+                {checkoutStep === 'cart' ? (
+                  cart.length === 0 ? (
+                    <div className="text-center py-16 flex flex-col items-center justify-center h-full">
+                      <div className="w-20 h-20 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
+                        <ShoppingCart className="w-10 h-10 text-brand-ink/40" />
+                      </div>
+                      <h3 className="font-serif text-2xl text-brand-ink mb-2">Your cart is empty</h3>
+                      <p className="text-brand-ink/60 mb-8 max-w-[250px] mx-auto text-sm">Looks like you haven't added anything to your cart yet.</p>
+                      <button 
+                        onClick={() => { setIsCartOpen(false); setCurrentView('home'); }} 
+                        className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors w-full sm:w-auto"
+                      >
+                        Start Shopping
+                      </button>
                     </div>
-                    <h3 className="font-serif text-2xl text-brand-ink mb-2">Your cart is empty</h3>
-                    <p className="text-brand-ink/60 mb-8 max-w-[250px] mx-auto text-sm">Looks like you haven't added anything to your cart yet.</p>
-                    <button 
-                      onClick={() => { setIsCartOpen(false); setCurrentView('home'); }} 
-                      className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors w-full sm:w-auto"
-                    >
-                      Start Shopping
-                    </button>
-                  </div>
+                  ) : (
+                    cart.map((item, idx) => {
+                      const product = PRODUCTS.find(p => p.id === item.productId);
+                      if (!product) return null;
+                      return (
+                        <div key={idx} className="flex gap-4 border-b border-brand-ink/10 pb-6">
+                          <img src={product.image} alt={product.name} className="w-20 h-24 object-cover" referrerPolicy="no-referrer" />
+                          <div className="flex-grow">
+                            <h4 className="font-serif text-base md:text-lg text-brand-ink">{product.name}</h4>
+                            <p className="text-sm text-brand-ink/70 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
+                            {item.variants && Object.entries(item.variants).map(([key, val]) => (
+                              <p key={key} className="text-[10px] uppercase tracking-widest text-brand-ink/50 mt-1">{key}: {val}</p>
+                            ))}
+                            <div className="flex items-center justify-between mt-3">
+                              <p className="text-xs text-brand-ink/80">Qty: {item.quantity}</p>
+                              <button 
+                                onClick={() => {
+                                  setCart(prev => prev.filter((_, i) => i !== idx));
+                                }}
+                                className="text-[10px] uppercase tracking-widest text-red-400 hover:text-red-500 transition-colors"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )
+                ) : checkoutStep === 'address' ? (
+                  <form className="flex flex-col gap-4 h-full" id="address-form" onSubmit={(e) => { e.preventDefault(); setCheckoutStep('payment'); }}>
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">Street Address</label>
+                      <textarea 
+                        required
+                        value={checkoutData.address}
+                        onChange={e => setCheckoutData({...checkoutData, address: e.target.value})}
+                        className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink"
+                        rows={3}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">City</label>
+                        <input 
+                          type="text" required
+                          value={checkoutData.city}
+                          onChange={e => setCheckoutData({...checkoutData, city: e.target.value})}
+                          className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">ZIP Code</label>
+                        <input 
+                          type="text" required
+                          value={checkoutData.zip}
+                          onChange={e => setCheckoutData({...checkoutData, zip: e.target.value})}
+                          className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink"
+                        />
+                      </div>
+                    </div>
+                  </form>
                 ) : (
-                  cart.map((item, idx) => {
-                    const product = PRODUCTS.find(p => p.id === item.productId);
-                    if (!product) return null;
-                    return (
-                      <div key={idx} className="flex gap-4 border-b border-brand-ink/10 pb-6">
-                        <img src={product.image} alt={product.name} className="w-20 h-24 object-cover" referrerPolicy="no-referrer" />
-                        <div className="flex-grow">
-                          <h4 className="font-serif text-base md:text-lg text-brand-ink">{product.name}</h4>
-                          <p className="text-sm text-brand-ink/70 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
-                          {item.variants && Object.entries(item.variants).map(([key, val]) => (
-                            <p key={key} className="text-[10px] uppercase tracking-widest text-brand-ink/50 mt-1">{key}: {val}</p>
-                          ))}
-                          <div className="flex items-center justify-between mt-3">
-                            <p className="text-xs text-brand-ink/80">Qty: {item.quantity}</p>
-                            <button 
-                              onClick={() => {
-                                setCart(prev => prev.filter((_, i) => i !== idx));
-                              }}
-                              className="text-[10px] uppercase tracking-widest text-red-400 hover:text-red-500 transition-colors"
-                            >
-                              Remove
-                            </button>
+                  <form className="flex flex-col gap-6 h-full" id="payment-form" onSubmit={completeCheckout}>
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-4">Payment Method</label>
+                      <div className="flex flex-col gap-3">
+                        <label className={`flex items-center gap-3 p-4 border rounded cursor-pointer transition-colors ${checkoutData.paymentMethod === 'card' ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-ink/20'}`}>
+                          <input type="radio" name="payment" value="card" checked={checkoutData.paymentMethod === 'card'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold" />
+                          <span className="text-sm font-medium">Credit / Debit Card</span>
+                        </label>
+                        <label className={`flex items-center gap-3 p-4 border rounded cursor-pointer transition-colors ${checkoutData.paymentMethod === 'upi' ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-ink/20'}`}>
+                          <input type="radio" name="payment" value="upi" checked={checkoutData.paymentMethod === 'upi'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold" />
+                          <span className="text-sm font-medium">UPI</span>
+                        </label>
+                        <label className={`flex items-center gap-3 p-4 border rounded cursor-pointer transition-colors ${checkoutData.paymentMethod === 'cod' ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-ink/20'}`}>
+                          <input type="radio" name="payment" value="cod" checked={checkoutData.paymentMethod === 'cod'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold" />
+                          <span className="text-sm font-medium">Cash on Delivery</span>
+                        </label>
+                      </div>
+                    </div>
+                    
+                    {checkoutData.paymentMethod === 'card' && (
+                      <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-top-2">
+                        <div>
+                          <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">Card Number</label>
+                          <input type="text" required placeholder="0000 0000 0000 0000" value={checkoutData.cardNumber} onChange={e => setCheckoutData({...checkoutData, cardNumber: e.target.value})} className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">Expiry</label>
+                            <input type="text" required placeholder="MM/YY" value={checkoutData.expiry} onChange={e => setCheckoutData({...checkoutData, expiry: e.target.value})} className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink" />
+                          </div>
+                          <div>
+                            <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">CVV</label>
+                            <input type="password" required placeholder="123" value={checkoutData.cvv} onChange={e => setCheckoutData({...checkoutData, cvv: e.target.value})} className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink" />
                           </div>
                         </div>
                       </div>
-                    );
-                  })
+                    )}
+                  </form>
                 )}
               </div>
               
               {cart.length > 0 && (
                 <div className="p-6 border-t border-brand-ink/10 bg-brand-bg">
                   <div className="flex justify-between items-center mb-6">
-                    <span className="text-sm uppercase tracking-widest text-brand-ink/70">Subtotal</span>
+                    <span className="text-sm uppercase tracking-widest text-brand-ink/70">Total</span>
                     <span className="font-serif text-xl text-brand-ink">
                       ₹{cart.reduce((sum, item) => {
                         const product = PRODUCTS.find(p => p.id === item.productId);
@@ -1233,13 +1374,27 @@ export default function App() {
                       }, 0).toLocaleString('en-IN')}
                     </span>
                   </div>
-                  <button 
-                    onClick={checkout}
-                    disabled={isCheckingOut}
-                    className="w-full bg-brand-gold text-brand-bg py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors disabled:opacity-50"
-                  >
-                    {isCheckingOut ? 'Processing...' : 'Checkout'}
-                  </button>
+                  {checkoutStep === 'cart' ? (
+                    <button 
+                      onClick={proceedToCheckout}
+                      disabled={isCheckingOut}
+                      className="w-full bg-brand-gold text-brand-bg py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors disabled:opacity-50"
+                    >
+                      Proceed to Checkout
+                    </button>
+                  ) : checkoutStep === 'address' ? (
+                    <div className="flex gap-3">
+                      <button onClick={() => setCheckoutStep('cart')} className="w-1/3 border border-brand-ink/20 text-brand-ink py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-surface transition-colors">Back</button>
+                      <button type="submit" form="address-form" className="w-2/3 bg-brand-gold text-brand-bg py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors">Continue to Payment</button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-3">
+                      <button onClick={() => setCheckoutStep('address')} className="w-1/3 border border-brand-ink/20 text-brand-ink py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-surface transition-colors">Back</button>
+                      <button type="submit" form="payment-form" disabled={isCheckingOut} className="w-2/3 bg-brand-gold text-brand-bg py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors disabled:opacity-50">
+                        {isCheckingOut ? 'Processing...' : 'Place Order'}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </motion.div>
