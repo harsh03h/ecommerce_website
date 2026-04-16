@@ -629,10 +629,17 @@ const ProductCard: React.FC<{
             View Details
           </button>
           <button 
-            onClick={(e) => onAddToCart(e, product.id)}
+            onClick={(e) => {
+              if (product.variants && product.variants.length > 0) {
+                e.stopPropagation();
+                onSelect(product);
+              } else {
+                onAddToCart(e, product.id);
+              }
+            }}
             className="bg-brand-gold text-brand-bg text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-bg hover:text-brand-gold transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]"
           >
-            Add to Cart
+            {product.variants && product.variants.length > 0 ? 'Select Options' : 'Add to Cart'}
           </button>
         </div>
       </div>
@@ -2645,7 +2652,13 @@ export default function App() {
                           onClick={() => {
                             setSelectedProduct(product);
                             setSelectedImageIndex(0);
-                            setSelectedVariants({});
+                            const defaultVariants: Record<string, string> = {};
+                            if (product.variants) {
+                              product.variants.forEach(v => {
+                                defaultVariants[v.name] = v.options[0];
+                              });
+                            }
+                            setSelectedVariants(defaultVariants);
                             // Scroll modal to top
                             const modalContent = document.querySelector('.custom-scrollbar');
                             if (modalContent) modalContent.scrollTop = 0;
