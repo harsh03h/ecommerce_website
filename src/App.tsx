@@ -4,6 +4,8 @@ import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { Login } from './components/Login';
+import { AdminPanel } from './components/AdminPanel';
 
 // Mock Data for the store
 export type ProductVariant = {
@@ -617,7 +619,7 @@ export default function App() {
   const [sortBy, setSortBy] = useState('featured');
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about' | 'contact'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about' | 'contact' | 'login' | 'admin'>('home');
   
   // Auth State
   const [user, setUser] = useState<User | null>(null);
@@ -933,10 +935,13 @@ export default function App() {
                   <button onClick={() => { setCurrentView('profile'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">My Profile</button>
                   <button onClick={() => { setCurrentView('wishlist'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">My Wishlist</button>
                   <button onClick={() => { setCurrentView('orders'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Order History</button>
+                  {user.email === 'harshgupta07h@gmail.com' && (
+                    <button onClick={() => { setCurrentView('admin'); setIsMobileMenuOpen(false); }} className="text-left text-brand-gold hover:text-brand-gold/80 transition-colors border-b border-brand-ink/10 pb-4">Admin Panel</button>
+                  )}
                   <button onClick={() => { logout(); setIsMobileMenuOpen(false); setCurrentView('home'); }} className="text-left text-red-400 hover:text-red-300 transition-colors border-b border-brand-ink/10 pb-4">Sign Out</button>
                 </>
               ) : (
-                <button onClick={() => { signInWithGoogle(); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Log In</button>
+                <button onClick={() => { setCurrentView('login'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Log In</button>
               )}
             </div>
             
@@ -1048,11 +1053,14 @@ export default function App() {
                 <button onClick={() => setCurrentView('profile')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">My Profile</button>
                 <button onClick={() => setCurrentView('wishlist')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">My Wishlist</button>
                 <button onClick={() => setCurrentView('orders')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">Order History</button>
+                {user.email === 'harshgupta07h@gmail.com' && (
+                  <button onClick={() => setCurrentView('admin')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors text-brand-gold">Admin Panel</button>
+                )}
                 <button onClick={() => { logout(); setCurrentView('home'); }} className="text-left px-4 py-3 text-xs uppercase tracking-widest text-red-400 hover:bg-brand-ink/5 transition-colors border-t border-brand-ink/10">Sign Out</button>
               </div>
             </div>
           ) : (
-            <button onClick={signInWithGoogle} className="text-[10px] uppercase tracking-widest hover:text-brand-gold transition-colors hidden md:block">
+            <button onClick={() => setCurrentView('login')} className="text-[10px] uppercase tracking-widest hover:text-brand-gold transition-colors hidden md:block">
               Log In
             </button>
           )}
@@ -2026,6 +2034,10 @@ export default function App() {
               </div>
             )}
           </section>
+        ) : currentView === 'login' ? (
+          <Login onLoginSuccess={(view) => setCurrentView(view)} />
+        ) : currentView === 'admin' && user ? (
+          <AdminPanel user={user} />
         ) : currentView === 'about' ? (
           <section className="py-16 md:py-24 px-6 md:px-12 max-w-4xl mx-auto min-h-[60vh]">
             <motion.div

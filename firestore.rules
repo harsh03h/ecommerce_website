@@ -73,6 +73,10 @@ service cloud.firestore {
              data.createdAt is timestamp;
     }
 
+    match /{path=**}/orders/{orderId} {
+      allow read: if isAdmin();
+    }
+
     match /users/{userId} {
       allow read: if isOwner(userId) || isAdmin();
       allow create: if isAuthenticated() && isOwner(userId) && isValidUser(request.resource.data) &&
