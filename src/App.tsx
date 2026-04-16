@@ -6,6 +6,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import { Login } from './components/Login';
 import { AdminPanel } from './components/AdminPanel';
+import { ImageZoom } from './components/ImageZoom';
 
 // Mock Data for the store
 export type ProductVariant = {
@@ -24,6 +25,8 @@ export type Product = {
   isNew: boolean;
   sales: number;
   description: string;
+  material?: string;
+  occasion?: string;
   variants?: ProductVariant[];
 };
 
@@ -43,6 +46,8 @@ const PRODUCTS: Product[] = [
     isNew: true,
     sales: 120,
     description: 'Authentic handwoven Banarasi silk saree featuring intricate zari work. Perfect for weddings and festive occasions.',
+    material: 'silk',
+    occasion: 'festive',
     variants: [
       { name: 'Color', options: ['Crimson Red', 'Royal Blue', 'Emerald Green'] }
     ]
@@ -62,6 +67,8 @@ const PRODUCTS: Product[] = [
     isNew: true,
     sales: 45,
     description: 'Exquisite Kundan bridal necklace set with matching earrings and maang tikka, crafted in 22k gold plating.',
+    material: 'gold',
+    occasion: 'bridal',
     variants: [
       { name: 'Metal Finish', options: ['22k Gold', 'Antique Gold'] },
       { name: 'Stone Color', options: ['Ruby Red', 'Emerald Green', 'Pearl White'] }
@@ -82,6 +89,8 @@ const PRODUCTS: Product[] = [
     isNew: false,
     sales: 300,
     description: 'Deep maroon velvet lehenga adorned with heavy zardosi and thread embroidery. Includes a matching net dupatta.',
+    material: 'velvet',
+    occasion: 'bridal',
     variants: [
       { name: 'Size', options: ['S', 'M', 'L', 'XL'] },
       { name: 'Color', options: ['Deep Maroon', 'Midnight Blue'] }
@@ -102,6 +111,8 @@ const PRODUCTS: Product[] = [
     isNew: false,
     sales: 210,
     description: 'Classic tennis bracelet featuring brilliant-cut VVS diamonds set in 18k white gold. A timeless statement piece.',
+    material: 'diamond',
+    occasion: 'party',
     variants: [
       { name: 'Metal', options: ['18k White Gold', '18k Yellow Gold', '18k Rose Gold'] },
       { name: 'Length', options: ['6.5 inches', '7 inches', '7.5 inches'] }
@@ -122,6 +133,8 @@ const PRODUCTS: Product[] = [
     isNew: false,
     sales: 80,
     description: 'Pure Kashmiri Pashmina shawl with subtle hand-embroidery along the borders. Incredibly soft and warm.',
+    material: 'cotton',
+    occasion: 'casual',
     variants: [
       { name: 'Color', options: ['Ivory White', 'Charcoal Grey', 'Dusty Rose'] }
     ]
@@ -140,7 +153,9 @@ const PRODUCTS: Product[] = [
     ],
     isNew: true,
     sales: 150,
-    description: 'Stunning uncut diamond (Polki) drop earrings with emerald accents and pearl hangings.'
+    description: 'Stunning uncut diamond (Polki) drop earrings with emerald accents and pearl hangings.',
+    material: 'gold',
+    occasion: 'festive'
   },
   {
     id: 'c4',
@@ -157,6 +172,8 @@ const PRODUCTS: Product[] = [
     isNew: true,
     sales: 45,
     description: 'Elegant silk blend Suit set with intricate embroidery and matching Suit.',
+    material: 'silk',
+    occasion: 'festive',
     variants: [
       { name: 'Size', options: ['M', 'L', 'XL', 'XXL'] }
     ]
@@ -175,7 +192,9 @@ const PRODUCTS: Product[] = [
     ],
     isNew: false,
     sales: 89,
-    description: 'Traditional 22k gold temple jewellery necklace with intricate deity motifs.'
+    description: 'Traditional 22k gold temple jewellery necklace with intricate deity motifs.',
+    material: 'gold',
+    occasion: 'festive'
   },
   {
     id: 'c5',
@@ -192,6 +211,8 @@ const PRODUCTS: Product[] = [
     isNew: false,
     sales: 210,
     description: 'Comfortable and stylish block-printed cotton Anarkali suit, perfect for everyday elegance.',
+    material: 'cotton',
+    occasion: 'casual',
     variants: [
       { name: 'Size', options: ['S', 'M', 'L'] }
     ]
@@ -210,7 +231,9 @@ const PRODUCTS: Product[] = [
     ],
     isNew: true,
     sales: 450,
-    description: 'Handcrafted oxidized silver jhumka earrings with tribal motifs and ghungroo drops.'
+    description: 'Handcrafted oxidized silver jhumka earrings with tribal motifs and ghungroo drops.',
+    material: 'silver',
+    occasion: 'casual'
   },
   {
     id: 'c6',
@@ -227,6 +250,8 @@ const PRODUCTS: Product[] = [
     isNew: false,
     sales: 180,
     description: 'Lightweight Chanderi silk dupatta with golden zari border and delicate floral motifs.',
+    material: 'silk',
+    occasion: 'festive',
     variants: [
       { name: 'Color', options: ['Mustard Yellow', 'Mint Green', 'Peach'] }
     ]
@@ -245,7 +270,9 @@ const PRODUCTS: Product[] = [
     ],
     isNew: false,
     sales: 65,
-    description: 'Elegant multi-strand freshwater pearl choker with a central kundan pendant.'
+    description: 'Elegant multi-strand freshwater pearl choker with a central kundan pendant.',
+    material: 'gold',
+    occasion: 'party'
   },
   {
     id: 'j7',
@@ -261,6 +288,8 @@ const PRODUCTS: Product[] = [
     isNew: true,
     sales: 30,
     description: 'Stunning 1-carat solitaire diamond engagement ring set in platinum.',
+    material: 'diamond',
+    occasion: 'bridal',
     variants: [
       { name: 'Ring Size', options: ['5', '6', '7', '8', '9'] }
     ]
@@ -280,6 +309,8 @@ const PRODUCTS: Product[] = [
     isNew: true,
     sales: 120,
     description: 'Comfortable cotton kurta pajama set for boys, perfect for festive occasions.',
+    material: 'cotton',
+    occasion: 'festive',
     variants: [
       { name: 'Age', options: ['2-3 Yrs', '4-5 Yrs', '6-7 Yrs'] }
     ]
@@ -299,6 +330,8 @@ const PRODUCTS: Product[] = [
     isNew: false,
     sales: 340,
     description: 'Breathable pure linen shirt with a relaxed fit. Ideal for casual outings.',
+    material: 'cotton',
+    occasion: 'casual',
     variants: [
       { name: 'Size', options: ['M', 'L', 'XL'] },
       { name: 'Color', options: ['White', 'Navy Blue', 'Olive Green'] }
@@ -318,6 +351,8 @@ const PRODUCTS: Product[] = [
     isNew: true,
     sales: 150,
     description: 'Beautiful silk saree with golden zari border.',
+    material: 'silk',
+    occasion: 'festive',
     variants: [
       { name: 'Color', options: ['Red', 'Green', 'Blue'] }
     ]
@@ -336,6 +371,8 @@ const PRODUCTS: Product[] = [
     isNew: false,
     sales: 80,
     description: 'Stunning designer lehenga for weddings and special occasions.',
+    material: 'silk',
+    occasion: 'bridal',
     variants: [
       { name: 'Size', options: ['S', 'M', 'L'] }
     ]
@@ -354,6 +391,8 @@ const PRODUCTS: Product[] = [
     isNew: true,
     sales: 45,
     description: 'Classic mens sherwani with intricate embroidery.',
+    material: 'silk',
+    occasion: 'festive',
     variants: [
       { name: 'Size', options: ['M', 'L', 'XL'] }
     ]
@@ -372,6 +411,8 @@ const PRODUCTS: Product[] = [
     isNew: false,
     sales: 220,
     description: 'Cute and comfortable party dress for kids.',
+    material: 'cotton',
+    occasion: 'party',
     variants: [
       { name: 'Age', options: ['3-4 Yrs', '5-6 Yrs', '7-8 Yrs'] }
     ]
@@ -617,6 +658,9 @@ export default function App() {
   const [department, setDepartment] = useState<'All' | 'Men' | 'Women' | 'Kids'>('All');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [sortBy, setSortBy] = useState('featured');
+  const [priceRange, setPriceRange] = useState('all');
+  const [material, setMaterial] = useState('all');
+  const [occasion, setOccasion] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about' | 'contact' | 'login' | 'admin'>('home');
@@ -853,6 +897,23 @@ export default function App() {
         p.category.toLowerCase().includes(query) ||
         (p.department && p.department.toLowerCase().includes(query))
       );
+    }
+
+    // Filter by Price Range
+    if (priceRange !== 'all') {
+      if (priceRange === 'under-1000') result = result.filter(p => p.price < 1000);
+      else if (priceRange === '1000-5000') result = result.filter(p => p.price >= 1000 && p.price <= 5000);
+      else if (priceRange === 'over-5000') result = result.filter(p => p.price > 5000);
+    }
+
+    // Filter by Material
+    if (material !== 'all') {
+      result = result.filter(p => p.material === material);
+    }
+
+    // Filter by Occasion
+    if (occasion !== 'all') {
+      result = result.filter(p => p.occasion === occasion);
     }
 
     switch (sortBy) {
@@ -1468,29 +1529,100 @@ export default function App() {
               )}
             </div>
             
-            <div className="flex items-center gap-3 text-sm w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-brand-ink/10 pt-4 md:pt-0">
+            <div className="flex flex-wrap items-center gap-4 text-sm w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-brand-ink/10 pt-4 md:pt-0">
               <div className="flex items-center gap-2">
                 <SlidersHorizontal className="w-4 h-4 text-brand-gold" />
-                <span className="uppercase tracking-widest text-brand-ink/60 text-[10px] md:text-xs">Sort By:</span>
+                <span className="uppercase tracking-widest text-brand-ink/60 text-[10px] md:text-xs">Filters:</span>
               </div>
-              <div className="relative">
-                <select 
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent border-b border-brand-ink/20 text-brand-ink py-1 pr-6 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs"
-                  style={{ 
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-                    backgroundPosition: 'right center', 
-                    backgroundRepeat: 'no-repeat', 
-                    backgroundSize: '1em' 
-                  }}
-                >
-                  <option value="featured" className="bg-brand-surface">Featured</option>
-                  <option value="newest" className="bg-brand-surface">New Arrivals</option>
-                  <option value="bestsellers" className="bg-brand-surface">Bestsellers</option>
-                  <option value="price-asc" className="bg-brand-surface">Price: Low to High</option>
-                  <option value="price-desc" className="bg-brand-surface">Price: High to Low</option>
-                </select>
+              
+              <div className="flex flex-wrap gap-3">
+                <div className="relative">
+                  <select 
+                    value={priceRange}
+                    onChange={(e) => setPriceRange(e.target.value)}
+                    className="bg-transparent border-b border-brand-ink/20 text-brand-ink py-1 pr-6 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs"
+                    style={{ 
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
+                      backgroundPosition: 'right center', 
+                      backgroundRepeat: 'no-repeat', 
+                      backgroundSize: '1em' 
+                    }}
+                  >
+                    <option value="all" className="bg-brand-surface">All Prices</option>
+                    <option value="under-1000" className="bg-brand-surface">Under ₹1,000</option>
+                    <option value="1000-5000" className="bg-brand-surface">₹1,000 - ₹5,000</option>
+                    <option value="over-5000" className="bg-brand-surface">Over ₹5,000</option>
+                  </select>
+                </div>
+
+                <div className="relative">
+                  <select 
+                    value={material}
+                    onChange={(e) => setMaterial(e.target.value)}
+                    className="bg-transparent border-b border-brand-ink/20 text-brand-ink py-1 pr-6 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs"
+                    style={{ 
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
+                      backgroundPosition: 'right center', 
+                      backgroundRepeat: 'no-repeat', 
+                      backgroundSize: '1em' 
+                    }}
+                  >
+                    <option value="all" className="bg-brand-surface">All Materials</option>
+                    {storeMode === 'clothing' ? (
+                      <>
+                        <option value="cotton" className="bg-brand-surface">Cotton</option>
+                        <option value="silk" className="bg-brand-surface">Silk</option>
+                        <option value="velvet" className="bg-brand-surface">Velvet</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="gold" className="bg-brand-surface">Gold</option>
+                        <option value="silver" className="bg-brand-surface">Silver</option>
+                        <option value="diamond" className="bg-brand-surface">Diamond</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+
+                <div className="relative">
+                  <select 
+                    value={occasion}
+                    onChange={(e) => setOccasion(e.target.value)}
+                    className="bg-transparent border-b border-brand-ink/20 text-brand-ink py-1 pr-6 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs"
+                    style={{ 
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
+                      backgroundPosition: 'right center', 
+                      backgroundRepeat: 'no-repeat', 
+                      backgroundSize: '1em' 
+                    }}
+                  >
+                    <option value="all" className="bg-brand-surface">All Occasions</option>
+                    <option value="casual" className="bg-brand-surface">Casual</option>
+                    <option value="festive" className="bg-brand-surface">Festive</option>
+                    <option value="bridal" className="bg-brand-surface">Bridal</option>
+                    <option value="party" className="bg-brand-surface">Party</option>
+                  </select>
+                </div>
+
+                <div className="relative ml-2">
+                  <select 
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-transparent border-b border-brand-ink/20 text-brand-ink py-1 pr-6 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs"
+                    style={{ 
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
+                      backgroundPosition: 'right center', 
+                      backgroundRepeat: 'no-repeat', 
+                      backgroundSize: '1em' 
+                    }}
+                  >
+                    <option value="featured" className="bg-brand-surface">Sort: Featured</option>
+                    <option value="newest" className="bg-brand-surface">Sort: New Arrivals</option>
+                    <option value="bestsellers" className="bg-brand-surface">Sort: Bestsellers</option>
+                    <option value="price-asc" className="bg-brand-surface">Price: Low to High</option>
+                    <option value="price-desc" className="bg-brand-surface">Price: High to Low</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -2192,11 +2324,10 @@ export default function App() {
                     
                     {/* Main Image */}
                     <div className="flex-grow relative aspect-[4/5] md:aspect-auto md:h-[500px] bg-brand-bg group/gallery flex items-center justify-center">
-                      <img 
+                      <ImageZoom 
                         src={selectedProduct.images?.[selectedImageIndex] || selectedProduct.image} 
                         alt={selectedProduct.name}
-                        className="w-full h-full object-contain"
-                        referrerPolicy="no-referrer"
+                        className="w-full h-full"
                       />
                       
                       {/* Navigation Arrows */}
