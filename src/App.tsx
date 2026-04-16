@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles, Plus, Minus } from 'lucide-react';
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
@@ -650,7 +650,7 @@ const ProductCard: React.FC<{
           {reviews.length > 0 && (
             <div className="flex items-center gap-1 md:gap-2 mt-1">
               {renderStars(Math.round(avgRating))}
-              <span className="text-[10px] md:text-xs text-brand-ink/50">({reviews.length})</span>
+              <span className="text-[10px] md:text-xs text-brand-ink/50 w-full sm:w-auto mt-1 sm:mt-0">({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})</span>
             </div>
           )}
         </div>
@@ -1280,12 +1280,32 @@ export default function App() {
                               <p key={key} className="text-[10px] uppercase tracking-widest text-brand-ink/50 mt-1">{key}: {val}</p>
                             ))}
                             <div className="flex items-center justify-between mt-3">
-                              <p className="text-xs text-brand-ink/80">Qty: {item.quantity}</p>
+                              <div className="flex items-center gap-3 bg-brand-surface border border-brand-ink/10 rounded-full py-1 px-2">
+                                <button 
+                                  onClick={() => {
+                                    setCart(prev => prev.map((cartItem, i) => i === idx ? { ...cartItem, quantity: Math.max(1, cartItem.quantity - 1) } : cartItem));
+                                  }}
+                                  className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-brand-ink/5 transition-colors"
+                                  aria-label="Decrease quantity"
+                                >
+                                  <Minus className="w-3 h-3 text-brand-ink" />
+                                </button>
+                                <span className="text-xs font-medium w-4 text-center text-brand-ink">{item.quantity}</span>
+                                <button 
+                                  onClick={() => {
+                                    setCart(prev => prev.map((cartItem, i) => i === idx ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem));
+                                  }}
+                                  className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-brand-ink/5 transition-colors"
+                                  aria-label="Increase quantity"
+                                >
+                                  <Plus className="w-3 h-3 text-brand-ink" />
+                                </button>
+                              </div>
                               <button 
                                 onClick={() => {
                                   setCart(prev => prev.filter((_, i) => i !== idx));
                                 }}
-                                className="text-[10px] uppercase tracking-widest text-red-400 hover:text-red-500 transition-colors"
+                                className="text-[10px] uppercase tracking-widest text-red-400 hover:text-red-500 transition-colors flex items-center gap-1"
                               >
                                 Remove
                               </button>
