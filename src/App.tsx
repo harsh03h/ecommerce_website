@@ -1876,8 +1876,8 @@ export default function App() {
                 <div className="flex items-center gap-4">
                   <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop" alt="Priya Sharma" className="w-12 h-12 rounded-full object-cover" />
                   <div>
-                    <h4 className="font-bold text-brand-ink text-sm">Priya Sharma</h4>
-                    <p className="text-xs text-brand-ink/50">Dehradun</p>
+                    <h4 className="font-bold text-brand-ink text-sm">Teesha Gupta</h4>
+                    <p className="text-xs text-brand-ink/50">Lucknow</p>
                   </div>
                 </div>
               </div>
@@ -1898,8 +1898,8 @@ export default function App() {
                 <div className="flex items-center gap-4">
                   <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="Ravi Agarwal" className="w-12 h-12 rounded-full object-cover" />
                   <div>
-                    <h4 className="font-bold text-brand-bg text-sm">Ravi Agarwal</h4>
-                    <p className="text-xs text-brand-bg/80">Haridwar</p>
+                    <h4 className="font-bold text-brand-bg text-sm">Yash Gupta</h4>
+                    <p className="text-xs text-brand-bg/80">Ambedkar Nagar</p>
                   </div>
                 </div>
               </div>
@@ -1920,8 +1920,8 @@ export default function App() {
                 <div className="flex items-center gap-4">
                   <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&auto=format&fit=crop" alt="Amit Verma" className="w-12 h-12 rounded-full object-cover" />
                   <div>
-                    <h4 className="font-bold text-brand-ink text-sm">Amit Verma</h4>
-                    <p className="text-xs text-brand-ink/50">Dehradun</p>
+                    <h4 className="font-bold text-brand-ink text-sm">Satvik</h4>
+                    <p className="text-xs text-brand-ink/50">Gorakhpur</p>
                   </div>
                 </div>
               </div>
@@ -1954,7 +1954,7 @@ export default function App() {
                 </div>
                 <h3 className="font-serif text-xl mb-3 text-brand-bg">Fast Delivery</h3>
                 <p className="text-sm text-brand-bg/80 leading-relaxed max-w-xs mx-auto">
-                  Same-day delivery in Dehradun. Pan-India shipping within 3-5 business days.
+                  Same-day delivery in Ambedkar Nagar. Pan-India shipping within 3-5 business days.
                 </p>
               </div>
               
@@ -2342,6 +2342,13 @@ export default function App() {
             >
               <h2 className="font-serif text-4xl md:text-6xl mb-6">Our Story</h2>
               <div className="w-16 h-px bg-brand-gold mx-auto"></div>
+              <h3 className="font-serif text-xl md:text-3xl mb-3">
+  Harsh Cloth Imporium & Anand Jewellars
+</h3>
+
+<p className="text-xs md:text-sm text-brand-ink/70">
+  Where Tradition Meets Timeless Luxury
+</p>
             </motion.div>
             
             <div className="space-y-12 md:space-y-20 text-brand-ink/80 leading-relaxed">
@@ -2376,11 +2383,12 @@ export default function App() {
                 </div>
                 <div className="order-1 md:order-2">
                   <h3 className="font-serif text-2xl md:text-3xl mb-4 text-brand-ink">Our Ethos</h3>
+          
                   <p className="mb-4">
-                    We believe that true luxury lies in authenticity and sustainability. Our commitment extends beyond aesthetics to the ethical sourcing of materials and the fair treatment of our artisans.
+                    At the heart of our brand lies a belief that luxury should be timeless, ethical, and genuine. We honour the artistry of our craftsmen and ensure that every creation reflects purity, precision, and purpose.
                   </p>
                   <p>
-                    Whether you are exploring our curated clothing lines or our bespoke bridal jewellery, you are experiencing a piece of art that was created with integrity, passion, and an unwavering dedication to quality.
+                    From fabric to finish, every detail is guided by our commitment to excellence, sustainability, and enduring elegance.
                   </p>
                 </div>
               </div>
@@ -2404,10 +2412,14 @@ export default function App() {
           <div>
             <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Explore</h4>
             <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
-              <li><a href="#" className="hover:text-brand-gold transition-colors">New Arrivals</a></li>
+              <li><a href="#shop" className="hover:text-brand-gold transition-colors">New Arrivals</a></li>
               <li><a href="#shop" className="hover:text-brand-gold transition-colors">Shop All</a></li>
-              <li><a href="#collections" className="hover:text-brand-gold transition-colors">Collections</a></li>
               <li><button onClick={() => { setCurrentView('about'); window.scrollTo(0,0); }} className="hover:text-brand-gold transition-colors">Our Story</button></li>
+              <li>
+  <a href="https://portfolioharsh29.netlify.app/" target="_blank" className="hover:text-brand-gold transition-colors">
+    Developer
+  </a>
+</li>
             </ul>
           </div>
 
@@ -2416,8 +2428,9 @@ export default function App() {
             <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
               <li>Ambedkar Nagar</li>
               <li>Uttar Pradesh, India</li>
+              <li>Pin Code: 224132</li>
               <li className="pt-2 md:pt-4"><a href="mailto:harshgupta07h@gmail.com" className="hover:text-brand-gold transition-colors break-all">harshgupta07h@gmail.com</a></li>
-              <li>+91 88758 10604</li>
+              <li>+91 8875810604</li>
             </ul>
           </div>
         </div>
