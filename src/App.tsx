@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles, Trash2, CreditCard, Banknote, Smartphone } from 'lucide-react';
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
@@ -438,6 +438,64 @@ const PRODUCTS: Product[] = [
     variants: [
       { name: 'Age', options: ['3-4 Yrs', '5-6 Yrs', '7-8 Yrs'] }
     ]
+  },
+  {
+    id: 'j8',
+    name: 'Rose Gold Moissanite Ring',
+    category: 'Jewellery',
+    department: 'Rings',
+    price: 8500,
+    image: 'https://images.unsplash.com/photo-1605100804763-247f67b254a6?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1605100804763-247f67b254a6?q=80&w=800&auto=format&fit=crop'
+    ],
+    isNew: true,
+    sales: 15,
+    description: 'Elegant rose gold ring featuring a brilliant-cut moissanite center stone.',
+    material: 'diamond',
+    occasion: 'party',
+    variants: [
+      { name: 'Ring Size', options: ['5', '6', '7', '8'] }
+    ]
+  },
+  {
+    id: 'c13',
+    name: 'Mens Casual Chinos',
+    category: 'Clothing',
+    department: 'Men',
+    price: 1450,
+    image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop'
+    ],
+    isNew: false,
+    sales: 420,
+    description: 'Premium cotton chinos with a tailored fit perfect for office or casual wear.',
+    material: 'cotton',
+    occasion: 'casual',
+    variants: [
+      { name: 'Size', options: ['30', '32', '34', '36'] },
+      { name: 'Color', options: ['Khaki', 'Navy', 'Olive'] }
+    ]
+  },
+  {
+    id: 'c14',
+    name: 'Kids Denim Jacket',
+    category: 'Clothing',
+    department: 'Kids',
+    price: 1100,
+    image: 'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=800&auto=format&fit=crop'
+    ],
+    isNew: true,
+    sales: 55,
+    description: 'Stylish denim jacket for kids with button closures and front pockets.',
+    material: 'cotton',
+    occasion: 'casual',
+    variants: [
+      { name: 'Age', options: ['4-5 Yrs', '6-7 Yrs', '8-9 Yrs'] }
+    ]
   }
 ];
 
@@ -641,15 +699,22 @@ const ProductCard: React.FC<{
             {product.images.map((_, idx) => (
               <div 
                 key={idx} 
-                className={`h-1 rounded-full transition-all duration-300 ${idx === currentImageIndex ? 'w-4 bg-brand-surface' : 'w-1.5 bg-brand-surface/50'}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentImageIndex ? 'w-4 bg-brand-surface shadow-[0_0_4px_rgba(0,0,0,0.5)]' : 'w-1.5 bg-brand-surface/70'}`}
               />
             ))}
           </div>
         )}
 
-        <div className="hidden md:flex absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-col items-center justify-center gap-3 pointer-events-none">
-          <button className="bg-brand-bg/90 text-brand-gold text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]">
-            View Details
+        {/* Quick Add Slide-up */}
+        <div className="absolute bottom-0 left-0 right-0 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none p-3 bg-gradient-to-t from-black/60 to-transparent flex flex-col gap-2 z-20">
+          <button 
+             onClick={(e) => {
+               e.stopPropagation();
+               onSelect(product);
+             }}
+             className="w-full bg-brand-surface text-brand-ink text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 hover:bg-brand-gold hover:text-brand-bg transition-colors shadow-lg pointer-events-auto font-medium"
+          >
+            Quick View
           </button>
           <button 
             onClick={(e) => {
@@ -660,7 +725,7 @@ const ProductCard: React.FC<{
                 onAddToCart(e, product.id);
               }
             }}
-            className="bg-brand-gold text-brand-bg text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 md:px-6 md:py-3 hover:bg-brand-bg hover:text-brand-gold transition-colors backdrop-blur-sm pointer-events-auto w-3/4 max-w-[160px]"
+            className="w-full bg-brand-gold text-brand-bg text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 hover:bg-brand-ink transition-colors shadow-lg pointer-events-auto font-bold"
           >
             {product.variants && product.variants.length > 0 ? 'Select Options' : 'Add to Cart'}
           </button>
@@ -1069,19 +1134,39 @@ export default function App() {
                 type="text" 
                 placeholder="Search products..." 
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setCurrentView('home');
-                  setIsMobileMenuOpen(false);
-                  setTimeout(() => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    setCurrentView('home');
+                    setIsMobileMenuOpen(false);
+                    setTimeout(() => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                  }
                 }}
                 className="w-full bg-brand-surface border border-brand-ink/20 rounded-full py-3 pl-10 pr-4 focus:outline-none focus:border-brand-gold text-brand-ink placeholder:text-brand-ink/40"
               />
             </div>
 
             <div className="flex flex-col gap-8 text-lg uppercase tracking-widest font-medium">
-              <a href="#shop" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Shop</a>
-              <a href="#collections" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Collections</a>
+              <button 
+                onClick={() => {
+                  setCurrentView('home'); 
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+                }} 
+                className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4"
+              >
+                Home
+              </button>
+              <button 
+                onClick={() => {
+                  setCurrentView('home'); 
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                }} 
+                className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4"
+              >
+                Shop
+              </button>
               {isAuthReady && user ? (
                 <>
                   <button onClick={() => { setCurrentView('profile'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">My Profile</button>
@@ -1181,10 +1266,12 @@ export default function App() {
               type="text" 
               placeholder="Search products..." 
               value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setCurrentView('home');
-                document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setCurrentView('home');
+                  document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+                }
               }}
               className="bg-transparent border-none focus:outline-none text-xs ml-2 w-32 lg:w-48 text-brand-ink placeholder:text-brand-ink/40"
             />
@@ -2247,7 +2334,7 @@ export default function App() {
                                       onClick={() => setCart(prev => prev.filter((_, i) => i !== idx))}
                                       className="text-brand-ink/30 hover:text-red-500 transition-colors mb-auto p-1"
                                     >
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                                      <Trash2 className="w-4 h-4" />
                                     </button>
                                     <div className="text-right">
                                       <span className="font-bold text-brand-ink text-lg">₹{(product.price * item.quantity).toLocaleString('en-IN')}</span>
@@ -2317,7 +2404,7 @@ export default function App() {
                             <div className="flex items-center pt-1">
                               <input type="radio" value="cod" checked={checkoutData.paymentMethod === 'cod'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
                             </div>
-                            <div className="text-brand-gold mt-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg></div>
+                            <div className="text-brand-gold mt-1"><Banknote className="w-5 h-5" /></div>
                             <div>
                               <div className="font-bold text-sm text-brand-ink">Cash on Delivery</div>
                               <div className="text-xs text-brand-ink/60 mt-1">Pay when your order arrives</div>
@@ -2327,7 +2414,7 @@ export default function App() {
                             <div className="flex items-center pt-1">
                               <input type="radio" value="upi" checked={checkoutData.paymentMethod === 'upi'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
                             </div>
-                            <div className="text-brand-gold mt-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></div>
+                            <div className="text-brand-gold mt-1"><Smartphone className="w-5 h-5" /></div>
                             <div>
                               <div className="font-bold text-sm text-brand-ink">UPI / Online Payment</div>
                               <div className="text-xs text-brand-ink/60 mt-1">PhonePe, GPay, Paytm, etc.</div>
@@ -2337,10 +2424,10 @@ export default function App() {
                             <div className="flex items-center pt-1">
                               <input type="radio" value="bank" checked={checkoutData.paymentMethod === 'bank'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
                             </div>
-                            <div className="text-brand-gold mt-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="10" width="18" height="10" rx="2" ry="2"></rect><polygon points="12 2 2 8 22 8 12 2"></polygon><line x1="12" y1="22" x2="12" y2="22"></line></svg></div>
+                            <div className="text-brand-gold mt-1"><CreditCard className="w-5 h-5" /></div>
                             <div>
-                              <div className="font-bold text-sm text-brand-ink">Bank Transfer</div>
-                              <div className="text-xs text-brand-ink/60 mt-1">Direct transfer to our account</div>
+                              <div className="font-bold text-sm text-brand-ink">Bank/Card Transfer</div>
+                              <div className="text-xs text-brand-ink/60 mt-1">Direct card or bank account</div>
                             </div>
                           </label>
                         </div>
@@ -2439,8 +2526,8 @@ export default function App() {
                      {currentView === 'cart' && (
                        <div className="flex justify-center items-center mt-8 pt-6 border-t border-brand-ink/5 text-[10px] text-brand-ink/40 font-medium">
                           <div className="flex items-center gap-1.5 px-3"><ShieldCheck className="w-3.5 h-3.5" /> Secure</div>
-                          <div className="flex items-center gap-1.5 border-x border-brand-ink/10 px-3"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Safe Pay</div>
-                          <div className="flex items-center gap-1.5 px-3"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg> Free Ship</div>
+                          <div className="flex items-center gap-1.5 border-x border-brand-ink/10 px-3"><ShieldCheck className="w-3.5 h-3.5" /> Safe Pay</div>
+                          <div className="flex items-center gap-1.5 px-3"><Truck className="w-3.5 h-3.5" /> Free Ship</div>
                        </div>
                      )}
                   </div>
@@ -2508,40 +2595,73 @@ export default function App() {
 
       {/* Footer */}
       <footer className="bg-brand-surface pt-16 md:pt-20 pb-8 md:pb-10 px-6 md:px-12 border-t border-brand-ink/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 mb-12 md:mb-16">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 md:gap-12 mb-12 md:mb-16">
           <div className="sm:col-span-2">
             <h2 className="font-serif text-2xl md:text-3xl mb-2 text-brand-gold">{brandInfo.title}</h2>
             <p className="text-[10px] md:text-xs uppercase tracking-widest text-brand-ink/60 mb-4 md:mb-6">{brandInfo.sub}</p>
-            <p className="text-sm text-brand-ink/70 max-w-sm leading-relaxed">
+            <p className="text-sm text-brand-ink/70 max-w-sm leading-relaxed mb-6">
               {storeMode === 'clothing' && 'Your premier destination for luxury clothing. We bring elegance and style to your everyday life.'}
               {storeMode === 'jewellery' && 'Your premier destination for exquisite jewellery. We bring brilliance and timeless beauty to your everyday life.'}
             </p>
+            <div className="flex flex-col gap-2">
+              <label className="text-[10px] uppercase tracking-widest font-semibold text-brand-ink">Subscribe to our Newsletter</label>
+              <div className="flex items-center w-full max-w-sm">
+                <input 
+                  type="email" 
+                  placeholder="Enter your email" 
+                  className="w-full bg-brand-bg md:bg-white border border-brand-ink/20 border-r-0 px-4 py-2 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors"
+                />
+                <button className="bg-brand-ink text-brand-gold px-4 py-2 text-sm uppercase tracking-widest border border-brand-ink hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium">Subscribe</button>
+              </div>
+            </div>
           </div>
           
           <div>
-            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Explore</h4>
+            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Shop</h4>
             <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
-              <li><a href="#" className="hover:text-brand-gold transition-colors">New Arrivals</a></li>
-              <li><a href="#shop" className="hover:text-brand-gold transition-colors">Shop All</a></li>
-              <li><a href="#collections" className="hover:text-brand-gold transition-colors">Collections</a></li>
-              <li><button onClick={() => { setCurrentView('about'); window.scrollTo(0,0); }} className="hover:text-brand-gold transition-colors">Our Story</button></li>
+              <li><button onClick={() => { setCurrentView('home'); setDepartment('All'); window.scrollTo(0, 0); }} className="hover:text-brand-gold transition-colors">New Arrivals</button></li>
+              <li><button onClick={() => { setCurrentView('home'); setDepartment('Women'); window.scrollTo(0, 0); }} className="hover:text-brand-gold transition-colors">Women's Collection</button></li>
+              <li><button onClick={() => { setCurrentView('home'); setDepartment('Men'); window.scrollTo(0, 0); }} className="hover:text-brand-gold transition-colors">Men's Collection</button></li>
+              <li><button onClick={() => { setCurrentView('home'); setDepartment('Kids'); window.scrollTo(0, 0); }} className="hover:text-brand-gold transition-colors">Kids' Collection</button></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Visit Us</h4>
+            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Customer Care</h4>
             <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
-              <li>Ambedkar Nagar</li>
-              <li>Uttar Pradesh, India</li>
-              <li className="pt-2 md:pt-4"><a href="mailto:harshgupta07h@gmail.com" className="hover:text-brand-gold transition-colors break-all">harshgupta07h@gmail.com</a></li>
-              <li>+91 88758 10604</li>
+              <li><button onClick={() => setCurrentView('contact')} className="hover:text-brand-gold transition-colors">Contact Us</button></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Shipping & Delivery</a></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Returns & Exchanges</a></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Size Guide</a></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">FAQs</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">About Us</h4>
+            <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
+              <li><button onClick={() => { setCurrentView('about'); window.scrollTo({top: 0, behavior: 'smooth'}); }} className="hover:text-brand-gold transition-colors">Our Story</button></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Careers</a></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Sustainability</a></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Privacy Policy</a></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Terms of Service</a></li>
             </ul>
           </div>
         </div>
         
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between pt-6 md:pt-8 border-t border-brand-ink/10 text-[10px] md:text-xs text-brand-ink/50 uppercase tracking-wider gap-4 md:gap-0">
-          <p className="text-center md:text-left">&copy; {new Date().getFullYear()} {brandInfo.title}. All rights reserved.</p>
-          <div className="flex gap-6">
+          <div className="flex flex-col items-center md:items-start gap-1.5">
+            <p className="text-center md:text-left">&copy; {new Date().getFullYear()} {brandInfo.title}. All rights reserved.</p>
+            <p className="text-[9px] md:text-[10px] normal-case tracking-normal">
+              Designed & Developed by <a href="https://portfolioharsh29.netlify.app/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold transition-colors font-medium border-b border-brand-gold/30 hover:border-brand-gold pb-0.5">Harsh Gupta</a>
+            </p>
+          </div>
+          <div className="flex gap-4 md:gap-6 items-center flex-wrap justify-center mt-4 md:mt-0">
+            <span>Secure Payments</span>
+            <div className="h-4 w-px bg-brand-ink/20"></div>
+            <span>Fast Delivery</span>
+            <div className="h-4 w-px bg-brand-ink/20"></div>
+            <span>Easy Returns</span>
           </div>
         </div>
       </footer>
@@ -2934,6 +3054,45 @@ export default function App() {
                         </form>
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Related Products Section */}
+                <div className="w-full border-t border-brand-ink/10 bg-brand-surface p-6 md:p-8">
+                  <h3 className="text-xl font-serif text-brand-ink mb-6">You May Also Like</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                    {PRODUCTS
+                      .filter(p => p.id !== selectedProduct.id && (p.category === selectedProduct.category || p.department === selectedProduct.department))
+                      .slice(0, 4)
+                      .map(product => (
+                        <div 
+                          key={product.id} 
+                          className="group cursor-pointer"
+                          onClick={() => {
+                            setSelectedProduct(product);
+                            document.querySelector('.custom-scrollbar')?.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                        >
+                          <div className="relative aspect-[3/4] overflow-hidden mb-3 bg-brand-surface rounded">
+                            <img 
+                              src={product.image} 
+                              alt={product.name}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                              referrerPolicy="no-referrer"
+                            />
+                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                              <span className="bg-brand-bg text-brand-gold text-[10px] uppercase tracking-widest px-4 py-2 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm">
+                                View Details
+                              </span>
+                            </div>
+                          </div>
+                          <div>
+                            <p className="text-[9px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
+                            <h4 className="font-serif text-sm text-brand-ink line-clamp-1">{product.name}</h4>
+                            <p className="text-xs text-brand-ink/70 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
+                          </div>
+                        </div>
+                      ))}
                   </div>
                 </div>
               </div>

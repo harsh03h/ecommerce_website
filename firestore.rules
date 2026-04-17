@@ -65,12 +65,14 @@ service cloud.firestore {
     }
 
     function isValidOrder(data) {
-      return hasOnlyAllowedFields(['items', 'totalAmount', 'status', 'createdAt']) &&
-             hasRequiredFields(['items', 'totalAmount', 'status', 'createdAt']) &&
+      return hasOnlyAllowedFields(['items', 'totalAmount', 'status', 'createdAt', 'shippingInfo', 'paymentMethod']) &&
+             hasRequiredFields(['items', 'totalAmount', 'status', 'createdAt', 'shippingInfo', 'paymentMethod']) &&
              data.items is list &&
              data.totalAmount is number &&
              data.status in ['pending', 'processing', 'shipped', 'delivered'] &&
-             data.createdAt is timestamp;
+             data.createdAt is timestamp &&
+             data.shippingInfo is map &&
+             data.paymentMethod in ['cod', 'upi', 'bank'];
     }
 
     match /{path=**}/orders/{orderId} {
