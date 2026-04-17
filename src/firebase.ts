@@ -82,8 +82,9 @@ export const signInWithGoogle = async () => {
     } catch (error) {
         handleFirestoreError(error, OperationType.GET, `users/${user.uid}`);
     }
-  } catch (error: any) {
-    if (error?.code === 'auth/popup-closed-by-user') {
+  } catch (error) {
+    const err = error as { code?: string; message?: string };
+    if (err?.code === 'auth/popup-closed-by-user') {
       console.log("Sign-in popup was closed by the user.");
       return;
     }

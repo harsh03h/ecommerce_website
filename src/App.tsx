@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles, Plus, Minus } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles } from 'lucide-react';
 import { auth, signInWithGoogle, logout, db } from './firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
@@ -28,6 +28,28 @@ export type Product = {
   material?: string;
   occasion?: string;
   variants?: ProductVariant[];
+};
+
+export type Review = {
+  id: string;
+  author: string;
+  rating: number;
+  comment: string;
+  date: string;
+};
+
+export type OrderItem = {
+  productId: string;
+  quantity: number;
+  variants?: Record<string, string>;
+};
+
+export type Order = {
+  id: string;
+  items: OrderItem[];
+  totalAmount: number;
+  status: string;
+  createdAt?: any;
 };
 
 const PRODUCTS: Product[] = [
@@ -521,7 +543,7 @@ const renderStars = (rating: number, interactive = false, onRate?: (star: number
 
 const ProductCard: React.FC<{
   product: Product;
-  reviews: any[];
+  reviews: Review[];
   isSaved: boolean;
   onSelect: (product: Product) => void;
   onToggleWishlist: (e: React.MouseEvent, id: string) => Promise<void> | void;
@@ -557,8 +579,9 @@ const ProductCard: React.FC<{
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
+      whileHover={{ scale: 1.03, y: -4 }}
       transition={{ duration: 0.3 }}
-      className="group cursor-pointer"
+      className="group cursor-pointer bg-brand-bg p-3 -m-3 rounded-2xl hover:shadow-2xl transition-all duration-300 relative z-0 hover:z-10"
       onClick={() => onSelect(product)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
@@ -650,7 +673,7 @@ const ProductCard: React.FC<{
           {reviews.length > 0 && (
             <div className="flex items-center gap-1 md:gap-2 mt-1">
               {renderStars(Math.round(avgRating))}
-              <span className="text-[10px] md:text-xs text-brand-ink/50 w-full sm:w-auto mt-1 sm:mt-0">({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})</span>
+              <span className="text-[10px] md:text-xs text-brand-ink/50">({reviews.length})</span>
             </div>
           )}
         </div>
@@ -662,7 +685,7 @@ const ProductCard: React.FC<{
 
 export default function App() {
   const [storeMode, setStoreMode] = useState<StoreMode>('clothing');
-  const [department, setDepartment] = useState<'All' | 'Men' | 'Women' | 'Kids'>('All');
+  const [department, setDepartment] = useState<'All' | 'Men' | 'Women' | 'Kids' | 'Gold' | 'Silver' | 'Bridal' | 'Rings'>('All');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [sortBy, setSortBy] = useState('featured');
   const [priceRange, setPriceRange] = useState('all');
@@ -670,22 +693,24 @@ export default function App() {
   const [occasion, setOccasion] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about' | 'contact' | 'login' | 'admin'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about' | 'contact' | 'login' | 'admin' | 'cart' | 'checkout'>('home');
   
   // Auth State
   const [user, setUser] = useState<User | null>(null);
   const [isAuthReady, setIsAuthReady] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [cart, setCart] = useState<{productId: string, quantity: number, variants?: Record<string, string>}[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [checkoutStep, setCheckoutStep] = useState<'cart' | 'address' | 'payment'>('cart');
   const [checkoutData, setCheckoutData] = useState({
+    fullName: '',
+    phone: '',
+    email: '',
     address: '',
     city: '',
-    zip: '',
-    paymentMethod: 'card',
+    pincode: '',
+    state: '',
+    paymentMethod: 'cod',
     cardNumber: '',
     expiry: '',
     cvv: ''
@@ -775,7 +800,7 @@ export default function App() {
         const fetchedOrders = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
-        })).sort((a: any, b: any) => {
+        } as Order)).sort((a: Order, b: Order) => {
           if (!a.createdAt || !b.createdAt) return 0;
           return b.createdAt.toMillis() - a.createdAt.toMillis();
         });
@@ -864,17 +889,21 @@ export default function App() {
   const proceedToCheckout = () => {
     if (!user) {
       setCurrentView('login');
-      setIsCartOpen(false);
       return;
     }
     if (cart.length === 0) return;
     
-    // Pre-fill address if available
-    if (profileData.address) {
-      setCheckoutData(prev => ({ ...prev, address: profileData.address }));
+    // Pre-fill fields if available
+    if (profileData) {
+      setCheckoutData(prev => ({
+        ...prev,
+        fullName: profileData.displayName || '',
+        phone: profileData.phone || '',
+        address: profileData.address || ''
+      }));
     }
     
-    setCheckoutStep('address');
+    setCurrentView('checkout');
   };
 
   const completeCheckout = async (e: React.FormEvent) => {
@@ -893,18 +922,20 @@ export default function App() {
         items: cart,
         totalAmount,
         status: 'pending',
-        shippingAddress: {
+        shippingInfo: {
+          fullName: checkoutData.fullName,
+          phone: checkoutData.phone,
+          email: checkoutData.email,
           address: checkoutData.address,
           city: checkoutData.city,
-          zip: checkoutData.zip
+          pincode: checkoutData.pincode,
+          state: checkoutData.state
         },
         paymentMethod: checkoutData.paymentMethod,
         createdAt: serverTimestamp()
       });
       
       setCart([]);
-      setCheckoutStep('cart');
-      setIsCartOpen(false);
       setCurrentView('orders');
       
       const id = Date.now();
@@ -912,7 +943,9 @@ export default function App() {
       setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
     } catch (error) {
       console.error("Error creating order", error);
-      alert("Failed to place order. Please try again.");
+      const id = Date.now();
+      setToast({ message: "Failed to place order. Please try again.", id });
+      setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
     } finally {
       setIsCheckingOut(false);
     }
@@ -1206,7 +1239,7 @@ export default function App() {
           </button>
           <button 
             className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors relative" 
-            onClick={() => setIsCartOpen(true)}
+            onClick={() => setCurrentView('cart')}
             aria-label={`Open cart, ${cart.reduce((sum, item) => sum + item.quantity, 0)} items`}
           >
             <ShoppingBag className="w-5 h-5" />
@@ -1219,215 +1252,7 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Cart Drawer */}
-      <AnimatePresence>
-        {isCartOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm flex justify-end"
-            onClick={() => setIsCartOpen(false)}
-          >
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
-              className="w-full max-w-md bg-brand-surface h-full flex flex-col shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-6 border-b border-brand-ink/10 flex justify-between items-center">
-                <h2 className="font-serif text-2xl text-brand-ink">
-                  {checkoutStep === 'cart' ? 'Your Cart' : checkoutStep === 'address' ? 'Shipping Address' : 'Payment'}
-                </h2>
-                <button 
-                  onClick={() => { setIsCartOpen(false); setCheckoutStep('cart'); }} 
-                  className="p-2 hover:bg-brand-ink/10 rounded-full"
-                  aria-label="Close cart"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              
-              <div className="flex-grow overflow-y-auto p-6 flex flex-col gap-6 custom-scrollbar">
-                {checkoutStep === 'cart' ? (
-                  cart.length === 0 ? (
-                    <div className="text-center py-16 flex flex-col items-center justify-center h-full">
-                      <div className="w-20 h-20 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
-                        <ShoppingCart className="w-10 h-10 text-brand-ink/40" />
-                      </div>
-                      <h3 className="font-serif text-2xl text-brand-ink mb-2">Your cart is empty</h3>
-                      <p className="text-brand-ink/60 mb-8 max-w-[250px] mx-auto text-sm">Looks like you haven't added anything to your cart yet.</p>
-                      <button 
-                        onClick={() => { setIsCartOpen(false); setCurrentView('home'); }} 
-                        className="bg-brand-gold text-brand-bg px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors w-full sm:w-auto"
-                      >
-                        Start Shopping
-                      </button>
-                    </div>
-                  ) : (
-                    cart.map((item, idx) => {
-                      const product = PRODUCTS.find(p => p.id === item.productId);
-                      if (!product) return null;
-                      return (
-                        <div key={idx} className="flex gap-4 border-b border-brand-ink/10 pb-6">
-                          <img src={product.image} alt={product.name} className="w-20 h-24 object-cover" referrerPolicy="no-referrer" />
-                          <div className="flex-grow">
-                            <h4 className="font-serif text-base md:text-lg text-brand-ink">{product.name}</h4>
-                            <p className="text-sm text-brand-ink/70 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
-                            {item.variants && Object.entries(item.variants).map(([key, val]) => (
-                              <p key={key} className="text-[10px] uppercase tracking-widest text-brand-ink/50 mt-1">{key}: {val}</p>
-                            ))}
-                            <div className="flex items-center justify-between mt-3">
-                              <div className="flex items-center gap-3 bg-brand-surface border border-brand-ink/10 rounded-full py-1 px-2">
-                                <button 
-                                  onClick={() => {
-                                    setCart(prev => prev.map((cartItem, i) => i === idx ? { ...cartItem, quantity: Math.max(1, cartItem.quantity - 1) } : cartItem));
-                                  }}
-                                  className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-brand-ink/5 transition-colors"
-                                  aria-label="Decrease quantity"
-                                >
-                                  <Minus className="w-3 h-3 text-brand-ink" />
-                                </button>
-                                <span className="text-xs font-medium w-4 text-center text-brand-ink">{item.quantity}</span>
-                                <button 
-                                  onClick={() => {
-                                    setCart(prev => prev.map((cartItem, i) => i === idx ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem));
-                                  }}
-                                  className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-brand-ink/5 transition-colors"
-                                  aria-label="Increase quantity"
-                                >
-                                  <Plus className="w-3 h-3 text-brand-ink" />
-                                </button>
-                              </div>
-                              <button 
-                                onClick={() => {
-                                  setCart(prev => prev.filter((_, i) => i !== idx));
-                                }}
-                                className="text-[10px] uppercase tracking-widest text-red-400 hover:text-red-500 transition-colors flex items-center gap-1"
-                              >
-                                Remove
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })
-                  )
-                ) : checkoutStep === 'address' ? (
-                  <form className="flex flex-col gap-4 h-full" id="address-form" onSubmit={(e) => { e.preventDefault(); setCheckoutStep('payment'); }}>
-                    <div>
-                      <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">Street Address</label>
-                      <textarea 
-                        required
-                        value={checkoutData.address}
-                        onChange={e => setCheckoutData({...checkoutData, address: e.target.value})}
-                        className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink"
-                        rows={3}
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">City</label>
-                        <input 
-                          type="text" required
-                          value={checkoutData.city}
-                          onChange={e => setCheckoutData({...checkoutData, city: e.target.value})}
-                          className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">ZIP Code</label>
-                        <input 
-                          type="text" required
-                          value={checkoutData.zip}
-                          onChange={e => setCheckoutData({...checkoutData, zip: e.target.value})}
-                          className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink"
-                        />
-                      </div>
-                    </div>
-                  </form>
-                ) : (
-                  <form className="flex flex-col gap-6 h-full" id="payment-form" onSubmit={completeCheckout}>
-                    <div>
-                      <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-4">Payment Method</label>
-                      <div className="flex flex-col gap-3">
-                        <label className={`flex items-center gap-3 p-4 border rounded cursor-pointer transition-colors ${checkoutData.paymentMethod === 'card' ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-ink/20'}`}>
-                          <input type="radio" name="payment" value="card" checked={checkoutData.paymentMethod === 'card'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold" />
-                          <span className="text-sm font-medium">Credit / Debit Card</span>
-                        </label>
-                        <label className={`flex items-center gap-3 p-4 border rounded cursor-pointer transition-colors ${checkoutData.paymentMethod === 'upi' ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-ink/20'}`}>
-                          <input type="radio" name="payment" value="upi" checked={checkoutData.paymentMethod === 'upi'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold" />
-                          <span className="text-sm font-medium">UPI</span>
-                        </label>
-                        <label className={`flex items-center gap-3 p-4 border rounded cursor-pointer transition-colors ${checkoutData.paymentMethod === 'cod' ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-ink/20'}`}>
-                          <input type="radio" name="payment" value="cod" checked={checkoutData.paymentMethod === 'cod'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold" />
-                          <span className="text-sm font-medium">Cash on Delivery</span>
-                        </label>
-                      </div>
-                    </div>
-                    
-                    {checkoutData.paymentMethod === 'card' && (
-                      <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-top-2">
-                        <div>
-                          <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">Card Number</label>
-                          <input type="text" required placeholder="0000 0000 0000 0000" value={checkoutData.cardNumber} onChange={e => setCheckoutData({...checkoutData, cardNumber: e.target.value})} className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">Expiry</label>
-                            <input type="text" required placeholder="MM/YY" value={checkoutData.expiry} onChange={e => setCheckoutData({...checkoutData, expiry: e.target.value})} className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink" />
-                          </div>
-                          <div>
-                            <label className="block text-xs uppercase tracking-widest text-brand-ink/60 mb-2">CVV</label>
-                            <input type="password" required placeholder="123" value={checkoutData.cvv} onChange={e => setCheckoutData({...checkoutData, cvv: e.target.value})} className="w-full bg-transparent border border-brand-ink/20 rounded p-3 text-sm focus:outline-none focus:border-brand-gold text-brand-ink" />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </form>
-                )}
-              </div>
-              
-              {cart.length > 0 && (
-                <div className="p-6 border-t border-brand-ink/10 bg-brand-bg">
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="text-sm uppercase tracking-widest text-brand-ink/70">Total</span>
-                    <span className="font-serif text-xl text-brand-ink">
-                      ₹{cart.reduce((sum, item) => {
-                        const product = PRODUCTS.find(p => p.id === item.productId);
-                        return sum + (product?.price || 0) * item.quantity;
-                      }, 0).toLocaleString('en-IN')}
-                    </span>
-                  </div>
-                  {checkoutStep === 'cart' ? (
-                    <button 
-                      onClick={proceedToCheckout}
-                      disabled={isCheckingOut}
-                      className="w-full bg-brand-gold text-brand-bg py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors disabled:opacity-50"
-                    >
-                      Proceed to Checkout
-                    </button>
-                  ) : checkoutStep === 'address' ? (
-                    <div className="flex gap-3">
-                      <button onClick={() => setCheckoutStep('cart')} className="w-1/3 border border-brand-ink/20 text-brand-ink py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-surface transition-colors">Back</button>
-                      <button type="submit" form="address-form" className="w-2/3 bg-brand-gold text-brand-bg py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors">Continue to Payment</button>
-                    </div>
-                  ) : (
-                    <div className="flex gap-3">
-                      <button onClick={() => setCheckoutStep('address')} className="w-1/3 border border-brand-ink/20 text-brand-ink py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-surface transition-colors">Back</button>
-                      <button type="submit" form="payment-form" disabled={isCheckingOut} className="w-2/3 bg-brand-gold text-brand-bg py-4 text-xs uppercase tracking-widest font-medium hover:bg-brand-ink hover:text-brand-gold transition-colors disabled:opacity-50">
-                        {isCheckingOut ? 'Processing...' : 'Place Order'}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+{/* Cart Drawer Removed */}
 
       {/* Mobile Store Mode Toggle (Visible only on small screens below nav) */}
       <div className="md:hidden flex justify-center bg-brand-bg border-b border-brand-ink/10 py-3 px-4">
@@ -1688,7 +1513,7 @@ export default function App() {
                   {['All', 'Men', 'Women', 'Kids'].map((dept) => (
                     <button
                       key={dept}
-                      onClick={() => setDepartment(dept as any)}
+                      onClick={() => setDepartment(dept as 'All' | 'Men' | 'Women' | 'Kids' | 'Gold' | 'Silver' | 'Bridal' | 'Rings')}
                       className={`whitespace-nowrap transition-colors pb-1 border-b-2 ${department === dept ? 'border-brand-gold text-brand-gold' : 'border-transparent text-brand-ink/60 hover:text-brand-ink'}`}
                     >
                       {dept}
@@ -1701,7 +1526,7 @@ export default function App() {
                   {['All', 'Gold', 'Silver', 'Bridal', 'Rings'].map((dept) => (
                     <button
                       key={dept}
-                      onClick={() => setDepartment(dept as any)}
+                      onClick={() => setDepartment(dept as 'All' | 'Men' | 'Women' | 'Kids' | 'Gold' | 'Silver' | 'Bridal' | 'Rings')}
                       className={`whitespace-nowrap transition-colors pb-1 border-b-2 ${department === dept ? 'border-brand-gold text-brand-gold' : 'border-transparent text-brand-ink/60 hover:text-brand-ink'}`}
                     >
                       {dept}
@@ -1896,8 +1721,8 @@ export default function App() {
                 <div className="flex items-center gap-4">
                   <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop" alt="Priya Sharma" className="w-12 h-12 rounded-full object-cover" />
                   <div>
-                    <h4 className="font-bold text-brand-ink text-sm">Teesha Gupta</h4>
-                    <p className="text-xs text-brand-ink/50">Lucknow</p>
+                    <h4 className="font-bold text-brand-ink text-sm">Priya Sharma</h4>
+                    <p className="text-xs text-brand-ink/50">Dehradun</p>
                   </div>
                 </div>
               </div>
@@ -1918,8 +1743,8 @@ export default function App() {
                 <div className="flex items-center gap-4">
                   <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="Ravi Agarwal" className="w-12 h-12 rounded-full object-cover" />
                   <div>
-                    <h4 className="font-bold text-brand-bg text-sm">Yash Gupta</h4>
-                    <p className="text-xs text-brand-bg/80">Ambedkar Nagar</p>
+                    <h4 className="font-bold text-brand-bg text-sm">Ravi Agarwal</h4>
+                    <p className="text-xs text-brand-bg/80">Haridwar</p>
                   </div>
                 </div>
               </div>
@@ -1940,8 +1765,8 @@ export default function App() {
                 <div className="flex items-center gap-4">
                   <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&auto=format&fit=crop" alt="Amit Verma" className="w-12 h-12 rounded-full object-cover" />
                   <div>
-                    <h4 className="font-bold text-brand-ink text-sm">Satvik</h4>
-                    <p className="text-xs text-brand-ink/50">Gorakhpur</p>
+                    <h4 className="font-bold text-brand-ink text-sm">Amit Verma</h4>
+                    <p className="text-xs text-brand-ink/50">Dehradun</p>
                   </div>
                 </div>
               </div>
@@ -1974,7 +1799,7 @@ export default function App() {
                 </div>
                 <h3 className="font-serif text-xl mb-3 text-brand-bg">Fast Delivery</h3>
                 <p className="text-sm text-brand-bg/80 leading-relaxed max-w-xs mx-auto">
-                  Same-day delivery in Ambedkar Nagar. Pan-India shipping within 3-5 business days.
+                  Same-day delivery in Dehradun. Pan-India shipping within 3-5 business days.
                 </p>
               </div>
               
@@ -2325,7 +2150,7 @@ export default function App() {
                     </div>
                     
                     <div className="space-y-6">
-                      {(order.items || []).map((item: any, idx: number) => {
+                      {(order.items || []).map((item: OrderItem, idx: number) => {
                         const product = PRODUCTS.find(p => p.id === item.productId);
                         if (!product) return null;
                         return (
@@ -2352,6 +2177,278 @@ export default function App() {
           <Login onLoginSuccess={(view) => setCurrentView(view)} />
         ) : currentView === 'admin' && user ? (
           <AdminPanel user={user} />
+        ) : currentView === 'cart' || currentView === 'checkout' ? (
+          <div>
+            {/* Header */}
+            <div className="bg-[#2a1306] py-12 md:py-20 px-4 md:px-12 relative overflow-hidden">
+               <div className="max-w-7xl mx-auto relative z-10">
+                 <div className="inline-block border border-brand-gold/30 rounded-full px-4 py-1.5 text-[10px] uppercase tracking-widest font-bold mb-4 text-brand-gold">
+                   YOUR BAG
+                 </div>
+                 <h1 className="text-4xl md:text-5xl font-serif text-white mb-2">
+                   {currentView === 'cart' ? 'Shopping Cart' : 'Checkout'}
+                 </h1>
+                 <p className="text-brand-gold/80">{cart.reduce((sum, item) => sum + item.quantity, 0)} items in your cart</p>
+               </div>
+               
+               {/* Decorative background circle */}
+               <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-[#3a1d0b] rounded-full blur-[80px] -translate-y-1/4 translate-x-1/4 opacity-60 pointer-events-none"></div>
+            </div>
+
+            <div className="bg-[#f9f9f9] min-h-[50vh] py-12 px-4 md:px-12">
+              <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+                
+                {/* Left Column (Items or Checkout Forms) */}
+                <div className="flex-grow space-y-6">
+                  {currentView === 'cart' ? (
+                    <>
+                      <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-brand-ink/5 p-6 md:p-8">
+                        {cart.length === 0 ? (
+                          <div className="text-center py-12">
+                            <ShoppingCart className="w-12 h-12 text-brand-ink/20 mx-auto mb-4" />
+                            <h3 className="font-serif text-2xl text-brand-ink mb-2">Your cart is empty</h3>
+                            <button onClick={() => setCurrentView('home')} className="mt-6 text-brand-gold font-medium uppercase text-xs tracking-widest hover:text-brand-ink transition-colors">Start Shopping</button>
+                          </div>
+                        ) : (
+                          <div className="space-y-6">
+                            {cart.map((item, idx) => {
+                              const product = PRODUCTS.find(p => p.id === item.productId);
+                              if (!product) return null;
+                              return (
+                                <div key={idx} className="flex items-center gap-6 relative group">
+                                  <img src={product.image} alt={product.name} className="w-24 h-32 object-cover rounded shadow-sm" referrerPolicy="no-referrer" />
+                                  <div className="flex-grow py-1 pr-8">
+                                    <p className="text-[#da7c44] text-xs font-medium mb-1">{product.category}</p>
+                                    <h4 className="font-serif text-lg font-bold text-brand-ink">{product.name}</h4>
+                                    
+                                    <div className="flex items-center gap-4 mt-5">
+                                      <div className="flex items-center bg-[#f4f4f4] rounded-full px-3 py-1.5">
+                                        <button 
+                                          onClick={() => {
+                                             if (item.quantity > 1) {
+                                                setCart(prev => prev.map((c, i) => i === idx ? { ...c, quantity: c.quantity - 1 } : c));
+                                             }
+                                          }}
+                                          className="text-brand-ink/50 hover:text-brand-ink px-2"
+                                        >−</button>
+                                        <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
+                                        <button 
+                                          onClick={() => {
+                                             setCart(prev => prev.map((c, i) => i === idx ? { ...c, quantity: c.quantity + 1 } : c));
+                                          }}
+                                          className="text-brand-ink/50 hover:text-brand-ink px-2"
+                                        >+</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="flex flex-col items-end py-1 h-full min-h-[100px]">
+                                    <button 
+                                      onClick={() => setCart(prev => prev.filter((_, i) => i !== idx))}
+                                      className="text-brand-ink/30 hover:text-red-500 transition-colors mb-auto p-1"
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                                    </button>
+                                    <div className="text-right">
+                                      <span className="font-bold text-brand-ink text-lg">₹{(product.price * item.quantity).toLocaleString('en-IN')}</span>
+                                      <p className="text-xs text-brand-ink/40">₹{product.price.toLocaleString('en-IN')} each</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                      
+                      <button onClick={() => setCurrentView('home')} className="flex items-center gap-2 text-[#da7c44] font-medium text-sm hover:text-brand-ink transition-colors mt-6 px-2">
+                        <span>←</span> Continue Shopping
+                      </button>
+                    </>
+                  ) : (
+                    <form id="checkout-form" onSubmit={completeCheckout} className="space-y-6 w-full max-w-2xl">
+                      {/* Personal Information */}
+                      <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8">
+                        <h3 className="font-serif text-xl font-bold mb-6 text-brand-ink">Personal Information</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <label className="block text-xs font-bold text-brand-ink/80 mb-2">Full Name *</label>
+                            <input type="text" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.fullName} onChange={e => setCheckoutData({...checkoutData, fullName: e.target.value})} />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-brand-ink/80 mb-2">Phone Number *</label>
+                            <input type="tel" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.phone} onChange={e => setCheckoutData({...checkoutData, phone: e.target.value})} />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-brand-ink/80 mb-2">Email Address</label>
+                          <input type="email" className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.email} onChange={e => setCheckoutData({...checkoutData, email: e.target.value})} />
+                        </div>
+                      </div>
+
+                      {/* Delivery Address */}
+                      <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8">
+                        <h3 className="font-serif text-xl font-bold mb-6 text-brand-ink">Delivery Address</h3>
+                        <div className="mb-4">
+                          <label className="block text-xs font-bold text-brand-ink/80 mb-2">Full Address *</label>
+                          <textarea required placeholder="House No, Street, Locality" className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" rows={2} value={checkoutData.address} onChange={e => setCheckoutData({...checkoutData, address: e.target.value})}></textarea>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-xs font-bold text-brand-ink/80 mb-2">City *</label>
+                            <input type="text" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.city} onChange={e => setCheckoutData({...checkoutData, city: e.target.value})} />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-brand-ink/80 mb-2">Pincode *</label>
+                            <input type="text" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.pincode} onChange={e => setCheckoutData({...checkoutData, pincode: e.target.value})} />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-bold text-brand-ink/80 mb-2">State *</label>
+                            <input type="text" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.state} onChange={e => setCheckoutData({...checkoutData, state: e.target.value})} />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Payment Method */}
+                      <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8">
+                        <h3 className="font-serif text-xl font-bold mb-6 text-brand-ink">Payment Method</h3>
+                        <div className="space-y-3">
+                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'cod' ? 'border-brand-gold bg-[#fffdf0]' : 'border-brand-ink/10'}`}>
+                            <div className="flex items-center pt-1">
+                              <input type="radio" value="cod" checked={checkoutData.paymentMethod === 'cod'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
+                            </div>
+                            <div className="text-brand-gold mt-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg></div>
+                            <div>
+                              <div className="font-bold text-sm text-brand-ink">Cash on Delivery</div>
+                              <div className="text-xs text-brand-ink/60 mt-1">Pay when your order arrives</div>
+                            </div>
+                          </label>
+                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'upi' ? 'border-brand-gold bg-[#fffdf0]' : 'border-brand-ink/10'}`}>
+                            <div className="flex items-center pt-1">
+                              <input type="radio" value="upi" checked={checkoutData.paymentMethod === 'upi'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
+                            </div>
+                            <div className="text-brand-gold mt-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></div>
+                            <div>
+                              <div className="font-bold text-sm text-brand-ink">UPI / Online Payment</div>
+                              <div className="text-xs text-brand-ink/60 mt-1">PhonePe, GPay, Paytm, etc.</div>
+                            </div>
+                          </label>
+                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'bank' ? 'border-brand-gold bg-[#fffdf0]' : 'border-brand-ink/10'}`}>
+                            <div className="flex items-center pt-1">
+                              <input type="radio" value="bank" checked={checkoutData.paymentMethod === 'bank'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
+                            </div>
+                            <div className="text-brand-gold mt-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="10" width="18" height="10" rx="2" ry="2"></rect><polygon points="12 2 2 8 22 8 12 2"></polygon><line x1="12" y1="22" x2="12" y2="22"></line></svg></div>
+                            <div>
+                              <div className="font-bold text-sm text-brand-ink">Bank Transfer</div>
+                              <div className="text-xs text-brand-ink/60 mt-1">Direct transfer to our account</div>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                    </form>
+                  )}
+                </div>
+
+                {/* Right Column (Order Summary) */}
+                <div className="w-full lg:w-[380px] flex-shrink-0">
+                  <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-brand-ink/5 p-6 md:p-8 sticky top-24 relative overflow-hidden">
+                     <h3 className="font-serif text-xl font-bold mb-6 text-brand-ink">Order Summary</h3>
+                     
+                     {currentView === 'cart' ? (
+                       <div className="space-y-4 mb-6 border-b border-brand-ink/10 pb-6">
+                         {cart.map((item, idx) => {
+                           const product = PRODUCTS.find(p => p.id === item.productId);
+                           if (!product) return null;
+                           return (
+                             <div key={idx} className="flex justify-between items-center text-sm">
+                               <span className="text-brand-ink/70 truncate flex-grow pr-4">{product.name} <span className="text-brand-ink/40 text-[10px] ml-1">x{item.quantity}</span></span>
+                               <span className="font-bold text-brand-ink font-serif">₹{(product.price * item.quantity).toLocaleString('en-IN')}</span>
+                             </div>
+                           );
+                         })}
+                       </div>
+                     ) : (
+                       <div className="space-y-5 mb-6 border-b border-brand-ink/10 pb-6">
+                         {cart.map((item, idx) => {
+                           const product = PRODUCTS.find(p => p.id === item.productId);
+                           if (!product) return null;
+                           return (
+                             <div key={idx} className="flex gap-3 text-sm items-center">
+                               <img src={product.image} className="w-12 h-16 object-cover rounded shadow-sm" alt={product.name} referrerPolicy="no-referrer" />
+                               <div className="flex-grow pt-1">
+                                  <div className="text-brand-ink/80 text-xs font-semibold leading-tight pr-4">{product.name}</div>
+                                  <div className="text-[10px] text-brand-ink/50 mt-1 uppercase tracking-widest">Qty: {item.quantity}</div>
+                                  <div className="text-xs font-bold text-[#da7c44] mt-1 font-serif">₹{(product.price * item.quantity).toLocaleString('en-IN')}</div>
+                               </div>
+                             </div>
+                           )
+                         })}
+                       </div>
+                     )}
+
+                     <div className="space-y-4 text-sm">
+                       <div className="flex justify-between items-center">
+                         <span className="text-brand-ink/60">Subtotal</span>
+                         <span className="text-brand-ink font-serif font-bold">₹{cart.reduce((s,i) => s + ((PRODUCTS.find(p => p.id === i.productId)?.price || 0) * i.quantity), 0).toLocaleString('en-IN')}</span>
+                       </div>
+                       <div className="flex justify-between items-center">
+                         <span className="text-brand-ink/60">Delivery</span>
+                         <span className="text-green-600 font-bold uppercase tracking-widest text-[10px]">Free</span>
+                       </div>
+                       
+                       {currentView === 'cart' && (
+                         <div className="bg-[#f0fdf4] text-[#166534] px-4 py-3 rounded-lg text-xs font-semibold flex items-center gap-2 mt-4 shadow-sm border border-green-100">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                           You saved on delivery charges!
+                         </div>
+                       )}
+
+                       <div className="flex justify-between border-t border-brand-ink/10 pt-4 mt-6 items-center">
+                         <span className="text-lg font-bold text-brand-ink">Total</span>
+                         <span className="text-2xl font-bold text-[#da7c44] font-serif">₹{cart.reduce((s,i) => s + ((PRODUCTS.find(p => p.id === i.productId)?.price || 0) * i.quantity), 0).toLocaleString('en-IN')}</span>
+                       </div>
+                     </div>
+
+                     {currentView === 'cart' ? (
+                       <button 
+                         onClick={proceedToCheckout}
+                         disabled={cart.length === 0}
+                         className="w-full bg-[#da7c44] text-white py-4 rounded-lg font-bold hover:bg-[#c76530] transition-colors mt-8 flex justify-center items-center gap-2 shadow-[0_4px_14px_rgba(218,124,68,0.4)] disabled:opacity-50"
+                       >
+                         Proceed to Checkout →
+                       </button>
+                     ) : (
+                       <div className="mt-8 flex flex-col gap-4">
+                         <button 
+                           type="submit" form="checkout-form"
+                           disabled={isCheckingOut || cart.length === 0}
+                           className="w-full bg-[#da7c44] text-white py-4 rounded-lg font-bold hover:bg-[#c76530] transition-colors flex justify-center items-center gap-2 shadow-[0_4px_14px_rgba(218,124,68,0.4)] disabled:opacity-50"
+                         >
+                           {isCheckingOut ? 'Processing...' : 'Place Order'}
+                         </button>
+                         <button 
+                           type="button"
+                           onClick={() => setCurrentView('cart')}
+                           className="text-center text-[#da7c44] text-xs font-medium hover:text-brand-ink transition-colors"
+                         >
+                           ← Back to Cart
+                         </button>
+                       </div>
+                     )}
+
+                     {currentView === 'cart' && (
+                       <div className="flex justify-center items-center mt-8 pt-6 border-t border-brand-ink/5 text-[10px] text-brand-ink/40 font-medium">
+                          <div className="flex items-center gap-1.5 px-3"><ShieldCheck className="w-3.5 h-3.5" /> Secure</div>
+                          <div className="flex items-center gap-1.5 border-x border-brand-ink/10 px-3"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Safe Pay</div>
+                          <div className="flex items-center gap-1.5 px-3"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg> Free Ship</div>
+                       </div>
+                     )}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
         ) : currentView === 'about' ? (
           <section className="py-16 md:py-24 px-6 md:px-12 max-w-4xl mx-auto min-h-[60vh]">
             <motion.div
@@ -2362,13 +2459,6 @@ export default function App() {
             >
               <h2 className="font-serif text-4xl md:text-6xl mb-6">Our Story</h2>
               <div className="w-16 h-px bg-brand-gold mx-auto"></div>
-              <h3 className="font-serif text-xl md:text-3xl mb-3">
-  Harsh Cloth Imporium & Anand Jewellars
-</h3>
-
-<p className="text-xs md:text-sm text-brand-ink/70">
-  Where Tradition Meets Timeless Luxury
-</p>
             </motion.div>
             
             <div className="space-y-12 md:space-y-20 text-brand-ink/80 leading-relaxed">
@@ -2403,12 +2493,11 @@ export default function App() {
                 </div>
                 <div className="order-1 md:order-2">
                   <h3 className="font-serif text-2xl md:text-3xl mb-4 text-brand-ink">Our Ethos</h3>
-          
                   <p className="mb-4">
-                    At the heart of our brand lies a belief that luxury should be timeless, ethical, and genuine. We honour the artistry of our craftsmen and ensure that every creation reflects purity, precision, and purpose.
+                    We believe that true luxury lies in authenticity and sustainability. Our commitment extends beyond aesthetics to the ethical sourcing of materials and the fair treatment of our artisans.
                   </p>
                   <p>
-                    From fabric to finish, every detail is guided by our commitment to excellence, sustainability, and enduring elegance.
+                    Whether you are exploring our curated clothing lines or our bespoke bridal jewellery, you are experiencing a piece of art that was created with integrity, passion, and an unwavering dedication to quality.
                   </p>
                 </div>
               </div>
@@ -2432,14 +2521,10 @@ export default function App() {
           <div>
             <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Explore</h4>
             <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
-              <li><a href="#shop" className="hover:text-brand-gold transition-colors">New Arrivals</a></li>
+              <li><a href="#" className="hover:text-brand-gold transition-colors">New Arrivals</a></li>
               <li><a href="#shop" className="hover:text-brand-gold transition-colors">Shop All</a></li>
+              <li><a href="#collections" className="hover:text-brand-gold transition-colors">Collections</a></li>
               <li><button onClick={() => { setCurrentView('about'); window.scrollTo(0,0); }} className="hover:text-brand-gold transition-colors">Our Story</button></li>
-              <li>
-  <a href="https://portfolioharsh29.netlify.app/" target="_blank" className="hover:text-brand-gold transition-colors">
-    Developer
-  </a>
-</li>
             </ul>
           </div>
 
@@ -2448,9 +2533,8 @@ export default function App() {
             <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
               <li>Ambedkar Nagar</li>
               <li>Uttar Pradesh, India</li>
-              <li>Pin Code: 224132</li>
               <li className="pt-2 md:pt-4"><a href="mailto:harshgupta07h@gmail.com" className="hover:text-brand-gold transition-colors break-all">harshgupta07h@gmail.com</a></li>
-              <li>+91 8875810604</li>
+              <li>+91 88758 10604</li>
             </ul>
           </div>
         </div>
@@ -2642,7 +2726,7 @@ export default function App() {
                         onClick={(e) => {
                           addToCart(e, selectedProduct.id, selectedVariants);
                           setSelectedProduct(null);
-                          setIsCartOpen(true);
+                          setCurrentView('cart');
                         }}
                         className="flex-1 bg-brand-ink text-brand-gold px-6 py-4 text-sm font-bold uppercase tracking-wide hover:bg-brand-gold hover:text-brand-bg transition-colors shadow-sm flex items-center justify-center gap-2"
                       >
@@ -2866,7 +2950,7 @@ export default function App() {
                   onClick={(e) => {
                     addToCart(e, selectedProduct.id, selectedVariants);
                     setSelectedProduct(null);
-                    setIsCartOpen(true);
+                    setCurrentView('cart');
                   }}
                   className="flex-1 bg-brand-gold text-brand-bg px-4 py-3 text-sm font-bold uppercase tracking-wide flex items-center justify-center gap-2"
                 >

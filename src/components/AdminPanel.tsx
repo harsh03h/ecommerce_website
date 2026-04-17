@@ -23,6 +23,8 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [actionMessage, setActionMessage] = useState('');
+  const [orderToDelete, setOrderToDelete] = useState<{userId: string, orderId: string} | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -55,22 +57,31 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
 
   const updateOrderStatus = async (userId: string, orderId: string, newStatus: string) => {
     try {
+      setActionMessage('');
       const orderRef = doc(db, 'users', userId, 'orders', orderId);
       await updateDoc(orderRef, { status: newStatus });
+      setActionMessage("Order status updated.");
+      setTimeout(() => setActionMessage(''), 3000);
     } catch (err) {
       console.error("Error updating order status:", err);
-      alert("Failed to update order status.");
+      setActionMessage("Failed to update order status.");
+      setTimeout(() => setActionMessage(''), 3000);
     }
   };
 
-  const deleteOrder = async (userId: string, orderId: string) => {
-    if (!window.confirm("Are you sure you want to delete this order?")) return;
+  const confirmDelete = async () => {
+    if (!orderToDelete) return;
     try {
-      const orderRef = doc(db, 'users', userId, 'orders', orderId);
+      setActionMessage('');
+      const orderRef = doc(db, 'users', orderToDelete.userId, 'orders', orderToDelete.orderId);
       await deleteDoc(orderRef);
+      setOrderToDelete(null);
+      setActionMessage("Order deleted.");
+      setTimeout(() => setActionMessage(''), 3000);
     } catch (err) {
       console.error("Error deleting order:", err);
-      alert("Failed to delete order.");
+      setActionMessage("Failed to delete order.");
+      setTimeout(() => setActionMessage(''), 3000);
     }
   };
 
@@ -94,10 +105,38 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
 
   return (
     <div className="p-6 md:p-12 max-w-7xl mx-auto min-h-[60vh]">
+      {actionMessage && (
+        <div className="mb-6 p-4 bg-brand-ink text-brand-bg rounded w-full lg:w-max">
+          {actionMessage}
+        </div>
+      )}
       <div className="flex items-center gap-3 mb-8">
         <Package className="w-8 h-8 text-brand-gold" />
         <h2 className="text-3xl font-serif text-brand-ink">Order Management</h2>
       </div>
+
+      {orderToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-brand-surface p-6 rounded shadow-2xl max-w-md w-full text-center">
+            <h3 className="text-xl font-serif font-bold text-brand-ink mb-4">Delete Order?</h3>
+            <p className="text-sm text-brand-ink/80 mb-6">Are you sure you want to permanently delete order {orderToDelete.orderId}?</p>
+            <div className="flex gap-4 justify-center">
+              <button 
+                className="px-4 py-2 border border-brand-ink/20 rounded hover:bg-brand-ink/5"
+                onClick={() => setOrderToDelete(null)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                onClick={confirmDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {orders.length === 0 ? (
         <div className="text-center py-12 bg-brand-surface rounded-lg border border-brand-ink/10">
@@ -162,7 +201,7 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                       <option value="cancelled">Cancelled</option>
                     </select>
                     <button
-                      onClick={() => deleteOrder(order.userId, order.id)}
+                      onClick={() => setOrderToDelete({ userId: order.userId, orderId: order.id })}
                       className="text-red-500 hover:text-red-700 p-1 rounded transition-colors"
                       title="Delete Order"
                     >
