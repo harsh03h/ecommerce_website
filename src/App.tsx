@@ -1245,10 +1245,10 @@ const PRODUCTS: Product[] = [
     "name": "Bohemian Statement Ring",
     "category": "Jewellery",
     "department": "Silver",
-    "price": 86549,
-    "image": "https://images.unsplash.com/photo-1573408301185-9146522cbbbb?auto=format&fit=crop&q=80&w=800&h=1000",
+    "price": 6549,
+    "image": "https://cdn.notonthehighstreet.com/fs/f0/54/a6a7-bce6-4260-9791-632b3c3cc590/original_wide-boho-statement-ring.jpg",
     "images": [
-      "https://images.unsplash.com/photo-1573408301185-9146522cbbbb?auto=format&fit=crop&q=80&w=800&h=1000"
+      "https://cdn.notonthehighstreet.com/fs/f0/54/a6a7-bce6-4260-9791-632b3c3cc590/original_wide-boho-statement-ring.jpg"
     ],
     "isNew": false,
     "sales": 455,
@@ -1263,9 +1263,10 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Silver",
     "price": 71953,
-    "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "http://5.imimg.com/data5/SELLER/Default/2022/11/HU/BN/XR/51510804/ghungroo-bracelet-1000x1000.jpeg",
     "images": [
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000"
+      'http://5.imimg.com/data5/SELLER/Default/2022/11/HU/BN/XR/51510804/ghungroo-bracelet-1000x1000.jpeg',
+      'https://www.festmarket.com/wp-content/uploads/2021/08/Oxidized-Silver-Ghungroo-Bracelet_cover2.jpg'
     ],
     "isNew": false,
     "sales": 460,
@@ -1280,9 +1281,10 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Silver",
     "price": 29330,
-    "image": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://shop.southindiajewels.com/wp-content/uploads/2022/09/Fish-Design-German-Silver-Jhumkas.jpg",
     "images": [
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://shop.southindiajewels.com/wp-content/uploads/2022/09/Fish-Design-German-Silver-Jhumkas.jpg',
+      'https://shop.southindiajewels.com/wp-content/uploads/2022/09/Fish-Design-German-Silver-Jhumkas.jpg'
     ],
     "isNew": true,
     "sales": 375,
@@ -1297,9 +1299,11 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Silver",
     "price": 17863,
-    "image": "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://www.gorjana.com/cdn/shop/files/196-114-S-001_563a928a-e007-40a3-8d40-5acec64cb08c.jpg?v=1740774835&width=1080",
     "images": [
-      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://www.gorjana.com/cdn/shop/files/196-114-S-001_563a928a-e007-40a3-8d40-5acec64cb08c.jpg?v=1740774835&width=1080',
+      'https://www.gorjana.com/cdn/shop/files/196-114-S_3_769f6185-91bb-4bb5-95ae-700c2a5010b8.jpg?v=1740774835&width=1080',
+      'https://www.gorjana.com/cdn/shop/files/COR24_MOD_196-114-S_04.jpg?v=1740774835&width=1080'
     ],
     "isNew": false,
     "sales": 660,
@@ -1313,10 +1317,13 @@ const PRODUCTS: Product[] = [
     "name": "Filigree Silver Pendant",
     "category": "Jewellery",
     "department": "Silver",
-    "price": 79559,
-    "image": "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000",
+    "price": 9559,
+    "image": "https://i.pinimg.com/736x/3d/31/a2/3d31a22e6cdde750ac505295ecdc55c5.jpg",
     "images": [
-      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://i.pinimg.com/736x/3d/31/a2/3d31a22e6cdde750ac505295ecdc55c5.jpg',
+      'https://lefkarasilver.com/wp-content/uploads/2020/03/filigree-pendant-fp22c-g2.0-1.jpg',
+      'https://lefkarasilver.com/wp-content/uploads/2020/03/filigree-pendant-fp35Lc-g8.2-1.jpg',
+      'https://lefkarasilver.com/wp-content/uploads/2020/03/filigree-pendant-fp21bM-g4.9-1.jpg'
     ],
     "isNew": false,
     "sales": 629,
@@ -1331,9 +1338,12 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Silver",
     "price": 86506,
-    "image": "https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://i5.walmartimages.com/seo/HZMAN-Chunky-Silver-Cuff-Bracelets-for-Women-Thick-Wide-Bangle-Bracelet-Hammered-Open-Hinge-Wrist-Cuff-Bracelet-Jewelry-Gift_a7ccbdd3-5d76-4f30-9a72-d557466e039f.c5add0f039e45c48ddbcbc5576b14199.jpeg",
     "images": [
-      "https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://i5.walmartimages.com/seo/HZMAN-Chunky-Silver-Cuff-Bracelets-for-Women-Thick-Wide-Bangle-Bracelet-Hammered-Open-Hinge-Wrist-Cuff-Bracelet-Jewelry-Gift_a7ccbdd3-5d76-4f30-9a72-d557466e039f.c5add0f039e45c48ddbcbc5576b14199.jpeg',
+      'https://a.1stdibscdn.com/antique-chunky-silver-cuff-bangle-leaf-engraved-edwardian-for-sale-picture-12/j_23462/j_174854421667683656912/PXL_20221102_125846693_2_master.jpg',
+      'https://i.pinimg.com/originals/43/d2/76/43d276dd9f0a84dfa65d09bb41885b80.jpg',
+      'https://images-na.ssl-images-amazon.com/images/I/71vHXqM1tEL._AC_SL1500_.jpg'
     ],
     "isNew": false,
     "sales": 450,
@@ -1348,9 +1358,11 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Bridal",
     "price": 22011,
-    "image": "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://tse3.mm.bing.net/th/id/OIP.d3jXvW34fHIDMO9_kqB65QHaHa?pid=Api&h=220&P=0",
     "images": [
-      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://tse3.mm.bing.net/th/id/OIP.d3jXvW34fHIDMO9_kqB65QHaHa?pid=Api&h=220&P=0',
+      'https://tse2.mm.bing.net/th/id/OIP.knUivHL1Y3zH4axXJTmu5gHaHa?pid=Api&h=220&P=0',
+      'https://gehnashop.com/cdn/shop/files/royal-look-bridal-kundan-matha-patti-by-gehna-shop-gehna-shop-royal-look-bridal-kundan-matha-patti-online-by-gehna-shop-42079240257851.jpg?v=1687985114'
     ],
     "isNew": true,
     "sales": 190,
@@ -1365,9 +1377,11 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Bridal",
     "price": 65734,
-    "image": "https://images.unsplash.com/photo-1599643478514-46b1db90ef40?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://5.imimg.com/data5/ECOM/Default/2024/3/400738034/AM/EA/IB/77950844/zevar-jewelry-sets-radiant-heavy-kundan-green-bridal-set-a-symphony-of-elegance-41627976007913-500x500.jpg",
     "images": [
-      "https://images.unsplash.com/photo-1599643478514-46b1db90ef40?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://5.imimg.com/data5/ECOM/Default/2024/3/400738034/AM/EA/IB/77950844/zevar-jewelry-sets-radiant-heavy-kundan-green-bridal-set-a-symphony-of-elegance-41627976007913-500x500.jpg',
+      'http://zevar.com/cdn/shop/files/zevar-bridal-jewelry-set-green-heavy-kundan-bridal-jewelry-set-zevar-wedding-collection-green-heavy-kundan-bridal-jewelry-set-zevar-wedding-collection-1195160063.webp?v=1759092543',
+      'http://ishhaara.com/cdn/shop/files/ishhaara-drop-shaped-heavy-kundan-bridal-set-32459866931243.jpg?v=1723808676'
     ],
     "isNew": true,
     "sales": 717,
@@ -1399,9 +1413,12 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Bridal",
     "price": 39824,
-    "image": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://medias.utsavfashion.com/media/catalog/product/cache/1/image/500x/040ec09b1e35df139433887a97daa66f/m/e/meenakari-choker-necklace-set-v1-jqt710.jpg",
     "images": [
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://medias.utsavfashion.com/media/catalog/product/cache/1/image/500x/040ec09b1e35df139433887a97daa66f/m/e/meenakari-choker-necklace-set-v1-jqt710.jpg',
+      'https://img.perniaspopupshop.com/catalog/product/k/o/KOHA012383_1.jpg?impolicy=zoomimage',
+      'https://medias.utsavfashion.com/media/catalog/product/cache/1/image/500x/040ec09b1e35df139433887a97daa66f/m/e/meenakari-choker-necklace-set-v1-jqt711.jpg',
+      'https://assets0.mirraw.com/images/6931668/MRR24-1_zoom.jpg?1554982918'
     ],
     "isNew": false,
     "sales": 606,
@@ -1416,9 +1433,11 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Bridal",
     "price": 60260,
-    "image": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://tse3.mm.bing.net/th/id/OIP.ffv_dCsr6xmko2gfj-rf-QHaHa?pid=Api&h=220&P=0",
     "images": [
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://tse3.mm.bing.net/th/id/OIP.ffv_dCsr6xmko2gfj-rf-QHaHa?pid=Api&h=220&P=0',
+      'https://i.pinimg.com/originals/1d/3c/45/1d3c458242427e27868e6ad3827b6593.jpg',
+      'https://tse1.mm.bing.net/th/id/OIP.dj4CydsLcotmQtcoS2RObQHaHa?pid=Api&h=220&P=0'
     ],
     "isNew": false,
     "sales": 797,
@@ -1433,9 +1452,13 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Bridal",
     "price": 21701,
-    "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://5.imimg.com/data5/UQ/OG/FT/SELLER-2816813/star-shaped-gold-finish-cz-carved-tops-earring-1000x1000.JPG",
     "images": [
-      "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://5.imimg.com/data5/UQ/OG/FT/SELLER-2816813/star-shaped-gold-finish-cz-carved-tops-earring-1000x1000.JPG',
+      'https://tse4.mm.bing.net/th/id/OIP.yPorwrNpOV2q55deN_cNhQHaJ3?pid=Api&h=220&P=0',
+      'https://tse1.mm.bing.net/th/id/OIP.HyddXA_axb4HVPlpMDFcZgHaJ4?pid=Api&h=220&P=0',
+      'https://i.etsystatic.com/47513053/r/il/a2c228/6184011559/il_1080xN.6184011559_mhbr.jpg',
+      'https://i.etsystatic.com/20875812/r/il/e36f99/6263195135/il_1080xN.6263195135_436e.jpg'
     ],
     "isNew": true,
     "sales": 602,
@@ -1450,9 +1473,11 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Bridal",
     "price": 59945,
-    "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://eternajewels.in/cdn/shop/files/8E473414-1041-486F-9E2B-545A418921D8.jpg?v=1752894276&width=990",
     "images": [
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://eternajewels.in/cdn/shop/files/8E473414-1041-486F-9E2B-545A418921D8.jpg?v=1752894276&width=990',
+      'http://aarveejewellery.in/cdn/shop/files/Jadaukundansemibridalset.jpg?v=1709096562',
+      'https://tse2.mm.bing.net/th/id/OIP.cIbWGQDVaAXFrkJMkOgUbgHaJ4?pid=Api&h=220&P=0'
     ],
     "isNew": false,
     "sales": 266,
@@ -1467,9 +1492,12 @@ const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Bridal",
     "price": 28807,
-    "image": "https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://cdn.shopify.com/s/files/1/2184/2541/files/IMG_0391_35dea7ca-c4ea-4bbd-95e8-f4ca0bea3582.jpg?v=1685946158",
     "images": [
-      "https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800&h=1000"
+      'https://cdn.shopify.com/s/files/1/2184/2541/files/IMG_0391_35dea7ca-c4ea-4bbd-95e8-f4ca0bea3582.jpg?v=1685946158',
+      'https://tse1.mm.bing.net/th/id/OIP.e57IAPebwhvsvfq8NKK13wHaHa?pid=Api&h=220&P=0',
+      'https://i.pinimg.com/originals/64/8a/3c/648a3ca798a0c8dd94427c36edda4bd9.jpg',
+      
     ],
     "isNew": true,
     "sales": 631,
