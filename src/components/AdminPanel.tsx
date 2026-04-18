@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { collectionGroup, query, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { db } from '../firebase';
-import { User } from 'firebase/auth';
 import { Package, Clock, CheckCircle, Truck, XCircle, FileText, Printer, ChevronDown, ChevronUp } from 'lucide-react';
+
+export interface User {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+}
 
 interface OrderItem {
   productId: string;
@@ -11,7 +14,8 @@ interface OrderItem {
 }
 
 interface Order {
-  id: string;
+  _id?: string;
+  id?: string;
   items: OrderItem[];
   totalAmount: number;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
@@ -40,38 +44,55 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     if (!user) return;
-
-    const q = query(collectionGroup(db, 'orders'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const ordersData: Order[] = [];
-      snapshot.forEach((doc) => {
-        // Extract userId from the path: users/{userId}/orders/{orderId}
-        const pathSegments = doc.ref.path.split('/');
-        const userId = pathSegments[1];
-        ordersData.push({ id: doc.id, ...doc.data(), userId } as Order);
-      });
-      // Sort by createdAt descending
-      ordersData.sort((a, b) => {
-        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
-        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
-        return timeB - timeA;
-      });
-      setOrders(ordersData);
+    
+    // Check if user is the admin (hardcoded for now to harshgupta07h@gmail.com)
+    if (user.email !== 'harshgupta07h@gmail.com') {
+      setError("You do not have administrative privileges.");
       setLoading(false);
-    }, (err) => {
-      console.error("Error fetching orders:", err);
-      setError("Failed to load orders. You may not have admin privileges.");
-      setLoading(false);
-    });
+      return;
+    }
 
-    return () => unsubscribe();
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch('/api/admin/orders');
+        if (!response.ok) throw new Error('Failed to fetch orders');
+        const data = await response.json();
+        // Standardize IDs for the UI
+        const formattedOrders = data.map((o: any) => ({
+          ...o,
+          id: o._id || o.id,
+          createdAt: {
+            toDate: () => new Date(o.createdAt)
+          } // Mock the Firestore Timestamp object structure here to not ruin the UI logic
+        }));
+        setOrders(formattedOrders);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+        setError("Failed to load orders. Please check your connection to MongoDB.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+    
+    // Minimal polling setup since we removed onSnapshot
+    const interval = setInterval(fetchOrders, 10000);
+    return () => clearInterval(interval);
   }, [user]);
 
   const updateOrderStatus = async (userId: string, orderId: string, newStatus: string) => {
     try {
       setActionMessage('');
-      const orderRef = doc(db, 'users', userId, 'orders', orderId);
-      await updateDoc(orderRef, { status: newStatus });
+      const response = await fetch(`/api/orders/${orderId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      
+      if (!response.ok) throw new Error('Failed to update status');
+      
+      setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus as any } : o));
       setActionMessage("Order status updated.");
       setTimeout(() => setActionMessage(''), 3000);
     } catch (err) {
@@ -85,8 +106,13 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
     if (!orderToDelete) return;
     try {
       setActionMessage('');
-      const orderRef = doc(db, 'users', orderToDelete.userId, 'orders', orderToDelete.orderId);
-      await deleteDoc(orderRef);
+      const response = await fetch(`/api/orders/${orderToDelete.orderId}`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) throw new Error('Failed to delete order');
+      
+      setOrders(prev => prev.filter(o => o.id !== orderToDelete.orderId));
       setOrderToDelete(null);
       setActionMessage("Order deleted.");
       setTimeout(() => setActionMessage(''), 3000);

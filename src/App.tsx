@@ -1,9 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles, Trash2, CreditCard, Banknote, Smartphone } from 'lucide-react';
-import { auth, signInWithGoogle, logout, db } from './firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
+
 import { Login } from './components/Login';
 import { AdminPanel } from './components/AdminPanel';
 import { ImageZoom } from './components/ImageZoom';
@@ -13,6 +11,12 @@ export type ProductVariant = {
   name: string;
   options: string[];
 };
+
+export interface User {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+}
 
 export type Product = {
   id: string;
@@ -2087,6 +2091,12 @@ export default function App() {
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
 
+  const handleLogout = () => {
+    localStorage.removeItem('auth_token');
+    setUser(null);
+    setCurrentView('home');
+  };
+
   // Review System State
   const [reviews, setReviews] = useState(INITIAL_REVIEWS);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -2115,29 +2125,51 @@ export default function App() {
 
   // Listen to Auth State
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const checkAuth = async () => {
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        try {
+          const res = await fetch('/api/auth/me', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setUser(data.user);
+          } else {
+            localStorage.removeItem('auth_token');
+            setUser(null);
+          }
+        } catch (err) {
+          console.error("Auth check failed", err);
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
       setIsAuthReady(true);
-    });
-    return () => unsubscribe();
+    };
+    checkAuth();
   }, []);
 
   // Listen to Profile Data
   useEffect(() => {
     if (user) {
-      const unsubscribe = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setProfileData({
-            displayName: data.displayName || '',
-            phone: data.phone || '',
-            address: data.address || ''
-          });
+      const fetchProfile = async () => {
+        try {
+          const res = await fetch(`/api/users/${user.uid}`);
+          if (res.ok) {
+            const data = await res.json();
+            setProfileData({
+              displayName: data.displayName || '',
+              phone: data.phone || '',
+              address: data.address || ''
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching profile", error);
         }
-      }, (error) => {
-        console.error("Error fetching profile", error);
-      });
-      return () => unsubscribe();
+      };
+      fetchProfile();
     } else {
       setProfileData({ displayName: '', phone: '', address: '' });
     }
@@ -2146,13 +2178,18 @@ export default function App() {
   // Listen to Wishlist
   useEffect(() => {
     if (user) {
-      const unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'wishlist'), (snapshot) => {
-        const items = snapshot.docs.map(doc => doc.id);
-        setWishlist(items);
-      }, (error) => {
-        console.error("Error fetching wishlist", error);
-      });
-      return () => unsubscribe();
+      const fetchWishlist = async () => {
+        try {
+          const res = await fetch(`/api/wishlist/${user.uid}`);
+          if (res.ok) {
+            const data = await res.json();
+            setWishlist(data);
+          }
+        } catch (error) {
+          console.error("Error fetching wishlist", error);
+        }
+      };
+      fetchWishlist();
     } else {
       setWishlist([]);
     }
@@ -2161,19 +2198,25 @@ export default function App() {
   // Listen to Orders
   useEffect(() => {
     if (user) {
-      const unsubscribe = onSnapshot(collection(db, 'users', user.uid, 'orders'), (snapshot) => {
-        const fetchedOrders = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        } as Order)).sort((a: Order, b: Order) => {
-          if (!a.createdAt || !b.createdAt) return 0;
-          return b.createdAt.toMillis() - a.createdAt.toMillis();
-        });
-        setOrders(fetchedOrders);
-      }, (error) => {
-        console.error("Error fetching orders", error);
-      });
-      return () => unsubscribe();
+      const fetchOrders = async () => {
+        try {
+          const res = await fetch(`/api/orders/${user.uid}`);
+          if (res.ok) {
+            const data = await res.json();
+            const fetchedOrders = data.map((o: any) => ({
+              ...o,
+              id: o._id || o.id,
+              createdAt: { toMillis: () => new Date(o.createdAt).getTime(), toDate: () => new Date(o.createdAt) }
+            }));
+            setOrders(fetchedOrders);
+          }
+        } catch (error) {
+          console.error("Error fetching orders", error);
+        }
+      };
+      fetchOrders();
+      const iv = setInterval(fetchOrders, 10000);
+      return () => clearInterval(iv);
     } else {
       setOrders([]);
     }
@@ -2182,19 +2225,19 @@ export default function App() {
   const toggleWishlist = async (e: React.MouseEvent, productId: string) => {
     e.stopPropagation();
     if (!user) {
-      signInWithGoogle();
+      setCurrentView('login');
       return;
     }
     const isSaved = wishlist.includes(productId);
+    const newWs = isSaved ? wishlist.filter(id => id !== productId) : [...wishlist, productId];
+    setWishlist(newWs); // optimistic update
+    
     try {
-      if (isSaved) {
-        await deleteDoc(doc(db, 'users', user.uid, 'wishlist', productId));
-      } else {
-        await setDoc(doc(db, 'users', user.uid, 'wishlist', productId), {
-          productId,
-          addedAt: serverTimestamp()
-        });
-      }
+      await fetch(`/api/wishlist/${user.uid}`, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ productIds: newWs }) 
+      });
     } catch (error) {
       console.error("Error toggling wishlist", error);
     }
@@ -2238,11 +2281,15 @@ export default function App() {
     if (!user) return;
     setIsSavingProfile(true);
     try {
-      await setDoc(doc(db, 'users', user.uid), {
-        displayName: profileData.displayName,
-        phone: profileData.phone,
-        address: profileData.address
-      }, { merge: true });
+      await fetch(`/api/users/${user.uid}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          displayName: profileData.displayName,
+          phone: profileData.phone,
+          address: profileData.address
+        })
+      });
       setIsEditingProfile(false);
     } catch (error) {
       console.error("Error saving profile", error);
@@ -2282,22 +2329,25 @@ export default function App() {
         return sum + (product?.price || 0) * item.quantity;
       }, 0);
 
-      const orderId = `ord_${Date.now()}`;
-      await setDoc(doc(db, 'users', user.uid, 'orders', orderId), {
-        items: cart,
-        totalAmount,
-        status: 'pending',
-        shippingInfo: {
-          fullName: checkoutData.fullName,
-          phone: checkoutData.phone,
-          email: checkoutData.email,
-          address: checkoutData.address,
-          city: checkoutData.city,
-          pincode: checkoutData.pincode,
-          state: checkoutData.state
-        },
-        paymentMethod: checkoutData.paymentMethod,
-        createdAt: serverTimestamp()
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.uid,
+          items: cart,
+          totalAmount,
+          status: 'pending',
+          shippingInfo: {
+            fullName: checkoutData.fullName,
+            phone: checkoutData.phone,
+            email: checkoutData.email,
+            address: checkoutData.address,
+            city: checkoutData.city,
+            pincode: checkoutData.pincode,
+            state: checkoutData.state
+          },
+          paymentMethod: checkoutData.paymentMethod
+        })
       });
       
       setCart([]);
@@ -2475,7 +2525,7 @@ export default function App() {
                   {user.email === 'harshgupta07h@gmail.com' && (
                     <button onClick={() => { setCurrentView('admin'); setIsMobileMenuOpen(false); }} className="text-left text-brand-gold hover:text-brand-gold/80 transition-colors border-b border-brand-ink/10 pb-4">Admin Panel</button>
                   )}
-                  <button onClick={() => { logout(); setIsMobileMenuOpen(false); setCurrentView('home'); }} className="text-left text-red-400 hover:text-red-300 transition-colors border-b border-brand-ink/10 pb-4">Sign Out</button>
+                  <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="text-left text-red-400 hover:text-red-300 transition-colors border-b border-brand-ink/10 pb-4">Sign Out</button>
                 </>
               ) : (
                 <button onClick={() => { setCurrentView('login'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Log In</button>
@@ -2609,7 +2659,7 @@ export default function App() {
                 {user.email === 'harshgupta07h@gmail.com' && (
                   <button onClick={() => setCurrentView('admin')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors text-brand-gold">Admin Panel</button>
                 )}
-                <button onClick={() => { logout(); setCurrentView('home'); }} className="text-left px-4 py-3 text-xs uppercase tracking-widest text-red-400 hover:bg-brand-ink/5 transition-colors border-t border-brand-ink/10">Sign Out</button>
+                <button onClick={() => handleLogout()} className="text-left px-4 py-3 text-xs uppercase tracking-widest text-red-400 hover:bg-brand-ink/5 transition-colors border-t border-brand-ink/10">Sign Out</button>
               </div>
             </div>
           ) : (
