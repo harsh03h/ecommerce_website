@@ -54,270 +54,776 @@ export type Order = {
 
 const PRODUCTS: Product[] = [
   {
-    id: 'c1',
+    "id": "c1",
     name: 'Smocked strappy dress',
     category: 'Clothing',
     department: 'Women',
-    price: 1500,
+    price: 1800,
     image: 'https://image.hm.com/assets/hm/e4/e3/e4e3a52016071db7561418f47646037827e44bc7.jpg?imwidth=2160',
     images: [
       'https://image.hm.com/assets/hm/fe/51/fe518e61ec358ce58cad5bba0d61ca4a1efe1adf.jpg?imwidth=2160',
       'https://image.hm.com/assets/hm/1e/f8/1ef8ae431836ce609b5f1a5e5116ceed5b831fb9.jpg?imwidth=2160',
       'https://image.hm.com/assets/hm/1d/e9/1de9c7f11cbd002542733f626e7aeea89b82b90d.jpg?imwidth=2160'
     ],
-    isNew: true,
-    sales: 120,
-    description: 'Authentic handwoven Banarasi silk saree featuring intricate zari work. Perfect for weddings and festive occasions.',
-    material: 'silk',
-    occasion: 'festive',
-    variants: [
-      { name: 'Color', options: ['Crimson Red', 'Royal Blue', 'Emerald Green'] }
+    "isNew": false,
+    "sales": 68,
+    "description": "Experience the elegant craftsmanship of the Smocked strappy Dress. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
     ]
   },
   {
-    id: 'j1',
-    name: 'Kundan Bridal Set',
-    category: 'Jewellery',
-    department: 'Bridal',
-    price: 1250,
-    image: 'https://i.etsystatic.com/30916859/r/il/d45fec/3903175250/il_600x600.3903175250_qkb7.jpg',
-    images: [
-      'https://i.etsystatic.com/30916859/r/il/d45fec/3903175250/il_600x600.3903175250_qkb7.jpg',
-      'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=800&auto=format&fit=crop'
+    "id": "c2",
+    "name": "Women Bodycon Black Midi/Calf Length Dress",
+    "category": "Clothing",
+    "department": "Women",
+    "price": 1500,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/g/m/1/m-338tk10091a-selvia-original-imahgkfasxncjxf2.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/g/m/1/m-338tk10091a-selvia-original-imahgkfasxncjxf2.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/8/b/l/m-338tk10091a-selvia-original-imahgkfaz7hztpfz.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/g/e/q/m-338tk10091a-selvia-original-imahgkfaghmstykh.jpeg?q=90'
     ],
-    isNew: true,
-    sales: 45,
-    description: 'Exquisite Kundan bridal necklace set with matching earrings and maang tikka, crafted in 22k gold plating.',
-    material: 'gold',
-    occasion: 'bridal',
-    variants: [
-      { name: 'Metal Finish', options: ['22k Gold', 'Antique Gold'] },
-      { name: 'Stone Color', options: ['Ruby Red', 'Emerald Green', 'Pearl White'] }
+    "isNew": false,
+    "sales": 135,
+    "description": "Experience the elegant craftsmanship of the Women Bodycon Black Midi/Calf Length Dress. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
     ]
   },
   {
-    id: 'c2',
-    name: 'Velvet Embroidered Lehenga',
-    category: 'Clothing',
-    department: 'Women',
-    price: 4500,
-    image: 'https://tse1.mm.bing.net/th/id/OIP.0KXqDbQ53cVcGX8bQDiQDgHaKL?rs=1&pid=ImgDetMain&o=7&rm=3',
-    images: [
-      'https://www.kollybollyethnics.com/image/catalog/data/14Feb2022/Maroon-velvet-embroidered-bridal-lehenga-choli-8103.jpg',
-      'https://tse3.mm.bing.net/th/id/OIP.sQTqeGvVSwoQbrZR_osnSAHaKL?rs=1&pid=ImgDetMain&o=7&rm=3',
-      'https://tse3.mm.bing.net/th/id/OIP.VwIoZYR6kWn966ypwM8ePwHaKt?w=1000&h=1447&rs=1&pid=ImgDetMain&o=7&rm=3'
+    "id": "c3",
+    "name": "Fit and Flare Black Below Knee Dress",
+    "category": "Clothing",
+    "department": "Women",
+    "price": 2999,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/1/k/x/xl-dnvc1190-chaukas-original-imahhhhg2yzazfym.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/r/8/1/5xl-dnvc1190-chaukas-original-imahhhhgx4zzenrk.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/0/5/2/xl-dnvc1190-chaukas-original-imahhhhgstus7ttf.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/h/o/m/xl-dnvc1190-chaukas-original-imahhhhgbhjupqfa.jpeg?q=90'
     ],
-    isNew: false,
-    sales: 300,
-    description: 'Deep maroon velvet lehenga adorned with heavy zardosi and thread embroidery. Includes a matching net dupatta.',
-    material: 'velvet',
-    occasion: 'bridal',
-    variants: [
-      { name: 'Size', options: ['S', 'M', 'L', 'XL'] },
-      { name: 'Color', options: ['Deep Maroon', 'Midnight Blue'] }
+    "isNew": true,
+    "sales": 698,
+    "description": "Experience the elegant craftsmanship of the Women Fit and Flare Black Below Knee Dress. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
     ]
   },
   {
-    id: 'j2',
-    name: 'Diamond Tennis Bracelet',
-    category: 'Jewellery',
-    department: 'Silver',
-    price: 85000,
-    image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800&auto=format&fit=crop',
-    images: [
-      'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?q=80&w=800&auto=format&fit=crop'
+    "id": "c4",
+    "name": "Women Maxi Multicolor Full Length Dress",
+    "category": "Clothing",
+    "department": "Women",
+    "price": 1977,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/b/n/6/xl-women-fit-and-flare-multicolor-dress-qena-original-imah4y6ghygejysr.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/b/n/6/xl-women-fit-and-flare-multicolor-dress-qena-original-imah4y6ghygejysr.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/f/h/c/xl-women-fit-and-flare-multicolor-dress-qena-original-imah4y6gakrhgjpa.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/q/i/y/xl-women-fit-and-flare-multicolor-dress-qena-original-imah4y6gyhdzy3bh.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/dress/z/d/u/xl-women-fit-and-flare-multicolor-dress-qena-original-imah4y6ghspqsmga.jpeg?q=90'
     ],
-    isNew: false,
-    sales: 210,
-    description: 'Classic tennis bracelet featuring brilliant-cut VVS diamonds set in 18k white gold. A timeless statement piece.',
-    material: 'diamond',
-    occasion: 'party',
-    variants: [
-      { name: 'Metal', options: ['18k White Gold', '18k Yellow Gold', '18k Rose Gold'] },
-      { name: 'Length', options: ['6.5 inches', '7 inches', '7.5 inches'] }
+    "isNew": false,
+    "sales": 618,
+    "description": "Experience the elegant craftsmanship of the Women Maxi Multicolor Full Length Dress. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
     ]
   },
   {
-    id: 'c3',
-    name: 'Sweatshirts',
-    category: 'Clothing',
-    department: 'Men',
-    price: 850,
-    image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop',
-    images: [
-      'https://engine.com.pk/cdn/shop/products/MT3237-TEL_1.jpg?v=1700224175',
-      'https://images.unsplash.com/photo-1604644401890-0bd678c83788?q=80&w=800&auto=format&fit=crop',
-      'https://tse1.mm.bing.net/th/id/OIP.wWZmc1AuxHM42shwTHtGOwHaJh?rs=1&pid=ImgDetMain&o=7&rm=3'
+    "id": "c5",
+    "name": "Embellished, Solid/Plain",
+    "category": "Clothing",
+    "department": "Women",
+    "price": 3924,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/sari/u/p/2/free-nc-satin-3-desty-unstitched-original-imahh2tgwythf3cx.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sari/u/p/2/free-nc-satin-3-desty-unstitched-original-imahh2tgwythf3cx.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sari/a/p/b/free-nc-satin-3-desty-unstitched-original-imahh2tgr6pg2fqc.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sari/v/w/q/free-fandy-vivan-fab-unstitched-original-imahgzzh6vyqbzsw.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sari/1/f/k/free-fandy-vivan-fab-unstitched-original-imahgzzhpzjyysc5.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sari/6/p/7/free-fandy-vivan-fab-unstitched-original-imahgzzhhtypjznu.jpeg?q=90'
     ],
-    isNew: false,
-    sales: 80,
-    description: 'Pure Kashmiri Pashmina shawl with subtle hand-embroidery along the borders. Incredibly soft and warm.',
-    material: 'cotton',
-    occasion: 'casual',
-    variants: [
-      { name: 'Color', options: ['Ivory White', 'Charcoal Grey', 'Dusty Rose'] }
+    "isNew": false,
+    "sales": 42,
+    "description": "Experience the elegant craftsmanship of the Embellished, Solid/Plain, Applique, Woven. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
     ]
   },
   {
-    id: 'j3',
-    name: 'Polki Drop Earrings',
-    category: 'Jewellery',
-    department: 'Gold',
-    price: 35000,
-    image: 'https://tse3.mm.bing.net/th/id/OIP.jvOVBLwN0htTjYCZQAiTrwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
-    images: [
-      'https://tse1.mm.bing.net/th/id/OIP.cQofW8Q2xZmnrV2Oi8ql4QHaHa?w=1000&h=1000&rs=1&pid=ImgDetMain&o=7&rm=3',
-      'https://shop.southindiajewels.com/wp-content/uploads/2024/04/Imitation-Sparkling-Victorian-Polki-Drop-Earrings_1-scaled.jpg',
-      'https://i.pinimg.com/originals/ec/64/07/ec6407340f34578f10022152446aa597.jpg'
+    "id": "c6",
+    "name": "Self Design Georgette Saree",
+    "category": "Clothing",
+    "department": "Women",
+    "price": 5214,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/shopsy-sari/q/k/5/free-new-swiroski-daimond-hotfix-saree-diamond-saree-lichi-soft-original-imahfh3cavexahch.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shopsy-sari/q/k/5/free-new-swiroski-daimond-hotfix-saree-diamond-saree-lichi-soft-original-imahfh3cavexahch.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sari/s/i/o/free-hotfix-sadi-for-women-new-swiroski-diamond-also-hotfix-work-original-imaheb4ymbzbhypg.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shopsy-sari/s/g/v/free-new-swiroski-daimond-hotfix-saree-diamond-saree-lichi-soft-original-imahfh3ch7wpcggz.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shopsy-sari/8/3/y/free-new-swiroski-daimond-hotfix-saree-diamond-saree-lichi-soft-original-imahfh3czfbryp8x.jpeg?q=90'
     ],
-    isNew: true,
-    sales: 150,
-    description: 'Stunning uncut diamond (Polki) drop earrings with emerald accents and pearl hangings.',
-    material: 'gold',
-    occasion: 'festive'
-  },
-  {
-    id: 'c4',
-    name: 'Women Wedding Suit ',
-    category: 'Clothing',
-    department: 'Women',
-    price: 2500,
-    image: 'https://www.libas.in/cdn/shop/files/green-yoke-design-silk-blend-straight-kurta-with-trousers-and-dupatta-libas-1-27531263770774_1400x.jpg?v=1694512762',
-    images: [
-      'https://www.libas.in/cdn/shop/files/green-yoke-design-silk-blend-straight-kurta-with-trousers-and-dupatta-libas-1-27531263770774_1400x.jpg?v=1694512762',
-      'https://assets0.mirraw.com/images/11972064/image_zoom.jpeg?1706792452',
-      'https://img.faballey.com/images/Product/XKS09183A/d4.jpg'
-    ],
-    isNew: true,
-    sales: 45,
-    description: 'Elegant silk blend Suit set with intricate embroidery and matching Suit.',
-    material: 'silk',
-    occasion: 'festive',
-    variants: [
-      { name: 'Size', options: ['M', 'L', 'XL', 'XXL'] }
+    "isNew": true,
+    "sales": 413,
+    "description": "Experience the elegant craftsmanship of the Self Design Bollywood Georgette Saree. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
     ]
   },
   {
-    id: 'j4',
-    name: 'Gold Temple Necklace',
-    category: 'Jewellery',
-    department: 'Gold',
-    price: 45000,
-    image: 'https://i.pinimg.com/originals/ac/11/9e/ac119e6f01360ef96f5d7a64171fad51.jpg',
-    images: [
-      'https://i.pinimg.com/originals/ac/11/9e/ac119e6f01360ef96f5d7a64171fad51.jpg',
-      'https://i.pinimg.com/originals/ad/08/c0/ad08c0f148af2d360ef095d05996e9ab.jpg',
-      'https://tse2.mm.bing.net/th/id/OIP.YBocOgHCb4RnHrCEuDqPDwHaJi?rs=1&pid=ImgDetMain&o=7&rm=3'
+    "id": "c7",
+    "name": "Deklook Women Self Design Flared Green Skirt",
+    "category": "Clothing",
+    "department": "Women",
+    "price": 1155,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/p/3/f/30-1-d777-black-deklook-original-imahgyfjnkvnq9gt.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/p/3/f/30-1-d777-black-deklook-original-imahgyfjnkvnq9gt.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/i/y/q/28-1-d777-black-deklook-original-imahgyfjpnna7qzn.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/z/f/g/28-1-d777-black-deklook-original-imahgyfjfhss27xy.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/2/4/e/28-1-d777-black-deklook-original-imahgyfjmt67b73h.jpeg?q=90',
     ],
-    isNew: false,
-    sales: 89,
-    description: 'Traditional 22k gold temple jewellery necklace with intricate deity motifs.',
-    material: 'gold',
-    occasion: 'festive'
-  },
-  {
-    id: 'c5',
-    name: 'Cotton Anarkali Suit',
-    category: 'Clothing',
-    department: 'Women',
-    price: 3200,
-    image: 'https://medias.utsavfashion.com/media/catalog/product/cache/1/image/1000x/040ec09b1e35df139433887a97daa66f/p/r/printed-pure-cotton-anarkali-suit-in-white-v1-kmqs146.jpg',
-    images: [
-      'https://medias.utsavfashion.com/media/catalog/product/cache/1/image/1000x/040ec09b1e35df139433887a97daa66f/p/r/printed-pure-cotton-anarkali-suit-in-white-v1-kmqs146.jpg',
-      'https://i.pinimg.com/originals/1a/61/83/1a61836d6a9274507bde2de060ba4b57.jpg',
-      'https://th.bing.com/th/id/R.456962bdf2abde2c9b9ffa761eedebbd?rik=D2C%2bjYpE%2fuqQpw&riu=http%3a%2f%2fpeachmode.com%2fcdn%2fshop%2fproducts%2flavender-floral-printed-pure-cotton-anarkali-suit-peachmode-1.jpg%3fv%3d1669070327&ehk=4tPf%2bJFFYm8L8zgic5JYH%2b2LRIbktSanVR7c%2fLKLU0w%3d&risl=&pid=ImgRaw&r=0'
-    ],
-    isNew: false,
-    sales: 210,
-    description: 'Comfortable and stylish block-printed cotton Anarkali suit, perfect for everyday elegance.',
-    material: 'cotton',
-    occasion: 'casual',
-    variants: [
-      { name: 'Size', options: ['S', 'M', 'L'] }
+    "isNew": false,
+    "sales": 34,
+    "description": "Experience the elegant craftsmanship of the Deklook Women Self Design Flared Green Skirt. Perfectly designed for your sophisticated taste.",
+    "material": "cotton Blend",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
     ]
   },
   {
-    id: 'j5',
-    name: 'Oxidized Silver Jhumkas',
-    category: 'Jewellery',
-    department: 'Silver',
-    price: 850,
-    image: 'https://i.pinimg.com/originals/f9/d6/0b/f9d60bc1bc6a482b32a51b2e03ed0663.jpg',
-    images: [
-      'https://i.pinimg.com/originals/f9/d6/0b/f9d60bc1bc6a482b32a51b2e03ed0663.jpg',
-      'https://i.etsystatic.com/16916043/r/il/7cebdf/2111585969/il_fullxfull.2111585969_jquu.jpg',
-      'https://assets0.mirraw.com/images/8854182/image_zoom.jpeg?1616861497'
+    "id": "c8",
+    "name": "Vestis Women Solid Pencil Blue Skirt",
+    "category": "Clothing",
+    "department": "Women",
+    "price": 1848,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/o/u/j/28-1-28-ak-fashion-original-imahga95thybgtxg.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/o/u/j/28-1-28-ak-fashion-original-imahga95thybgtxg.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/v/l/u/28-1-28-ak-fashion-original-imahga95wp9xxnkh.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/f/r/d/28-1-28-vestis-original-imahh3zwvx2hwdpc.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/q/o/m/28-1-28-vestis-original-imahh3zwhghr8re9.jpeg?q=90'
     ],
-    isNew: true,
-    sales: 450,
-    description: 'Handcrafted oxidized silver jhumka earrings with tribal motifs and ghungroo drops.',
-    material: 'silver',
-    occasion: 'casual'
-  },
-  {
-    id: 'c6',
-    name: 'Chanderi Silk Dupatta',
-    category: 'Clothing',
-    department: 'Women',
-    price: 1200,
-    image: 'https://i.etsystatic.com/24145065/r/il/7fd8be/3346348133/il_300x300.3346348133_8ja7.jpg',
-    images: [
-      'https://i.etsystatic.com/24145065/r/il/7fd8be/3346348133/il_300x300.3346348133_8ja7.jpg',
-      'https://cdn.shopify.com/s/files/1/0009/3510/0467/products/banarasi_silk_dupatta_red_DUP5731032012505547_1500x.jpg?v=1603799506',
-      'https://tse3.mm.bing.net/th/id/OIP.Uhq_AwQc8lk888X_wB5DHgHaHa?rs=1&pid=ImgDetMain&o=7&rm=3'
-    ],
-    isNew: false,
-    sales: 180,
-    description: 'Lightweight Chanderi silk dupatta with golden zari border and delicate floral motifs.',
-    material: 'silk',
-    occasion: 'festive',
-    variants: [
-      { name: 'Color', options: ['Mustard Yellow', 'Mint Green', 'Peach'] }
+    "isNew": false,
+    "sales": 558,
+    "description": "Experience the elegant craftsmanship of the Vestis Women Solid Pencil Blue Skirt. Perfectly designed for your sophisticated taste.",
+    "material": "Jeans",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
     ]
   },
   {
-    id: 'j6',
-    name: 'Pearl Choker Set',
-    category: 'Jewellery',
-    department: 'Bridal',
-    price: 12500,
-    image: 'https://shop.southindiajewels.com/wp-content/uploads/2024/09/1805.5-scaled.jpg',
-    images: [
-      'https://shop.southindiajewels.com/wp-content/uploads/2024/09/1805.5-scaled.jpg',
-      'https://tse2.mm.bing.net/th/id/OIP.20Y4_nQzuexxAEbKDzCVKwHaHa?pid=ImgDet&w=474&h=474&rs=1&o=7&rm=3',
-      'https://tse4.mm.bing.net/th/id/OIP.JIFaSw4xjytE6Vghqw9-cAHaHa?pid=ImgDet&w=474&h=474&rs=1&o=7&rm=3'
+    "id": "c9",
+    "name": "Sahaj Women Printed Wrap Around Multicolor Skirt",
+    "category": "Clothing",
+    "department": "Women",
+    "price": 1145,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/s/e/c/free-1-jaipuri-print-warp-around-cotton-repar-skirt-for-women-original-imahm6bgsu2ghx74.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/s/e/c/free-1-jaipuri-print-warp-around-cotton-repar-skirt-for-women-original-imahm6bgsu2ghx74.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/h/9/2/free-1-jaipuri-print-warp-around-cotton-repar-skirt-for-women-original-imahm6bgczxzqzgn.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/p/h/x/free-1-jaipuri-print-warp-around-cotton-repar-skirt-for-women-original-imahm6bgmr2s9j3u.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/skirt/i/c/n/free-1-jaipuri-print-warp-around-cotton-repar-skirt-for-women-original-imahm6bgbpcymsje.jpeg?q=90'
     ],
-    isNew: false,
-    sales: 65,
-    description: 'Elegant multi-strand freshwater pearl choker with a central kundan pendant.',
-    material: 'gold',
-    occasion: 'party'
-  },
-  {
-    id: 'j7',
-    name: 'Solitaire Engagement Ring',
-    category: 'Jewellery',
-    department: 'Rings',
-    price: 15000,
-    image: 'https://i.pinimg.com/originals/cf/89/fb/cf89fb1c5ef28ad531d4e870a096e9c7.jpg',
-    images: [
-      'https://i.pinimg.com/originals/4b/55/7e/4b557eda262fba5dba66ed59bbce35cc.jpg',
-      'https://i.pinimg.com/originals/99/74/48/997448bbd54661a85d4bac59a405a517.jpg'
-    ],
-    isNew: true,
-    sales: 30,
-    description: 'Stunning 1-carat solitaire diamond engagement ring set in platinum.',
-    material: 'diamond',
-    occasion: 'bridal',
-    variants: [
-      { name: 'Ring Size', options: ['5', '6', '7', '8', '9'] }
+    "isNew": false,
+    "sales": 337,
+    "description": "Experience the elegant craftsmanship of the Sahaj Women Printed Wrap Around Multicolor Skirt. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
     ]
   },
   {
-    id: 'c7',
+    "id": "c10",
+    "name": "PEDR TRENDS Embroidered Semi Stitched Lehenga Choli ",
+    "category": "Clothing",
+    "department": "Women",
+    "price": 3665,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/lehenga-choli/e/g/b/free-full-sleeve-lengha-18-pedr-trends-original-imahm9sgdhkrteak.jpeg?q=90",
+    "images": [
+     'https://rukminim1.flixcart.com/image/1280/1280/xif0q/lehenga-choli/e/g/b/free-full-sleeve-lengha-18-pedr-trends-original-imahm9sgdhkrteak.jpeg?q=90',
+     'https://rukminim1.flixcart.com/image/1280/1280/xif0q/lehenga-choli/f/k/p/free-full-sleeve-lengha-18-pedr-trends-original-imahm9sgpqbtzsr3.jpeg?q=90',
+     'https://rukminim1.flixcart.com/image/1280/1280/xif0q/lehenga-choli/y/o/n/free-full-sleeve-lengha-18-pedr-trends-original-imahm9sgvfzefbht.jpeg?q=90',
+     
+    ],
+    "isNew": false,
+    "sales": 456,
+    "description": "Experience the elegant craftsmanship of the PEDR TRENDS Embroidered Semi Stitched Lehenga Choli. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c11",
+    "name": "GSH Men Straight Fit Mid Rise Dark Blue Jeans",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 4001,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/n/p/p/30-mens-jeans-001-gsh-original-imahmcvubwph23gh.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/n/p/p/30-mens-jeans-001-gsh-original-imahmcvubwph23gh.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/y/z/b/30-mens-jeans-001-gsh-original-imahmcvuhfubfbyq.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/y/e/9/32-mens-jeans-001-gsh-original-imahmcvv7893kck3.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/6/l/0/30-mens-jeans-001-gsh-original-imahmcvvcn4rcxcf.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/r/m/h/34-mens-jeans-001-gsh-original-imahmcvv8gtfumaz.jpeg?q=90'
+    ],
+    "isNew": true,
+    "sales": 604,
+    "description": "Experience the elegant craftsmanship of the GSH Men Straight Fit Mid Rise Dark Blue Jeans. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "28",
+          "30",
+          "32",
+          "34"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c12",
+    "name": "Men Regular Mid Rise Black Jeans",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 3074,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/n/l/i/28-mr-dmg-hvy-kazamajeans-original-imah9b5xkcc6ura3.jpeg?q=90",
+    "images": [
+    'https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/n/l/i/28-mr-dmg-hvy-kazamajeans-original-imah9b5xkcc6ura3.jpeg?q=90',
+    'https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/e/i/p/32-mr-dmg-hvy-kazamajeans-original-imah9bfdvjv7ahvf.jpeg?q=90',
+    'https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/4/n/k/30-mr-dmg-hvy-kazamajeans-original-imah9bfdphbmgu35.jpeg?q=90',
+    'https://rukminim1.flixcart.com/image/1280/1280/xif0q/jean/j/i/y/32-mr-dmg-hvy-kazamajeans-original-imah9bfdqasb7wsp.jpeg?q=90'
+    ],
+    "isNew": false,
+    "sales": 65,
+    "description": "Experience the elegant craftsmanship of the KAZAMAJEANS Men Regular Mid Rise Black Jeans. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "28",
+          "30",
+          "32",
+          "34"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "VTEXX Men Regular Fit Solid Spread Collar Formal Shirt",
+    "name": "VTEXX Men Regular Fit Solid Spread Collar Formal Shirt",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 3742,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/3/2/7/3xl-16lst-mstrd-vtexx-original-imah8sgztpp232gj.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/3/2/7/3xl-16lst-mstrd-vtexx-original-imah8sgztpp232gj.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/i/u/e/3xl-16lst-mstrd-vtexx-original-imah8sgzaczjhggg.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/a/t/z/3xl-16lst-mstrd-vtexx-original-imah8sgzz3v9dhxc.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/4/a/z/3xl-16lst-mstrd-vtexx-original-imah8sgzqbgagfeu.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/n/t/4/3xl-16lst-mstrd-vtexx-original-imah8sgzkcx5aygw.jpeg?q=90'
+    ],
+    "isNew": true,
+    "sales": 705,
+    "description": "Experience the elegant craftsmanship of the VTEXX Men Regular Fit Solid Spread Collar Formal Shirt. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Livitro Men Slim Fit Graphic Print Slim Collar Formal Shirt",
+    "name": "Livitro Men Slim Fit Graphic Print Slim Collar Formal Shirt",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 2950,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/0/0/z/s-light-blue-livitro-original-imahjv2gtaymzqsj.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/0/0/z/s-light-blue-livitro-original-imahjv2gtaymzqsj.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/f/y/z/s-light-blue-livitro-original-imahjv2gkapjuhfy.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/d/z/t/s-light-blue-livitro-original-imahjv2g7ygd7gb2.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/c/q/b/s-light-blue-livitro-original-imahjv2gemphhsnu.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/c/e/6/s-light-blue-livitro-original-imahjv2gcrbjun6z.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/shirt/k/f/u/s-light-blue-livitro-original-imahjv2gd5pwbygn.jpeg?q=90'
+    ],
+    "isNew": false,
+    "sales": 702,
+    "description": "Experience the elegant craftsmanship of the Livitro Men Slim Fit Graphic Print Slim Collar Formal Shirt. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "Rabhya Fashion Men Solid, Self Design, Striped Red Track Pants",
+    "name": "Rabhya Fashion Men Solid, Self Design, Striped Red Track Pants",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 2271,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/track-pant/s/x/v/xl-rf-tp-str-red-rabhya-fashion-original-imahm9rkjtg3zt4f.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/track-pant/s/x/v/xl-rf-tp-str-red-rabhya-fashion-original-imahm9rkjtg3zt4f.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/track-pant/9/r/r/xl-rf-tp-str-red-rabhya-fashion-original-imahm9rkrv32xhh7.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/track-pant/e/n/n/xl-rf-tp-str-red-rabhya-fashion-original-imahm9rkppdfxgrm.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/track-pant/r/p/u/l-rf-tp-str-red-rabhya-fashion-original-imahm9rkthafsrf2.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/track-pant/l/b/g/s-rf-tp-str-red-rabhya-fashion-original-imahm9rkrmjjhnmf.jpeg?q=90'
+    ],
+    "isNew": false,
+    "sales": 258,
+    "description": "Experience the elegant craftsmanship of the Rabhya Fashion Men Solid, Self Design, Striped Red Track Pants. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "28",
+          "30",
+          "32",
+          "34"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c16",
+    "name": "INDICLUB Self Design Men Beige Cargo Shorts",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 376,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/short/i/s/g/l-srtcodr0b-indiclub-original-imahgakzurfcases.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/short/i/s/g/l-srtcodr0b-indiclub-original-imahgakzurfcases.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/short/o/d/2/4xl-srtcodr0b-indiclub-original-imahgahyjma2cukv.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/short/d/y/4/m-srtcodr0b-indiclub-original-imahgahyu3yhgfcq.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/short/d/y/v/xl-srtcodr0b-indiclub-original-imahgahyhb9jxb88.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/short/y/x/m/xl-srtcodr0b-indiclub-original-imahgahyhgarfkfe.jpeg?q=90'
+    ],
+    "isNew": true,
+    "sales": 487,
+    "description": "Experience the elegant craftsmanship of the INDICLUB Self Design Men Beige Cargo Shorts. Perfectly designed for your sophisticated taste.",
+    "material": "Nylon",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c17",
+    "name": "Men Full Sleeve Sweatshirt",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 2225,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/sweatshirt/w/v/a/m-2003-sw-los-ofwt-magneto-original-imahhrvgdxwc8pcg.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sweatshirt/w/v/a/m-2003-sw-los-ofwt-magneto-original-imahhrvgdxwc8pcg.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sweatshirt/k/y/f/m-2003-sw-los-ofwt-magneto-original-imahhrvgrgzde9jg.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sweatshirt/t/y/c/m-2003-sw-los-ofwt-magneto-original-imahhrvgzqvyakr4.jpeg?q=90',
+      
+    ],
+    "isNew": false,
+    "sales": 248,
+    "description": "Experience the elegant craftsmanship of the Magneto Men Full Sleeve Printed Sweatshirt. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c18",
+    "name": "N.B.F Self Design Sherwani",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 3982,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/h/t/y/xl-rj-399-n-b-f-fashion-original-imahjgx325tcf62p.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/h/t/y/xl-rj-399-n-b-f-fashion-original-imahjgx325tcf62p.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/7/1/5/xl-rj-399-n-b-f-fashion-original-imahjgx3ykeryuvh.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/i/7/k/xl-rj-399-n-b-f-fashion-original-imahjgx3ysy4sufg.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/l/9/8/xl-rj-399-n-b-f-fashion-original-imahjgx3gdgyxhym.jpeg?q=90'
+    ],
+    "isNew": false,
+    "sales": 267,
+    "description": "Experience the elegant craftsmanship of the N.B.F Fashion Self Design Sherwani. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c19",
+    "name": "White Embroidered Sherwani with Pajama, Maroon Dupatta & Mala Embroidered Sherwani",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 9999,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/m/8/l/s-rd61-diamond-style-original-imahgeyze6yaru5f.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/m/8/l/s-rd61-diamond-style-original-imahgeyze6yaru5f.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/o/k/f/s-rd61-diamond-style-original-imahgeyz3jxcygq7.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/j/i/3/s-rd61-diamond-style-original-imahgeyzb4ca7r97.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/sherwani/l/t/k/s-rd61-diamond-style-original-imahgeyz4u9tb4a5.jpeg?q=90',
+
+    ],
+    "isNew": false,
+    "sales": 136,
+    "description": "Experience the elegant craftsmanship of the Diamond Style Men’s White Embroidered Sherwani with Pajama, Maroon Dupatta & Mala Embroidered Sherwani. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c20",
+    "name": "Men Solid Polo Neck Cotton Blend Green T-Shirt",
+    "category": "Clothing",
+    "department": "Men",
+    "price": 2963,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/t-shirt/i/d/k/xs-db1024-3bros-original-imahfxj9zxzbsmz9.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/t-shirt/i/d/k/xs-db1024-3bros-original-imahfxj9zxzbsmz9.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/t-shirt/2/h/k/xs-db1024-3bros-original-imahfxj94rfkzwxc.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/t-shirt/e/l/k/xs-db1024-3bros-original-imahfxj9ntfjfsfm.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/t-shirt/c/d/w/xs-db1024-3bros-original-imahfxj9fpsyuqcz.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/t-shirt/y/e/p/xs-db1024-3bros-original-imahfxj959zgeyyb.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/t-shirt/h/4/g/xs-db1024-3bros-original-imahfxj9hhsspb2r.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/t-shirt/2/z/o/xs-db1024-3bros-original-imahfxj9ukze5b7p.jpeg?q=90'
+    ],
+    "isNew": true,
+    "sales": 678,
+    "description": "Experience the elegant craftsmanship of the Men Solid Polo Neck Cotton Blend Green T-Shirt. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c21",
+    "name": "Boys & Girls Printed Polyester Regular T Shirt",
+    "category": "Clothing",
+    "department": "Kids",
+    "price": 635,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-t-shirt/4/4/s/13-14-years-hee40-virat18-kids-jersey-25-rcb-msv-original-imahhb7dhhwsb8dx.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-t-shirt/4/4/s/13-14-years-hee40-virat18-kids-jersey-25-rcb-msv-original-imahhb7dhhwsb8dx.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-t-shirt/u/8/d/13-14-years-hee40-virat18-kids-jersey-25-rcb-msv-original-imahhb7dhzjncwg7.jpeg?q=90',
+      
+    ],
+    "isNew": true,
+    "sales": 754,
+    "description": "Experience the elegant craftsmanship of the MSV Boys & Girls Printed Polyester Regular T Shirt (Red, Pack of 1). Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "2 - 4 Years",
+          "4 - 6 Years",
+          "6 - 8 Years",
+          "8 - 10 Years",
+          "10 - 12 Years",
+          "12 - 14 Years"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c22",
+    "name": "Printed Pure Cotton Regular T Shirt",
+    "category": "Clothing",
+    "department": "Kids",
+    "price": 599,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-t-shirt/g/n/9/15-16-years-kil-bpolo-c-s-olv-wte-blk-1pck-killer-original-imahgnxtzrbfwcmu.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-t-shirt/g/n/9/15-16-years-kil-bpolo-c-s-olv-wte-blk-1pck-killer-original-imahgnxtzrbfwcmu.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-t-shirt/k/t/s/15-16-years-kil-bpolo-c-s-olv-wte-blk-1pck-killer-original-imahgnxthvweshjc.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-t-shirt/h/k/s/15-16-years-kil-bpolo-c-s-olv-wte-blk-1pck-killer-original-imahgnxtbtwjqzpg.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-t-shirt/k/g/u/15-16-years-kil-bpolo-c-s-olv-wte-blk-1pck-killer-original-imahgnxththdxbbh.jpeg?q=90'
+    ],
+    "isNew": false,
+    "sales": 566,
+    "description": "Experience the elegant craftsmanship of the KILLER Boys Printed Pure Cotton Regular T Shirt (Green, Pack of 1). Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "2 - 4 Years",
+          "4 - 6 Years",
+          "6 - 8 Years",
+          "8 - 10 Years",
+          "10 - 12 Years",
+          "12 - 14 Years"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c23",
+    "name": "Boys Festive & Party, Wedding Kurta and Pyjama Set",
+    "category": "Clothing",
+    "department": "Kids",
+    "price": 1296,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/i/c/s/4-5-years-sequence-kurta-set-kids-shreeji-enterprise-original-imahgrwb7zk8gqfj.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/i/c/s/4-5-years-sequence-kurta-set-kids-shreeji-enterprise-original-imahgrwb7zk8gqfj.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/4/2/b/8-9-years-sequence-kurta-set-kids-shreeji-enterprise-original-imahgrwbkegsheey.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/c/d/r/8-9-years-sequence-kurta-set-kids-shreeji-enterprise-original-imahgrwbvuxfjbtn.jpeg?q=90',
+      
+    ],
+    "isNew": false,
+    "sales": 606,
+    "description": "Experience the elegant craftsmanship of the VALAKI Boys Festive & Party, Wedding Kurta and Pyjama Set (Purple Pack of 1). Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "2 - 4 Years",
+          "4 - 6 Years",
+          "6 - 8 Years",
+          "8 - 10 Years",
+          "10 - 12 Years",
+          "12 - 14 Years"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c24",
+    "name": "Festive & Party Blazer and Pant Set",
+    "category": "Clothing",
+    "department": "Kids",
+    "price": 2297,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/z/l/e/6-9-months-black-suite-rkdress-original-imahhctuhpsk6ybe.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/z/l/e/6-9-months-black-suite-rkdress-original-imahhctuhpsk6ybe.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/8/u/j/6-9-months-black-suite-rkdress-original-imahhctupnpuysdq.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/j/j/g/6-9-months-black-suite-rkdress-original-imahhctu6gkfgxgk.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/3/8/v/6-9-months-black-suite-rkdress-original-imahhctuckzztwh9.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/h/w/b/6-9-months-black-suite-rkdress-original-imahhctu3k9hvm3x.jpeg?q=90',
+      ''
+    ],
+    "isNew": false,
+    "sales": 604,
+    "description": "Experience the elegant craftsmanship of the KDdress Boys Festive & Party Blazer and Pant Set (Black Pack of 1). Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "2 - 4 Years",
+          "4 - 6 Years",
+          "6 - 8 Years",
+          "8 - 10 Years",
+          "10 - 12 Years",
+          "12 - 14 Years"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c25",
+    "name": "Girls Festive & Party Kurta and Sharara Set",
+    "category": "Clothing",
+    "department": "Kids",
+    "price": 2793,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/n/c/2/13-14-years-k-d-m-kids-red-sarasara-set-kdm-fashion-original-imahhzsdkhkyjzbh.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/n/c/2/13-14-years-k-d-m-kids-red-sarasara-set-kdm-fashion-original-imahhzsdkhkyjzbh.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/4/f/x/13-14-years-k-d-m-kids-red-sarasara-set-kdm-fashion-original-imahhzsdzgmjy8up.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/q/h/k/6-7-years-k-d-m-kids-red-sarasara-set-kdm-fashion-original-imahktqnwqxvnyyq.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/y/q/m/13-14-years-k-d-m-kids-red-sarasara-set-kdm-fashion-original-imahhzsd9dcrr5bx.jpeg?q=90'
+    ],
+    "isNew": false,
+    "sales": 299,
+    "description": "Experience the elegant craftsmanship of the KDM FASHION Girls Festive & Party Kurta and Sharara Set (Red Pack of 1). Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "2 - 4 Years",
+          "4 - 6 Years",
+          "6 - 8 Years",
+          "8 - 10 Years",
+          "10 - 12 Years",
+          "12 - 14 Years"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c26",
     name: 'Boys Festive Kurta Pajama',
     category: 'Clothing',
     department: 'Kids',
@@ -328,99 +834,27 @@ const PRODUCTS: Product[] = [
       'https://tse2.mm.bing.net/th/id/OIP.KCDkQGt-lA8D1tSW44XidwHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3',
       'https://tse4.mm.bing.net/th/id/OIP.gW0vdKQBK45CQ5JryUBhTQHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3'
     ],
-    isNew: true,
-    sales: 120,
-    description: 'Comfortable cotton kurta pajama set for boys, perfect for festive occasions.',
-    material: 'cotton',
-    occasion: 'festive',
-    variants: [
-      { name: 'Age', options: ['2-3 Yrs', '4-5 Yrs', '6-7 Yrs'] }
+    "isNew": true,
+    "sales": 170,
+    "description": "Experience the elegant craftsmanship of the Cozy Knit Cardigan. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "2 - 4 Years",
+          "4 - 6 Years",
+          "6 - 8 Years",
+          "8 - 10 Years",
+          "10 - 12 Years",
+          "12 - 14 Years"
+        ]
+      }
     ]
   },
   {
-    id: 'c8',
-    name: 'Mens Linen Shirt',
-    category: 'Clothing',
-    department: 'Men',
-    price: 1800,
-    image: 'https://cdna.lystit.com/photos/b9a1-2016/02/05/john-varvatos-lichen-green-linen-shirt-green-product-0-792906595-normal.jpeg',
-    images: [
-      'https://cdna.lystit.com/photos/b9a1-2016/02/05/john-varvatos-lichen-green-linen-shirt-green-product-0-792906595-normal.jpeg',
-      'https://th.bing.com/th/id/R.c77e852f879c5f6127d9e65c893bcc58?rik=brV8L4octnNN0A&riu=http%3a%2f%2fmagiclinen.com%2fcdn%2fshop%2fproducts%2fmens-linen-shirt-nevada-in-matcha-green-1.jpg%3fv%3d1661172505&ehk=Z5SlVGy6MMGC%2bjRT%2bkoCT5Cb9rh7bGHAFNeGolIi0R4%3d&risl=&pid=ImgRaw&r=0',
-      'https://cdn.shopify.com/s/files/1/0511/8771/2157/files/Sunnyshirt2.png?v=1716363284'
-    ],
-    isNew: false,
-    sales: 340,
-    description: 'Breathable pure linen shirt with a relaxed fit. Ideal for casual outings.',
-    material: 'cotton',
-    occasion: 'casual',
-    variants: [
-      { name: 'Size', options: ['M', 'L', 'XL'] },
-      { name: 'Color', options: ['White', 'Navy Blue', 'Olive Green'] }
-    ]
-  },
-  {
-    id: 'c9',
-    name: 'Silk Saree',
-    category: 'Clothing',
-    department: 'Women',
-    price: 5500,
-    image: 'https://www.noblehousecreations.net/wp-content/uploads/2021/01/Paithani-Silk-Saree.jpg',
-    images: [
-      'https://assets2.andaazfashion.com/media/catalog/product/cache/1/image/500x750/a12781a7f2ccb3d663f7fd01e1bd2e4e/b/u/burgundy-maroon-banarasi-silk-woven-zari-saree-sarv115379-1.jpg',
-      'https://www.karagiri.com/cdn/shop/products/silk-saree-scarlet-red-silk-saree-silk-saree-online-32564358119617_450x.jpg?v=1655809317'
-    ],
-    isNew: true,
-    sales: 150,
-    description: 'Beautiful silk saree with golden zari border.',
-    material: 'silk',
-    occasion: 'festive',
-    variants: [
-      { name: 'Color', options: ['Red', 'Green', 'Blue'] }
-    ]
-  },
-  {
-    id: 'c10',
-    name: 'Designer Lehenga',
-    category: 'Clothing',
-    department: 'Women',
-    price: 12500,
-    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop',
-    images: [
-      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?q=80&w=800&auto=format&fit=crop'
-    ],
-    isNew: false,
-    sales: 80,
-    description: 'Stunning designer lehenga for weddings and special occasions.',
-    material: 'silk',
-    occasion: 'bridal',
-    variants: [
-      { name: 'Size', options: ['S', 'M', 'L'] }
-    ]
-  },
-  {
-    id: 'c11',
-    name: 'Mens Sherwani',
-    category: 'Clothing',
-    department: 'Men',
-    price: 8500,
-    image: 'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=800&auto=format&fit=crop',
-    images: [
-      'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=800&auto=format&fit=crop'
-    ],
-    isNew: true,
-    sales: 45,
-    description: 'Classic mens sherwani with intricate embroidery.',
-    material: 'silk',
-    occasion: 'festive',
-    variants: [
-      { name: 'Size', options: ['M', 'L', 'XL'] }
-    ]
-  },
-  {
-    id: 'c12',
+    "id": "c27",
     name: 'Kids Party Dress',
     category: 'Clothing',
     department: 'Kids',
@@ -430,57 +864,28 @@ const PRODUCTS: Product[] = [
       'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1622290319146-7b63df48a635?q=80&w=800&auto=format&fit=crop'
     ],
-    isNew: false,
-    sales: 220,
-    description: 'Cute and comfortable party dress for kids.',
-    material: 'cotton',
-    occasion: 'party',
-    variants: [
-      { name: 'Age', options: ['3-4 Yrs', '5-6 Yrs', '7-8 Yrs'] }
+    "isNew": false,
+    "sales": 496,
+    "description": "Experience the elegant craftsmanship of the Polka Dot Raincoat. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "2 - 4 Years",
+          "4 - 6 Years",
+          "6 - 8 Years",
+          "8 - 10 Years",
+          "10 - 12 Years",
+          "12 - 14 Years"
+        ]
+      }
     ]
   },
   {
-    id: 'j8',
-    name: 'Rose Gold Moissanite Ring',
-    category: 'Jewellery',
-    department: 'Rings',
-    price: 8500,
-    image: 'https://images.unsplash.com/photo-1605100804763-247f67b254a6?q=80&w=800&auto=format&fit=crop',
-    images: [
-      'https://images.unsplash.com/photo-1605100804763-247f67b254a6?q=80&w=800&auto=format&fit=crop'
-    ],
-    isNew: true,
-    sales: 15,
-    description: 'Elegant rose gold ring featuring a brilliant-cut moissanite center stone.',
-    material: 'diamond',
-    occasion: 'party',
-    variants: [
-      { name: 'Ring Size', options: ['5', '6', '7', '8'] }
-    ]
-  },
-  {
-    id: 'c13',
-    name: 'Mens Casual Chinos',
-    category: 'Clothing',
-    department: 'Men',
-    price: 1450,
-    image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop',
-    images: [
-      'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=800&auto=format&fit=crop'
-    ],
-    isNew: false,
-    sales: 420,
-    description: 'Premium cotton chinos with a tailored fit perfect for office or casual wear.',
-    material: 'cotton',
-    occasion: 'casual',
-    variants: [
-      { name: 'Size', options: ['30', '32', '34', '36'] },
-      { name: 'Color', options: ['Khaki', 'Navy', 'Olive'] }
-    ]
-  },
-  {
-    id: 'c14',
-    name: 'Kids Denim Jacket',
+    "id": "c28",
+     name: 'Kids Denim Jacket',
     category: 'Clothing',
     department: 'Kids',
     price: 1100,
@@ -488,13 +893,897 @@ const PRODUCTS: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=800&auto=format&fit=crop'
     ],
-    isNew: true,
-    sales: 55,
-    description: 'Stylish denim jacket for kids with button closures and front pockets.',
-    material: 'cotton',
-    occasion: 'casual',
-    variants: [
-      { name: 'Age', options: ['4-5 Yrs', '6-7 Yrs', '8-9 Yrs'] }
+    "isNew": false,
+    "sales": 448,
+    "description": "Experience the elegant craftsmanship of the Summer Linen Shorts. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c29",
+    "name": "CAVENDERS Brief For Boys",
+    "category": "Clothing",
+    "department": "Kids",
+    "price": 347,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/shopsy-kids-brief/y/5/o/12-13-years-259-printed-briefs-and-trunks-underwear-cotton-original-imah5h8ck4hhqegj.jpeg?q=90",
+    "images": [
+      "https://rukminim1.flixcart.com/image/1280/1280/xif0q/shopsy-kids-brief/y/5/o/12-13-years-259-printed-briefs-and-trunks-underwear-cotton-original-imah5h8ck4hhqegj.jpeg?q=90"
+    ],
+    "isNew": true,
+    "sales": 655,
+    "description": "Experience the elegant craftsmanship of the CAVENDERS Brief For Boys. Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c30",
+    "name": "Girls Festive & Party Kurta and Pyjama Set",
+    "category": "Clothing",
+    "department": "Kids",
+    "price": 1209,
+    "image": "https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/o/y/e/9-10-years-set-barkatdesigningplanet-original-imah9fzfq8ceqtje.jpeg?q=90",
+    "images": [
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/o/y/e/9-10-years-set-barkatdesigningplanet-original-imah9fzfq8ceqtje.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/z/q/i/9-10-years-set-barkatdesigningplanet-original-imah9fzft63wrnhw.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/h/r/x/10-11-years-plazoo-set-barkatdesigningplanet-original-imags9xzd6asksnd.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/r/g/v/10-11-years-plazoo-set-barkatdesigningplanet-original-imags9xzmyzehzek.jpeg?q=90',
+      'https://rukminim1.flixcart.com/image/1280/1280/xif0q/kids-ethnic-set/6/x/e/10-11-years-plazoo-set-barkatdesigningplanet-original-imags9xzyqkfrzft.jpeg?q=90'
+    ],
+    "isNew": true,
+    "sales": 59,
+    "description": "Experience the elegant craftsmanship of the barkatdesigningplanet Girls Festive & Party Kurta and Pyjama Set (Multicolor Pack of 1). Perfectly designed for your sophisticated taste.",
+    "material": "cotton",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Size",
+        "options": [
+          "S",
+          "M",
+          "L",
+          "XL"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j31",
+    name: 'Kundan Bridal Set',
+    category: 'Jewellery',
+    department: 'Bridal',
+    price: 1250,
+    image: 'https://i.etsystatic.com/30916859/r/il/d45fec/3903175250/il_600x600.3903175250_qkb7.jpg',
+    images: [
+      'https://i.etsystatic.com/30916859/r/il/d45fec/3903175250/il_600x600.3903175250_qkb7.jpg',
+      'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=800&auto=format&fit=crop'
+    ],
+    "isNew": false,
+    "sales": 4,
+    "description": "Experience the elegant craftsmanship of the Kundan Set. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j32",
+    name: 'Diamond Tennis Bracelet',
+    category: 'Jewellery',
+    department: 'Silver',
+    price: 85000,
+    image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?q=80&w=800&auto=format&fit=crop'
+    ],
+    "isNew": true,
+    "sales": 0,
+    "description": "Experience the elegant craftsmanship of the Diamond Bracelet. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j33",
+     name: 'Polki Drop Earrings',
+    category: 'Jewellery',
+    department: 'Gold',
+    price: 35000,
+    image: 'https://tse3.mm.bing.net/th/id/OIP.jvOVBLwN0htTjYCZQAiTrwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
+    images: [
+      'https://tse1.mm.bing.net/th/id/OIP.cQofW8Q2xZmnrV2Oi8ql4QHaHa?w=1000&h=1000&rs=1&pid=ImgDetMain&o=7&rm=3',
+      'https://shop.southindiajewels.com/wp-content/uploads/2024/04/Imitation-Sparkling-Victorian-Polki-Drop-Earrings_1-scaled.jpg',
+      'https://i.pinimg.com/originals/ec/64/07/ec6407340f34578f10022152446aa597.jpg'
+    ],
+    "isNew": false,
+    "sales": 178,
+    "description": "Experience the elegant craftsmanship of the . Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j34",
+    name: 'Gold Temple Necklace',
+    category: 'Jewellery',
+    department: 'Gold',
+    price: 45000,
+    image: 'https://i.pinimg.com/originals/ac/11/9e/ac119e6f01360ef96f5d7a64171fad51.jpg',
+    images: [
+      'https://i.pinimg.com/originals/ac/11/9e/ac119e6f01360ef96f5d7a64171fad51.jpg',
+      'https://i.pinimg.com/originals/ad/08/c0/ad08c0f148af2d360ef095d05996e9ab.jpg',
+      'https://tse2.mm.bing.net/th/id/OIP.YBocOgHCb4RnHrCEuDqPDwHaJi?rs=1&pid=ImgDetMain&o=7&rm=3'
+    ],
+
+    "isNew": false,
+    "sales": 592,
+    "description": "Experience the elegant craftsmanship of the . Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j35",
+    name: 'Oxidized Silver Jhumkas',
+    category: 'Jewellery',
+    department: 'Silver',
+    price: 850,
+    image: 'https://i.pinimg.com/originals/f9/d6/0b/f9d60bc1bc6a482b32a51b2e03ed0663.jpg',
+    images: [
+      'https://i.pinimg.com/originals/f9/d6/0b/f9d60bc1bc6a482b32a51b2e03ed0663.jpg',
+      'https://i.etsystatic.com/16916043/r/il/7cebdf/2111585969/il_fullxfull.2111585969_jquu.jpg',
+      'https://assets0.mirraw.com/images/8854182/image_zoom.jpeg?1616861497'
+    ],
+    "isNew": false,
+    "sales": 222,
+    "description": "Experience the elegant craftsmanship of the . Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j36",
+    name: 'Pearl Choker Set',
+    category: 'Jewellery',
+    department: 'Bridal',
+    price: 12500,
+    image: 'https://shop.southindiajewels.com/wp-content/uploads/2024/09/1805.5-scaled.jpg',
+    images: [
+      'https://shop.southindiajewels.com/wp-content/uploads/2024/09/1805.5-scaled.jpg',
+      'https://tse2.mm.bing.net/th/id/OIP.20Y4_nQzuexxAEbKDzCVKwHaHa?pid=ImgDet&w=474&h=474&rs=1&o=7&rm=3',
+      'https://tse4.mm.bing.net/th/id/OIP.JIFaSw4xjytE6Vghqw9-cAHaHa?pid=ImgDet&w=474&h=474&rs=1&o=7&rm=3'
+    ],
+    "isNew": false,
+    "sales": 169,
+    "description": "Experience the elegant craftsmanship of the . Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j37",
+    name: 'Solitaire Engagement Ring',
+    category: 'Jewellery',
+    department: 'Rings',
+    price: 15000,
+    image: 'https://i.pinimg.com/originals/cf/89/fb/cf89fb1c5ef28ad531d4e870a096e9c7.jpg',
+    images: [
+      'https://i.pinimg.com/originals/4b/55/7e/4b557eda262fba5dba66ed59bbce35cc.jpg',
+      'https://i.pinimg.com/originals/99/74/48/997448bbd54661a85d4bac59a405a517.jpg'
+    ],
+    "isNew": false,
+    "sales": 725,
+    "description": "Experience the elegant craftsmanship of the Ruby Inset Pendant. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j38",
+    "name": "Traditional Lakshmi Haar",
+    "category": "Jewellery",
+    "department": "Gold",
+    "price": 11557,
+    "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 364,
+    "description": "Experience the elegant craftsmanship of the Traditional Lakshmi Haar. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j39",
+    "name": "Gold & Pearl Drop Earrings",
+    "category": "Jewellery",
+    "department": "Gold",
+    "price": 73872,
+    "image": "https://cdn.caratlane.com/media/catalog/product/J/E/JE00581-YGP9PE_1_lar.jpg",
+    "images": [
+      'https://cdn.caratlane.com/media/catalog/product/J/E/JE00581-YGP9PE_1_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/E/JE00581-YGP9PE_3_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/E/JE00581-YGP9PE_4_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/E/JE00581-YGP9PE_5_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/E/JE00581-YGP9PE_6_lar.jpg'
+    ],
+    "isNew": true,
+    "sales": 640,
+    "description": "Experience the elegant craftsmanship of the Gold & Pearl Drop Earrings. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j40",
+    "name": "Textured Gold Cuff",
+    "category": "Jewellery",
+    "department": "Gold",
+    "price": 39434,
+    "image": "https://cdn.caratlane.com/media/catalog/product/K/E/KE07271-2Y0000_1_lar.jpg",
+    "images": [
+      'https://cdn.caratlane.com/media/catalog/product/K/E/KE07271-2Y0000_1_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/K/E/KE07271-2Y0000_3_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/K/E/KE07271-2Y0000_4_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/K/E/KE07271-2Y0000_16_video.mp4'
+    ],
+    "isNew": false,
+    "sales": 373,
+    "description": "Experience the elegant craftsmanship of the Textured Gold Cuff. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j41",
+    "name": "Oxidized Silver Tribal Choker",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 34286,
+    "image": "https://cdn.caratlane.com/media/catalog/product/B/E/BE01385-SSS300_1_lar.jpg",
+    "images": [
+      "https://cdn.caratlane.com/media/catalog/product/B/E/BE01385-SSS300_1_lar.jpg",
+      'https://cdn.caratlane.com/media/catalog/product/B/E/BE01385-SSS300_3_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/B/E/BE01385-SSS300_5_lar.jpg'
+    ],
+    "isNew": false,
+    "sales": 417,
+    "description": "Experience the elegant craftsmanship of the Oxidized Silver Tribal Choker. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j42",
+    "name": "Sterling Silver Anklet",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 64409,
+    "image": "https://cdn.caratlane.com/media/catalog/product/B/L/BL01016-SSS3RF_1_lar.jpg",
+    "images": [
+      "https://cdn.caratlane.com/media/catalog/product/B/L/BL01016-SSS3RF_1_lar.jpg",
+      'https://cdn.caratlane.com/media/catalog/product/B/L/BL01016-SSS3RF_3_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/B/L/BL01016-SSS3RF_4_lar.jpg'
+    ],
+    "isNew": false,
+    "sales": 23,
+    "description": "Experience the elegant craftsmanship of the Sterling Silver Anklet. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j43",
+    "name": "Artistic Silver Nose Pin",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 3875,
+    "image": "https://cdn.caratlane.com/media/catalog/product/J/N/JN00427-1RP900_3_lar.jpg",
+    "images": [
+      'https://cdn.caratlane.com/media/catalog/product/J/N/JN00427-1RP900_3_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/N/JN00427-1RP900_4_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/N/JN00427-1RP900_5_lar.jpg'
+    ],
+    "isNew": false,
+    "sales": 656,
+    "description": "Experience the elegant craftsmanship of the Artistic Silver Nose Pin. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j44",
+    "name": "Vintage Silver Danglers",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 18372,
+    "image": "https://cdn.caratlane.com/media/catalog/product/B/E/BE01379-SSS300_1_lar.jpg",
+    "images": [
+      'https://cdn.caratlane.com/media/catalog/product/B/E/BE01379-SSS300_1_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/B/E/BE01379-SSS300_3_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/B/E/BE01379-SSS300_4_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/B/E/BE01379-SSS300_5_lar.jpg'
+    ],
+    "isNew": false,
+    "sales": 651,
+    "description": "Experience the elegant craftsmanship of the Vintage Silver Danglers. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j45",
+    "name": "Bohemian Statement Ring",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 86549,
+    "image": "https://images.unsplash.com/photo-1573408301185-9146522cbbbb?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1573408301185-9146522cbbbb?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 455,
+    "description": "Experience the elegant craftsmanship of the Bohemian Statement Ring. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j46",
+    "name": "Silver Ghungroo Bracelet",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 71953,
+    "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 460,
+    "description": "Experience the elegant craftsmanship of the Silver Ghungroo Bracelet. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j47",
+    "name": "Enamelled Silver Jhumkis",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 29330,
+    "image": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 375,
+    "description": "Experience the elegant craftsmanship of the Enamelled Silver Jhumkis. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j48",
+    "name": "Minimalist Silver Chain",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 17863,
+    "image": "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 660,
+    "description": "Experience the elegant craftsmanship of the Minimalist Silver Chain. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j49",
+    "name": "Filigree Silver Pendant",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 79559,
+    "image": "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 629,
+    "description": "Experience the elegant craftsmanship of the Filigree Silver Pendant. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j50",
+    "name": "Chunky Silver Cuff",
+    "category": "Jewellery",
+    "department": "Silver",
+    "price": 86506,
+    "image": "https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 450,
+    "description": "Experience the elegant craftsmanship of the Chunky Silver Cuff. Perfectly designed for your sophisticated taste.",
+    "material": "silver",
+    "occasion": "casual",
+    "variants": []
+  },
+  {
+    "id": "j51",
+    "name": "Royal Polki Matha Patti",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 22011,
+    "image": "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 190,
+    "description": "Experience the elegant craftsmanship of the Royal Polki Matha Patti. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j52",
+    "name": "Heavy Kundan Bridal Set",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 65734,
+    "image": "https://images.unsplash.com/photo-1599643478514-46b1db90ef40?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1599643478514-46b1db90ef40?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 717,
+    "description": "Experience the elegant craftsmanship of the Heavy Kundan Bridal Set. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j53",
+    "name": "Bridal Pearl Nath",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 30828,
+    "image": "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 655,
+    "description": "Experience the elegant craftsmanship of the Bridal Pearl Nath. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j54",
+    "name": "Elaborate Meenakari Choker",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 39824,
+    "image": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 606,
+    "description": "Experience the elegant craftsmanship of the Elaborate Meenakari Choker. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j55",
+    "name": "Bridal Chura Sets",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 60260,
+    "image": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 797,
+    "description": "Experience the elegant craftsmanship of the Bridal Chura Sets. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j56",
+    "name": "Emerald Drop Maang Tikka",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 21701,
+    "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 602,
+    "description": "Experience the elegant craftsmanship of the Emerald Drop Maang Tikka. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j57",
+    "name": "Jadau Bridal Haaram",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 59945,
+    "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 266,
+    "description": "Experience the elegant craftsmanship of the Jadau Bridal Haaram. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j58",
+    "name": "Diamond & Gold Maatha Patti",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 28807,
+    "image": "https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1605100804763-247f67b254a6?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 631,
+    "description": "Experience the elegant craftsmanship of the Diamond & Gold Maatha Patti. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j59",
+    "name": "Exquisite Bridal Passa",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 47077,
+    "image": "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 100,
+    "description": "Experience the elegant craftsmanship of the Exquisite Bridal Passa. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j60",
+    "name": "Traditional Temple Bridal Set",
+    "category": "Jewellery",
+    "department": "Bridal",
+    "price": 76250,
+    "image": "https://images.unsplash.com/photo-1599643478514-46b1db90ef40?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1599643478514-46b1db90ef40?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 798,
+    "description": "Experience the elegant craftsmanship of the Traditional Temple Bridal Set. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "festive",
+    "variants": []
+  },
+  {
+    "id": "j61",
+    name: 'Kundan Bridal Set',
+    category: 'Jewellery',
+    department: 'Bridal',
+    price: 1250,
+    image: 'https://i.etsystatic.com/30916859/r/il/d45fec/3903175250/il_600x600.3903175250_qkb7.jpg',
+    images: [
+      'https://i.etsystatic.com/30916859/r/il/d45fec/3903175250/il_600x600.3903175250_qkb7.jpg',
+      'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=800&auto=format&fit=crop'
+    ],
+    "isNew": true,
+    "sales": 350,
+    "description": "Experience the elegant craftsmanship of the Solitaire Diamond Engagement Ring. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j62",
+    "name": "Vintage Sapphire Halo Ring",
+    "category": "Jewellery",
+    "department": "Rings",
+    "price": 51926,
+    "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 111,
+    "description": "Experience the elegant craftsmanship of the Vintage Sapphire Halo Ring. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j63",
+    "name": "18k Gold Eternity Band",
+    "category": "Jewellery",
+    "department": "Rings",
+    "price": 74049,
+    "image": "https://images.unsplash.com/photo-1615361200141-f8e28f0de278?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1615361200141-f8e28f0de278?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 112,
+    "description": "Experience the elegant craftsmanship of the 18k Gold Eternity Band. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j64",
+    "name": "Rose Gold Moissanite Ring",
+    "category": "Jewellery",
+    "department": "Rings",
+    "price": 36825,
+    "image": "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 127,
+    "description": "Experience the elegant craftsmanship of the Rose Gold Moissanite Ring. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j65",
+    "name": "Classic Platinum Wedding Band",
+    "category": "Jewellery",
+    "department": "Rings",
+    "price": 78320,
+    "image": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 438,
+    "description": "Experience the elegant craftsmanship of the Classic Platinum Wedding Band. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j66",
+    "name": "Ruby Cluster Ring",
+    "category": "Jewellery",
+    "department": "Rings",
+    "price": 51467,
+    "image": "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": true,
+    "sales": 384,
+    "description": "Experience the elegant craftsmanship of the Ruby Cluster Ring. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j67",
+    "name": "Minimalist Gold Stacking Rings",
+    "category": "Jewellery",
+    "department": "Rings",
+    "price": 49926,
+    "image": "https://cdn.caratlane.com/media/catalog/product/K/R/KR02251-2Y0000_1_lar.jpg",
+    "images": [
+      "https://cdn.caratlane.com/media/catalog/product/K/R/KR02251-2Y0000_1_lar.jpg",
+      'https://cdn.caratlane.com/media/catalog/product/K/R/KR02251-2Y0000_3_lar.jpg'
+    ],
+    "isNew": false,
+    "sales": 756,
+    "description": "Experience the elegant craftsmanship of the Minimalist Gold Stacking Rings. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j68",
+    "name": "Emerald Cut Engagement Ring",
+    "category": "Jewellery",
+    "department": "Rings",
+    "price": 26373,
+    "image": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800&h=1000",
+    "images": [
+      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800&h=1000"
+    ],
+    "isNew": false,
+    "sales": 98,
+    "description": "Experience the elegant craftsmanship of the Emerald Cut Engagement Ring. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j69",
+    "name": "Oval Diamond Halo Ring",
+    "category": "Jewellery",
+    "department": "Rings",
+    "price": 26515,
+    "image":"https://cdn.caratlane.com/media/catalog/product/J/R/JR06389-1YP600_1_lar.jpg",
+    "images": [
+      'https://cdn.caratlane.com/media/catalog/product/J/R/JR06389-1YP600_1_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/R/JR06389-1YP600_2_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/R/JR06389-1YP600_4_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/R/JR06389-1YP600_6_lar.jpg'
+    ],
+    "isNew": false,
+    "sales": 555,
+    "description": "Experience the elegant craftsmanship of the Oval Diamond Halo Ring. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "j70",
+    "name": "Art Deco Sapphire Ring",
+    "category": "Jewellery",
+    "department": "Rings",
+    "price": 49391,
+    "image": "https://cdn.caratlane.com/media/catalog/product/J/R/JR03628-YGS300_1_lar.jpg",
+    "images": [
+      'https://cdn.caratlane.com/media/catalog/product/J/R/JR03628-YGS300_1_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/R/JR03628-YGS300_3_lar.jpg',
+      'https://cdn.caratlane.com/media/catalog/product/J/R/JR03628-YGS300_6_lar.jpg'
+    ],
+    "isNew": true,
+    "sales": 530,
+    "description": "Experience the elegant craftsmanship of the Art Deco Sapphire Ring. Perfectly designed for your sophisticated taste.",
+    "material": "gold",
+    "occasion": "casual",
+    "variants": [
+      {
+        "name": "Ring Size",
+        "options": [
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      }
     ]
   }
 ];
@@ -637,9 +1926,10 @@ const ProductCard: React.FC<{
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      whileHover={{ scale: 1.03, y: -4 }}
+      whileHover={{ scale: 1.02, y: -4 }}
+      whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.3 }}
-      className="group cursor-pointer bg-brand-bg p-3 -m-3 rounded-2xl hover:shadow-2xl transition-all duration-300 relative z-0 hover:z-10"
+      className="group cursor-pointer bg-brand-bg rounded-xl sm:rounded-2xl transition-all duration-300 relative z-0 hover:z-10 flex flex-col h-full"
       onClick={() => onSelect(product)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
@@ -647,24 +1937,31 @@ const ProductCard: React.FC<{
         setCurrentImageIndex(0);
       }}
     >
-      <div className="relative aspect-[3/4] overflow-hidden mb-4 bg-brand-surface">
-        {product.isNew && (
-          <div className="absolute top-3 left-3 md:top-4 md:left-4 z-10 bg-brand-gold text-brand-bg text-[9px] md:text-[10px] uppercase tracking-widest px-2 py-1 md:px-3 md:py-1 font-medium">
-            New Arrival
-          </div>
-        )}
-        <div className="absolute top-3 right-3 md:top-4 md:right-4 z-20 flex flex-col gap-2">
+      <div className="relative aspect-[4/5] overflow-hidden mb-3 md:mb-4 bg-brand-surface rounded-t-xl sm:rounded-t-2xl">
+        <div className="absolute top-2 left-2 md:top-4 md:left-4 z-10 flex flex-col gap-1.5">
+          {product.isNew && (
+            <div className="bg-brand-ink text-brand-surface text-[8px] md:text-[10px] uppercase tracking-widest px-2 py-0.5 md:px-3 md:py-1 font-bold shadow-sm">
+              New
+            </div>
+          )}
+          {product.sales > 400 && (
+            <div className="bg-brand-gold text-brand-bg text-[8px] md:text-[10px] uppercase tracking-widest px-2 py-0.5 md:px-3 md:py-1 font-bold shadow-sm">
+              Sale
+            </div>
+          )}
+        </div>
+        <div className="absolute top-2 right-2 md:top-4 md:right-4 z-20 flex flex-col gap-2">
           <button 
             onClick={(e) => onToggleWishlist(e, product.id)}
-            className="p-2 bg-brand-bg/80 hover:bg-brand-bg rounded-full text-brand-ink transition-colors backdrop-blur-md"
+            className="p-1.5 md:p-2 bg-brand-bg/80 hover:bg-brand-bg rounded-full text-brand-ink transition-colors backdrop-blur-md"
             aria-label={isSaved ? "Remove from wishlist" : "Add to wishlist"}
           >
-            <Heart className={`w-4 h-4 ${isSaved ? 'fill-brand-gold text-brand-gold' : ''}`} />
+            <Heart className={`w-3 h-3 md:w-4 md:h-4 ${isSaved ? 'fill-brand-gold text-brand-gold' : ''}`} />
           </button>
           <ShareMenu 
             product={product} 
             className="relative"
-            iconClassName="bg-brand-bg/80 hover:bg-brand-bg text-brand-ink backdrop-blur-md"
+            iconClassName="bg-brand-bg/80 hover:bg-brand-bg text-brand-ink backdrop-blur-md p-1.5 md:p-2"
           />
         </div>
 
@@ -680,69 +1977,72 @@ const ProductCard: React.FC<{
           <div className="absolute inset-0 flex items-center justify-between px-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none">
             <button 
               onClick={prevImage}
-              className="w-8 h-8 rounded-full bg-brand-surface/80 text-brand-ink flex items-center justify-center hover:bg-brand-surface transition-colors shadow-sm pointer-events-auto"
+              className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-surface/80 text-brand-ink flex items-center justify-center hover:bg-brand-surface transition-colors shadow-sm pointer-events-auto"
              aria-label="Previous image">
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-3 h-3 md:w-4 md:h-4" />
             </button>
             <button 
               onClick={nextImage}
-              className="w-8 h-8 rounded-full bg-brand-surface/80 text-brand-ink flex items-center justify-center hover:bg-brand-surface transition-colors shadow-sm pointer-events-auto"
+              className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-surface/80 text-brand-ink flex items-center justify-center hover:bg-brand-surface transition-colors shadow-sm pointer-events-auto"
              aria-label="Next image">
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
             </button>
           </div>
         )}
 
         {/* Image Dots */}
         {product.images.length > 1 && (
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
+          <div className="absolute bottom-2 md:bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
             {product.images.map((_, idx) => (
               <div 
                 key={idx} 
-                className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentImageIndex ? 'w-4 bg-brand-surface shadow-[0_0_4px_rgba(0,0,0,0.5)]' : 'w-1.5 bg-brand-surface/70'}`}
+                className={`h-1 md:h-1.5 rounded-full transition-all duration-300 ${idx === currentImageIndex ? 'w-3 md:w-4 bg-brand-surface shadow-[0_0_4px_rgba(0,0,0,0.5)]' : 'w-1 md:w-1.5 bg-brand-surface/70'}`}
               />
             ))}
           </div>
         )}
-
-        {/* Quick Add Slide-up */}
-        <div className="absolute bottom-0 left-0 right-0 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none p-3 bg-gradient-to-t from-black/60 to-transparent flex flex-col gap-2 z-20">
+      </div>
+      <div className="flex flex-col gap-2 flex-grow px-1 md:px-0">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-1">
+          <div>
+            <p className="text-[8px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-0.5 md:mb-1">{product.category}</p>
+            <h4 className="font-serif text-xs md:text-lg text-brand-ink line-clamp-2 md:line-clamp-1 leading-tight">{product.name}</h4>
+            {reviews.length > 0 && (
+              <div className="flex items-center gap-1 md:gap-2 mt-1">
+                {renderStars(Math.round(avgRating))}
+                <span className="text-[9px] md:text-xs text-brand-ink/50">({reviews.length})</span>
+              </div>
+            )}
+          </div>
+          <p className="text-[11px] md:text-sm font-medium tracking-wider text-brand-ink/80 pt-0.5 whitespace-nowrap">₹{product.price.toLocaleString('en-IN')}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-1.5 md:gap-2 mt-auto pt-2">
           <button 
              onClick={(e) => {
                e.stopPropagation();
                onSelect(product);
              }}
-             className="w-full bg-brand-surface text-brand-ink text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 hover:bg-brand-gold hover:text-brand-bg transition-colors shadow-lg pointer-events-auto font-medium"
+             className="w-full border border-brand-ink/20 text-brand-ink text-[9px] md:text-[10px] uppercase tracking-widest px-1 py-1.5 md:px-2 md:py-2 hover:border-brand-gold hover:text-brand-gold transition-colors font-medium text-center"
           >
             Quick View
           </button>
           <button 
             onClick={(e) => {
+              e.stopPropagation();
+              let defaultVariants: Record<string, string> | undefined = undefined;
               if (product.variants && product.variants.length > 0) {
-                e.stopPropagation();
-                onSelect(product);
-              } else {
-                onAddToCart(e, product.id);
+                defaultVariants = {};
+                product.variants.forEach(v => {
+                  defaultVariants![v.name] = v.options[0]; 
+                });
               }
+              onAddToCart(e, product.id, defaultVariants);
             }}
-            className="w-full bg-brand-gold text-brand-bg text-[10px] md:text-xs uppercase tracking-widest px-4 py-2 hover:bg-brand-ink transition-colors shadow-lg pointer-events-auto font-bold"
+            className="w-full bg-brand-ink text-brand-surface text-[9px] md:text-[10px] uppercase tracking-widest px-1 py-1.5 md:px-2 md:py-2 hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium text-center"
           >
-            {product.variants && product.variants.length > 0 ? 'Select Options' : 'Add to Cart'}
+            Add to Cart
           </button>
         </div>
-      </div>
-      <div className="flex justify-between items-start">
-        <div>
-          <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
-          <h4 className="font-serif text-sm md:text-lg text-brand-ink line-clamp-2">{product.name}</h4>
-          {reviews.length > 0 && (
-            <div className="flex items-center gap-1 md:gap-2 mt-1">
-              {renderStars(Math.round(avgRating))}
-              <span className="text-[10px] md:text-xs text-brand-ink/50">({reviews.length})</span>
-            </div>
-          )}
-        </div>
-        <p className="text-xs md:text-sm tracking-wider text-brand-ink/80 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
       </div>
     </motion.div>
   );
@@ -1629,15 +2929,15 @@ export default function App() {
                 <span className="uppercase tracking-widest text-brand-ink/60 text-[10px] md:text-xs">Filters:</span>
               </div>
               
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-2 lg:flex lg:flex-row gap-3 w-full md:w-auto">
                 <div className="relative">
                   <select 
                     value={priceRange}
                     onChange={(e) => setPriceRange(e.target.value)}
-                    className="bg-transparent border-b border-brand-ink/20 text-brand-ink py-1 pr-6 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs"
+                    className="w-full bg-transparent border border-brand-ink/20 rounded-none text-brand-ink py-2 pl-3 pr-8 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs transition-colors hover:border-brand-ink/40"
                     style={{ 
                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-                      backgroundPosition: 'right center', 
+                      backgroundPosition: 'calc(100% - 0.5rem) center', 
                       backgroundRepeat: 'no-repeat', 
                       backgroundSize: '1em' 
                     }}
@@ -1653,10 +2953,10 @@ export default function App() {
                   <select 
                     value={material}
                     onChange={(e) => setMaterial(e.target.value)}
-                    className="bg-transparent border-b border-brand-ink/20 text-brand-ink py-1 pr-6 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs"
+                    className="w-full bg-transparent border border-brand-ink/20 rounded-none text-brand-ink py-2 pl-3 pr-8 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs transition-colors hover:border-brand-ink/40"
                     style={{ 
                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-                      backgroundPosition: 'right center', 
+                      backgroundPosition: 'calc(100% - 0.5rem) center', 
                       backgroundRepeat: 'no-repeat', 
                       backgroundSize: '1em' 
                     }}
@@ -1682,10 +2982,10 @@ export default function App() {
                   <select 
                     value={occasion}
                     onChange={(e) => setOccasion(e.target.value)}
-                    className="bg-transparent border-b border-brand-ink/20 text-brand-ink py-1 pr-6 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs"
+                    className="w-full bg-transparent border border-brand-ink/20 rounded-none text-brand-ink py-2 pl-3 pr-8 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs transition-colors hover:border-brand-ink/40"
                     style={{ 
                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-                      backgroundPosition: 'right center', 
+                      backgroundPosition: 'calc(100% - 0.5rem) center', 
                       backgroundRepeat: 'no-repeat', 
                       backgroundSize: '1em' 
                     }}
@@ -1698,23 +2998,23 @@ export default function App() {
                   </select>
                 </div>
 
-                <div className="relative ml-2">
+                <div className="relative">
                   <select 
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-transparent border-b border-brand-ink/20 text-brand-ink py-1 pr-6 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs"
+                    className="w-full bg-transparent border border-brand-ink/20 rounded-none text-brand-ink py-2 pl-3 pr-8 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs transition-colors hover:border-brand-ink/40"
                     style={{ 
                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-                      backgroundPosition: 'right center', 
+                      backgroundPosition: 'calc(100% - 0.5rem) center', 
                       backgroundRepeat: 'no-repeat', 
                       backgroundSize: '1em' 
                     }}
                   >
                     <option value="featured" className="bg-brand-surface">Sort: Featured</option>
-                    <option value="newest" className="bg-brand-surface">Sort: New Arrivals</option>
-                    <option value="bestsellers" className="bg-brand-surface">Sort: Bestsellers</option>
-                    <option value="price-asc" className="bg-brand-surface">Price: Low to High</option>
-                    <option value="price-desc" className="bg-brand-surface">Price: High to Low</option>
+                    <option value="newest" className="bg-brand-surface">Sort: Newest</option>
+                    <option value="bestsellers" className="bg-brand-surface">Sort: Best</option>
+                    <option value="price-asc" className="bg-brand-surface">Low to High</option>
+                    <option value="price-desc" className="bg-brand-surface">High to Low</option>
                   </select>
                 </div>
               </div>
@@ -1806,10 +3106,10 @@ export default function App() {
                 </div>
                 <div className="h-px bg-brand-ink/10 w-full mb-6"></div>
                 <div className="flex items-center gap-4">
-                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop" alt="Priya Sharma" className="w-12 h-12 rounded-full object-cover" />
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop" alt="Amrita" className="w-12 h-12 rounded-full object-cover" />
                   <div>
-                    <h4 className="font-bold text-brand-ink text-sm">Priya Sharma</h4>
-                    <p className="text-xs text-brand-ink/50">Dehradun</p>
+                    <h4 className="font-bold text-brand-ink text-sm">Amrita</h4>
+                    <p className="text-xs text-brand-ink/50">Gorakhpur</p>
                   </div>
                 </div>
               </div>
@@ -1828,10 +3128,10 @@ export default function App() {
                 </div>
                 <div className="h-px bg-brand-bg/20 w-full mb-6"></div>
                 <div className="flex items-center gap-4">
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="Ravi Agarwal" className="w-12 h-12 rounded-full object-cover" />
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="Satvik Agrahari" className="w-12 h-12 rounded-full object-cover" />
                   <div>
-                    <h4 className="font-bold text-brand-bg text-sm">Ravi Agarwal</h4>
-                    <p className="text-xs text-brand-bg/80">Haridwar</p>
+                    <h4 className="font-bold text-brand-bg text-sm">Satvik Agrahari</h4>
+                    <p className="text-xs text-brand-bg/80">Lucknow</p>
                   </div>
                 </div>
               </div>
@@ -1850,10 +3150,10 @@ export default function App() {
                 </div>
                 <div className="h-px bg-brand-ink/10 w-full mb-6"></div>
                 <div className="flex items-center gap-4">
-                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&auto=format&fit=crop" alt="Amit Verma" className="w-12 h-12 rounded-full object-cover" />
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&auto=format&fit=crop" alt="Yash Gupta" className="w-12 h-12 rounded-full object-cover" />
                   <div>
-                    <h4 className="font-bold text-brand-ink text-sm">Amit Verma</h4>
-                    <p className="text-xs text-brand-ink/50">Dehradun</p>
+                    <h4 className="font-bold text-brand-ink text-sm">Yash Gupta</h4>
+                    <p className="text-xs text-brand-ink/50">Ambedkar Nagar</p>
                   </div>
                 </div>
               </div>
@@ -1886,7 +3186,7 @@ export default function App() {
                 </div>
                 <h3 className="font-serif text-xl mb-3 text-brand-bg">Fast Delivery</h3>
                 <p className="text-sm text-brand-bg/80 leading-relaxed max-w-xs mx-auto">
-                  Same-day delivery in Dehradun. Pan-India shipping within 3-5 business days.
+                  Same-day delivery in Uttar Pradesh. Pan-India shipping within 3-5 business days.
                 </p>
               </div>
               
@@ -2595,7 +3895,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="bg-brand-surface pt-16 md:pt-20 pb-8 md:pb-10 px-6 md:px-12 border-t border-brand-ink/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 md:gap-12 mb-12 md:mb-16">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-12 md:mb-16">
           <div className="sm:col-span-2">
             <h2 className="font-serif text-2xl md:text-3xl mb-2 text-brand-gold">{brandInfo.title}</h2>
             <p className="text-[10px] md:text-xs uppercase tracking-widest text-brand-ink/60 mb-4 md:mb-6">{brandInfo.sub}</p>
@@ -2617,7 +3917,7 @@ export default function App() {
           </div>
           
           <div>
-            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Shop</h4>
+            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Shop Collections</h4>
             <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
               <li><button onClick={() => { setCurrentView('home'); setDepartment('All'); window.scrollTo(0, 0); }} className="hover:text-brand-gold transition-colors">New Arrivals</button></li>
               <li><button onClick={() => { setCurrentView('home'); setDepartment('Women'); window.scrollTo(0, 0); }} className="hover:text-brand-gold transition-colors">Women's Collection</button></li>
@@ -2627,24 +3927,12 @@ export default function App() {
           </div>
 
           <div>
-            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Customer Care</h4>
-            <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
-              <li><button onClick={() => setCurrentView('contact')} className="hover:text-brand-gold transition-colors">Contact Us</button></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Shipping & Delivery</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Returns & Exchanges</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Size Guide</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">FAQs</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">About Us</h4>
+            <h4 className="text-[10px] md:text-xs uppercase tracking-widest font-semibold mb-4 md:mb-6 text-brand-gold">Discover</h4>
             <ul className="space-y-3 md:space-y-4 text-sm text-brand-ink/80">
               <li><button onClick={() => { setCurrentView('about'); window.scrollTo({top: 0, behavior: 'smooth'}); }} className="hover:text-brand-gold transition-colors">Our Story</button></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Careers</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Sustainability</a></li>
+              <li><button onClick={() => setCurrentView('contact')} className="hover:text-brand-gold transition-colors">Contact Us</button></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Shipping & Returns</a></li>
               <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Privacy Policy</a></li>
-              <li><a href="#" onClick={(e) => e.preventDefault()} className="hover:text-brand-gold transition-colors">Terms of Service</a></li>
             </ul>
           </div>
         </div>
