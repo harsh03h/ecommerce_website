@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
-import { createServer as createViteServer } from 'vite';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 
 dotenv.config();
 
@@ -89,7 +89,7 @@ const UserSchema = new mongoose.Schema({
   phone: String,
   address: String
 });
-const User = mongoose.model('User', UserSchema);
+const User = (mongoose.models.User as any) || mongoose.model('User', UserSchema);
 
 const OrderSchema = new mongoose.Schema({
   userId: String,
@@ -100,18 +100,17 @@ const OrderSchema = new mongoose.Schema({
   paymentMethod: String,
   createdAt: { type: Date, default: Date.now }
 });
-const Order = mongoose.model('Order', OrderSchema);
+const Order = (mongoose.models.Order as any) || mongoose.model('Order', OrderSchema);
 
 const WishlistSchema = new mongoose.Schema({
   userId: String,
   productIds: [String]
 });
-const Wishlist = mongoose.model('Wishlist', WishlistSchema);
+const Wishlist = (mongoose.models.Wishlist as any) || mongoose.model('Wishlist', WishlistSchema);
 
 // --- APIs ---
 
 // Auth
-import { OAuth2Client } from 'google-auth-library';
 
 const googleClient = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -377,6 +376,9 @@ app.delete('/api/orders/:orderId', async (req, res) => {
 
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
+    // Dynamically import vite safely
+    const viteModule = await import('vite');
+    const createViteServer = viteModule.createServer;
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
