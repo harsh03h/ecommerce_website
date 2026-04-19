@@ -90,7 +90,7 @@ const Wishlist = mongoose.model('Wishlist', WishlistSchema);
 
 // Auth
 app.post('/api/auth/register', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
+  if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
     const { email, password, displayName } = req.body;
     let user = await User.findOne({ email });
@@ -111,7 +111,7 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 app.post('/api/auth/login', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
+  if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });

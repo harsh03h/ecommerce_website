@@ -24,19 +24,26 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      const data = await res.json();
+      
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error(`Server returned non-JSON: ${res.status} ${text.substring(0, 100)}`);
+      }
       
       if (!res.ok) {
-        setError(data.error || 'Authenication failed');
+        setError(data.error || 'Authentication failed');
         return;
       }
       
       // Pass token and user data back up
       localStorage.setItem('auth_token', data.token);
       onLoginSuccess(asAdmin ? 'admin' : 'home', data.token, data.user);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Auth error", err);
-      setError("Failed to authenticate. Please check connection.");
+      setError(err.message || "Failed to authenticate. Please check connection.");
     }
   };
 
