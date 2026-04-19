@@ -17,14 +17,45 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI;
+let MONGODB_URI = process.env.MONGODB_URI;
+
+if (MONGODB_URI && MONGODB_URI.startsWith('mongodb+srv://')) {
+  try {
+    const [prefix, rest] = MONGODB_URI.split('mongodb+srv://');
+    const atIndices = [];
+    for (let i = 0; i < rest.length; i++) {
+      if (rest[i] === '@') atIndices.push(i);
+    }
+    // if there are multiple @, the last one is the host separator
+    if (atIndices.length > 1) {
+      const lastAtIndex = atIndices[atIndices.length - 1];
+      const credentials = rest.substring(0, lastAtIndex);
+      const hostInfo = rest.substring(lastAtIndex);
+      
+      const colonIndex = credentials.indexOf(':');
+      if (colonIndex !== -1) {
+        const user = credentials.substring(0, colonIndex);
+        let pass = credentials.substring(colonIndex + 1);
+        pass = decodeURIComponent(pass); // decode just in case they partially encoded
+        MONGODB_URI = 'mongodb+srv://' + encodeURIComponent(user) + ':' + encodeURIComponent(pass) + hostInfo;
+      }
+    }
+  } catch (err) {
+    console.error("Failed to parse MongoDB URI", err);
+  }
+}
 
 if (!MONGODB_URI) {
   console.warn("⚠️ MONGODB_URI is not defined in environment variables. Data will not be saved to MongoDB.");
 } else {
   mongoose.connect(MONGODB_URI)
     .then(() => console.log("Connected to MongoDB successfully!"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+    .catch((err) => {
+      console.error("MongoDB connection error:", err.message);
+      if (err.message.includes("IP that isn't whitelisted")) {
+         console.warn("⚠️ Please go to your MongoDB Atlas dashboard -> Network Access -> Add IP Address, and choose 'Allow Access From Anywhere' (0.0.0.0/0)");
+      }
+    });
 }
 
 // Mongoose Models
@@ -59,7 +90,7 @@ const Wishlist = mongoose.model('Wishlist', WishlistSchema);
 
 // Auth
 app.post('/api/auth/register', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
     const { email, password, displayName } = req.body;
     let user = await User.findOne({ email });
@@ -80,7 +111,7 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 app.post('/api/auth/login', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
