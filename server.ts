@@ -45,18 +45,40 @@ if (MONGODB_URI && MONGODB_URI.startsWith('mongodb+srv://')) {
   }
 }
 
-if (!MONGODB_URI) {
-  console.warn("⚠️ MONGODB_URI is not defined in environment variables. Data will not be saved to MongoDB.");
-} else {
-  mongoose.connect(MONGODB_URI)
-    .then(() => console.log("Connected to MongoDB successfully!"))
-    .catch((err) => {
-      console.error("MongoDB connection error:", err.message);
-      if (err.message.includes("IP that isn't whitelisted")) {
-         console.warn("⚠️ Please go to your MongoDB Atlas dashboard -> Network Access -> Add IP Address, and choose 'Allow Access From Anywhere' (0.0.0.0/0)");
-      }
-    });
+let isConnecting = false;
+
+async function connectDB() {
+  if (mongoose.connection.readyState >= 1) return;
+  if (isConnecting) return;
+  
+  if (!MONGODB_URI) {
+    console.warn("⚠️ MONGODB_URI is not defined in environment variables. Data will not be saved to MongoDB.");
+    return;
+  }
+  
+  isConnecting = true;
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log("Connected to MongoDB successfully!");
+  } catch (err: any) {
+    console.error("MongoDB connection error:", err.message);
+    if (err.message.includes("IP that isn't whitelisted")) {
+       console.warn("⚠️ Please go to your MongoDB Atlas dashboard -> Network Access -> Add IP Address, and choose 'Allow Access From Anywhere' (0.0.0.0/0)");
+    }
+  } finally {
+    isConnecting = false;
+  }
 }
+
+// Automatically initiate connection on startup
+connectDB();
+
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    await connectDB();
+  }
+  next();
+});
 
 // Mongoose Models
 const UserSchema = new mongoose.Schema({
@@ -368,9 +390,15 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  }
 }
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export default app;
