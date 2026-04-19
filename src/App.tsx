@@ -3639,7 +3639,7 @@ export default function App() {
             )}
           </section>
         ) : currentView === 'login' ? (
-          <Login onLoginSuccess={(view) => setCurrentView(view)} />
+          <Login onLoginSuccess={(view, token, userData) => { setCurrentView(view); setUser(userData); }} />
         ) : currentView === 'admin' && user ? (
           <AdminPanel user={user} />
         ) : currentView === 'cart' || currentView === 'checkout' ? (

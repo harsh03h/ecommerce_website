@@ -89,6 +89,87 @@ const Wishlist = mongoose.model('Wishlist', WishlistSchema);
 // --- APIs ---
 
 // Auth
+import { OAuth2Client } from 'google-auth-library';
+
+const googleClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  // We'll pass the dynamic redirect URI from the client
+);
+
+app.get('/api/auth/google/url', (req, res) => {
+  const { redirectUri } = req.query;
+  if (!process.env.GOOGLE_CLIENT_ID) {
+    return res.status(500).json({ error: "GOOGLE_CLIENT_ID not configured" });
+  }
+  const url = googleClient.generateAuthUrl({
+    access_type: 'offline',
+    scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
+    redirect_uri: typeof redirectUri === 'string' ? redirectUri : undefined
+  });
+  res.json({ url });
+});
+
+app.get(['/auth/callback', '/auth/callback/'], async (req, res) => {
+  const { code, state } = req.query; // we pass redirect URL via state if needed, or rely on URL
+  const redirectUri = req.query.redirectUri || (req.headers.referer ? new URL('/auth/callback', req.headers.referer).toString() : '');
+  
+  try {
+    // If not exchanging token server-side, we can just pass the code to the parent window
+    res.send(`
+      <html>
+        <body>
+          <script>
+            if (window.opener) {
+              window.opener.postMessage({ type: 'OAUTH_AUTH_SUCCESS', code: '${code}' }, '*');
+              window.close();
+            } else {
+              window.location.href = '/';
+            }
+          </script>
+          <p>Authentication successful. This window should close automatically.</p>
+        </body>
+      </html>
+    `);
+  } catch (err: any) {
+    res.send(`<html><body><p>OAuth Error: ${err.message}</p></body></html>`);
+  }
+});
+
+app.post('/api/auth/google/verify', async (req, res) => {
+  if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected" });
+  try {
+    const { code, redirectUri } = req.body;
+    const { tokens } = await googleClient.getToken({ code, redirect_uri: redirectUri });
+    googleClient.setCredentials(tokens);
+    
+    // Get user info
+    const oauth2 = googleClient.request({ url: 'https://www.googleapis.com/oauth2/v2/userinfo' });
+    const userInfo = (await oauth2).data as any;
+    
+    const email = userInfo.email;
+    const displayName = userInfo.name;
+    
+    // Find or create user
+    let user = await User.findOne({ email });
+    const userId = user ? user.userId : new mongoose.Types.ObjectId().toString();
+    
+    if (!user) {
+      // random password for oauth users
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(Math.random().toString(36), salt);
+      user = new User({ email, password: hashedPassword, displayName, userId });
+      await user.save();
+    }
+    
+    const token = jwt.sign({ id: user.userId, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, user: { uid: user.userId, email: user.email, displayName: user.displayName } });
+  } catch (error: any) {
+    console.error("Google Auth Error:", error);
+    res.status(500).json({ error: "Google verification failed: " + error.message });
+  }
+});
+
 app.post('/api/auth/register', async (req, res) => {
   if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
