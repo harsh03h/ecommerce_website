@@ -29,7 +29,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
           if (!res.ok) throw new Error(data.error);
           
           localStorage.setItem('auth_token', data.token);
-          onLoginSuccess('home', data.token, data.user);
+          onLoginSuccess(data.user.isAdmin ? 'admin' : 'home', data.token, data.user);
         } catch (err: any) {
           setError("Google login failed: " + err.message);
         }
@@ -94,6 +94,11 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
       
       if (!res.ok) {
         setError(data.error || 'Authentication failed');
+        return;
+      }
+      
+      if (asAdmin && !data.user.isAdmin) {
+        setError('You are not authorized to login as admin.');
         return;
       }
       

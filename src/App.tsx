@@ -16,6 +16,7 @@ export interface User {
   uid: string;
   email: string | null;
   displayName: string | null;
+  isAdmin?: boolean;
 }
 
 export type Product = {
@@ -2550,7 +2551,7 @@ export default function App() {
                   <button onClick={() => { setCurrentView('profile'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">My Profile</button>
                   <button onClick={() => { setCurrentView('wishlist'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">My Wishlist</button>
                   <button onClick={() => { setCurrentView('orders'); setIsMobileMenuOpen(false); }} className="text-left hover:text-brand-gold transition-colors border-b border-brand-ink/10 pb-4">Order History</button>
-                  {user.email === 'harshgupta07h@gmail.com' && (
+                  {user.isAdmin && (
                     <button onClick={() => { setCurrentView('admin'); setIsMobileMenuOpen(false); }} className="text-left text-brand-gold hover:text-brand-gold/80 transition-colors border-b border-brand-ink/10 pb-4">Admin Panel</button>
                   )}
                   <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="text-left text-red-400 hover:text-red-300 transition-colors border-b border-brand-ink/10 pb-4">Sign Out</button>
@@ -2684,7 +2685,7 @@ export default function App() {
                 <button onClick={() => setCurrentView('profile')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">My Profile</button>
                 <button onClick={() => setCurrentView('wishlist')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">My Wishlist</button>
                 <button onClick={() => setCurrentView('orders')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors">Order History</button>
-                {user.email === 'harshgupta07h@gmail.com' && (
+                {user.isAdmin && (
                   <button onClick={() => setCurrentView('admin')} className="text-left px-4 py-3 text-xs uppercase tracking-widest hover:bg-brand-ink/5 transition-colors text-brand-gold">Admin Panel</button>
                 )}
                 <button onClick={() => handleLogout()} className="text-left px-4 py-3 text-xs uppercase tracking-widest text-red-400 hover:bg-brand-ink/5 transition-colors border-t border-brand-ink/10">Sign Out</button>
@@ -3640,7 +3641,7 @@ export default function App() {
           </section>
         ) : currentView === 'login' ? (
           <Login onLoginSuccess={(view, token, userData) => { setCurrentView(view); setUser(userData); }} />
-        ) : currentView === 'admin' && user ? (
+        ) : currentView === 'admin' && user?.isAdmin ? (
           <AdminPanel user={user} />
         ) : currentView === 'cart' || currentView === 'checkout' ? (
           <div>
