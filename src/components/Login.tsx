@@ -104,7 +104,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
       
       // Pass token and user data back up
       localStorage.setItem('auth_token', data.token);
-      onLoginSuccess(asAdmin ? 'admin' : 'home', data.token, data.user);
+      onLoginSuccess(data.user.isAdmin ? 'admin' : 'home', data.token, data.user);
     } catch (err: any) {
       console.error("Auth error", err);
       setError(err.message || "Failed to authenticate. Please check connection.");

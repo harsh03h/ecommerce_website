@@ -173,7 +173,8 @@ app.post('/api/auth/google/verify', async (req, res) => {
 app.post('/api/auth/register', async (req, res) => {
   if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
-    const { email, password, displayName } = req.body;
+    const { email: rawEmail, password, displayName } = req.body;
+    const email = rawEmail.toLowerCase();
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ error: "User already exists" });
 
@@ -194,8 +195,23 @@ app.post('/api/auth/register', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { email: rawEmail, password } = req.body;
+    const email = rawEmail.toLowerCase();
+    let user = await User.findOne({ email });
+    
+    // Special Override for Admin to prevent lockout if Google Auth was used originally
+    if (email === 'harshgupta07h@gmail.com' && password === 'Admin@123') {
+      if (!user) {
+        const userId = new mongoose.Types.ObjectId().toString();
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        user = new User({ email, password: hashedPassword, displayName: 'Admin', userId });
+        await user.save();
+      }
+      const token = jwt.sign({ id: user.userId, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+      return res.json({ token, user: { uid: user.userId, email: user.email, displayName: user.displayName, isAdmin: true } });
+    }
+    
     if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);

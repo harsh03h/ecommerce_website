@@ -17,6 +17,7 @@ export interface User {
   email: string | null;
   displayName: string | null;
   isAdmin?: boolean;
+  photoURL?: string;
 }
 
 export type Product = {
@@ -57,7 +58,7 @@ export type Order = {
   createdAt?: any;
 };
 
-const PRODUCTS: Product[] = [
+export const PRODUCTS: Product[] = [
   {
     "id": "c1",
     name: 'Smocked strappy dress',
@@ -2319,7 +2320,15 @@ export default function App() {
           address: profileData.address
         })
       });
+      setUser(prev => prev ? { ...prev, displayName: profileData.displayName } : null);
       setIsEditingProfile(false);
+      
+      const id = Date.now();
+      setToast({ message: "Profile updated successfully", id });
+      setTimeout(() => {
+        setToast(prev => prev?.id === id ? null : prev);
+      }, 3000);
+      
     } catch (error) {
       console.error("Error saving profile", error);
     } finally {

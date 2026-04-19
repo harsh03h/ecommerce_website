@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Package, Clock, CheckCircle, Truck, XCircle, FileText, Printer, ChevronDown, ChevronUp } from 'lucide-react';
+import { PRODUCTS } from '../App';
 
 export interface User {
   uid: string;
@@ -211,7 +212,7 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
               <h1 className="text-3xl font-serif text-brand-ink font-bold mb-2">INVOICE</h1>
               <h2 className="text-xl text-brand-gold font-serif">Harsh Imporium & Anand Jewellars</h2>
               <p className="text-sm text-gray-500 mt-2">Ambedkar Nagar, Uttar Pradesh</p>
-              <p className="text-sm text-gray-500">contact harshgupta07h@gmail.com | +91 8875810604</p>
+              <p className="text-sm text-gray-500">harshgupta07h@gmail.com | +91 8875810604</p>
             </div>
 
             <div className="flex justify-between mb-8 text-sm">
@@ -247,10 +248,12 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                 </tr>
               </thead>
               <tbody>
-                {selectedBill.items.map((item, idx) => (
+                {selectedBill.items.map((item, idx) => {
+                  const product = PRODUCTS.find(p => p.id === item.productId);
+                  return (
                   <tr key={idx} className="border-b border-gray-200 text-sm py-2">
                     <td className="p-3 text-gray-800">
-                      {item.productId}
+                      {product ? product.name : item.productId}
                       {item.variant && Object.keys(item.variant).length > 0 && (
                         <div className="text-xs text-gray-400 mt-0.5">
                           {Object.entries(item.variant).map(([k, v]) => `${k}: ${v}`).join(', ')}
@@ -258,9 +261,9 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                       )}
                     </td>
                     <td className="p-3 text-center text-gray-600">{item.quantity}</td>
-                    <td className="p-3 text-right text-gray-800">-</td>
+                    <td className="p-3 text-right text-gray-800">{product ? `₹${(product.price * item.quantity).toLocaleString('en-IN')}` : '-'}</td>
                   </tr>
-                ))}
+                )})}
               </tbody>
             </table>
 
@@ -387,10 +390,12 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                               <div>
                                 <h4 className="text-xs font-bold uppercase tracking-widest text-brand-ink/80 mb-3 border-b border-brand-ink/10 pb-2">Order Items ({order.items.reduce((a,b)=>a+b.quantity, 0)})</h4>
                                 <ul className="space-y-2">
-                                  {order.items.map((item, idx) => (
+                                  {order.items.map((item, idx) => {
+                                    const product = PRODUCTS.find(p => p.id === item.productId);
+                                    return (
                                     <li key={idx} className="flex justify-between text-sm text-brand-ink/80 bg-white p-2 rounded border border-brand-ink/5">
                                       <span>
-                                        <span className="font-medium text-brand-ink text-xs">{item.quantity}x</span> {item.productId}
+                                        <span className="font-medium text-brand-ink text-xs">{item.quantity}x</span> {product ? product.name : item.productId}
                                         {item.variant && Object.keys(item.variant).length > 0 && (
                                           <span className="text-[10px] ml-2 bg-brand-ink/5 px-2 py-0.5 rounded-full">
                                             {Object.entries(item.variant).map(([k,v]) => `${k}: ${v}`).join(', ')}
@@ -398,7 +403,7 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                                         )}
                                       </span>
                                     </li>
-                                  ))}
+                                  )})}
                                 </ul>
                               </div>
                               {order.shippingInfo ? (
