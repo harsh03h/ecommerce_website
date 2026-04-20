@@ -1531,9 +1531,9 @@ export const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Bridal",
     "price": 76250,
-    "image": "https://images.unsplash.com/photo-1599643478514-46b1db90ef40?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://i.etsystatic.com/26473799/r/il/2dcc71/3075227211/il_fullxfull.3075227211_44sp.jpg",
     "images": [
-      "https://images.unsplash.com/photo-1599643478514-46b1db90ef40?auto=format&fit=crop&q=80&w=800&h=1000"
+      "https://i.etsystatic.com/26473799/r/il/2dcc71/3075227211/il_fullxfull.3075227211_44sp.jpg"
     ],
     "isNew": false,
     "sales": 798,
@@ -1577,9 +1577,10 @@ export const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Rings",
     "price": 51926,
-    "image": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://d17anp2eo56k6j.cloudfront.net/media/catalog/product/v/i/victorian-style-sapphire-and-diamond-halo-ring_1_30-1-10074.jpg",
     "images": [
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=800&h=1000"
+      "https://d17anp2eo56k6j.cloudfront.net/media/catalog/product/v/i/victorian-style-sapphire-and-diamond-halo-ring_1_30-1-10074.jpg",
+      'https://www.jewelryfinds.com/siteuploads/photogalleryimg/18916_prod_2006-ring-beauty.jpg'
     ],
     "isNew": true,
     "sales": 111,
@@ -1604,9 +1605,9 @@ export const PRODUCTS: Product[] = [
     "category": "Jewellery",
     "department": "Rings",
     "price": 74049,
-    "image": "https://images.unsplash.com/photo-1615361200141-f8e28f0de278?auto=format&fit=crop&q=80&w=800&h=1000",
+    "image": "https://a.1stdibscdn.com/15-carat-18k-yellow-gold-radiant-cut-fancy-yellow-diamond-eternity-band-for-sale/1121189/j_124768821623210027842/12476882_master.jpeg",
     "images": [
-      "https://images.unsplash.com/photo-1615361200141-f8e28f0de278?auto=format&fit=crop&q=80&w=800&h=1000"
+      "https://a.1stdibscdn.com/15-carat-18k-yellow-gold-radiant-cut-fancy-yellow-diamond-eternity-band-for-sale/1121189/j_124768821623210027842/12476882_master.jpeg"
     ],
     "isNew": false,
     "sales": 112,
