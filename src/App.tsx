@@ -3638,70 +3638,258 @@ export default function App() {
                               const total = subtotal + tax;
 
                               printWindow.document.write(`
+                                <!DOCTYPE html>
                                 <html>
                                   <head>
-                                    <title>Invoice - ${order.id}</title>
+                                    <title>Premium Invoice - ${order.id}</title>
+                                    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
                                     <style>
-                                      body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto; padding: 40px; }
-                                      .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #333; padding-bottom: 20px; }
-                                      .invoice-details { display: flex; justify-content: space-between; margin-bottom: 40px; }
-                                      table { w-full; width: 100%; border-collapse: collapse; margin-bottom: 40px; }
-                                      th { border-bottom: 2px solid #333; padding: 12px; text-align: left; }
-                                      .totals { margin-left: auto; width: 300px; }
-                                      .totals-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-                                      .totals-row.final { border-top: 2px solid #333; border-bottom: none; font-weight: bold; font-size: 1.2em; }
-                                      @media print { body { padding: 0; } }
+                                      :root {
+                                        --ink: #1a1a1a;
+                                        --gold: #c5a059;
+                                        --surface: #ffffff;
+                                        --muted: #f9f9f9;
+                                        --border: #eaeaea;
+                                      }
+                                      body { 
+                                        font-family: 'Inter', sans-serif; 
+                                        color: var(--ink); 
+                                        max-width: 850px; 
+                                        margin: 0 auto; 
+                                        padding: 60px 40px;
+                                        background-color: var(--surface);
+                                        -webkit-font-smoothing: antialiased;
+                                      }
+                                      .invoice-container {
+                                        border: 1px solid var(--border);
+                                        padding: 50px;
+                                        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+                                      }
+                                      .header { 
+                                        text-align: center; 
+                                        margin-bottom: 50px; 
+                                        padding-bottom: 30px;
+                                        position: relative;
+                                      }
+                                      .header::after {
+                                        content: '';
+                                        position: absolute;
+                                        bottom: 0;
+                                        left: 50%;
+                                        transform: translateX(-50%);
+                                        width: 60px;
+                                        height: 2px;
+                                        background-color: var(--gold);
+                                      }
+                                      .shop-title {
+                                        font-family: 'Playfair Display', serif;
+                                        font-size: 32px;
+                                        font-weight: 700;
+                                        margin: 0 0 10px 0;
+                                        letter-spacing: 1px;
+                                        color: var(--ink);
+                                      }
+                                      .shop-subtitle {
+                                        font-size: 12px;
+                                        text-transform: uppercase;
+                                        letter-spacing: 3px;
+                                        color: var(--gold);
+                                        margin: 0 0 15px 0;
+                                        font-weight: 500;
+                                      }
+                                      .shop-address {
+                                        font-size: 13px;
+                                        color: #666;
+                                        line-height: 1.6;
+                                      }
+                                      .invoice-meta {
+                                        display: flex;
+                                        justify-content: space-between;
+                                        background-color: var(--muted);
+                                        padding: 25px 30px;
+                                        border-left: 3px solid var(--gold);
+                                        margin-bottom: 40px;
+                                        font-size: 13px;
+                                      }
+                                      .meta-block strong {
+                                        font-size: 10px;
+                                        text-transform: uppercase;
+                                        letter-spacing: 1.5px;
+                                        color: #888;
+                                        display: block;
+                                        margin-bottom: 8px;
+                                      }
+                                      .meta-value {
+                                        font-weight: 500;
+                                        font-size: 14px;
+                                        color: var(--ink);
+                                      }
+                                      .invoice-details { 
+                                        display: flex; 
+                                        justify-content: space-between; 
+                                        margin-bottom: 50px; 
+                                      }
+                                      .bill-to h3 {
+                                        font-family: 'Playfair Display', serif;
+                                        font-size: 18px;
+                                        margin: 0 0 15px 0;
+                                        color: var(--ink);
+                                      }
+                                      .bill-to p {
+                                        margin: 0 0 5px 0;
+                                        font-size: 14px;
+                                        color: #555;
+                                        line-height: 1.5;
+                                      }
+                                      table { 
+                                        width: 100%; 
+                                        border-collapse: collapse; 
+                                        margin-bottom: 40px; 
+                                      }
+                                      th { 
+                                        border-bottom: 1px solid var(--border); 
+                                        padding: 15px; 
+                                        text-align: left; 
+                                        font-size: 11px;
+                                        text-transform: uppercase;
+                                        letter-spacing: 1.5px;
+                                        color: #888;
+                                        font-weight: 600;
+                                      }
+                                      td {
+                                        padding: 20px 15px;
+                                        border-bottom: 1px solid var(--border);
+                                        font-size: 14px;
+                                        color: #333;
+                                      }
+                                      .item-name {
+                                        font-weight: 500;
+                                        color: var(--ink);
+                                      }
+                                      .totals { 
+                                        margin-left: auto; 
+                                        width: 350px; 
+                                      }
+                                      .totals-row { 
+                                        display: flex; 
+                                        justify-content: space-between; 
+                                        padding: 12px 0; 
+                                        font-size: 14px;
+                                        color: #555;
+                                      }
+                                      .totals-row.final { 
+                                        border-top: 1px solid var(--ink); 
+                                        border-bottom: 1px solid var(--ink); 
+                                        font-weight: 600; 
+                                        font-size: 18px; 
+                                        color: var(--ink);
+                                        margin-top: 10px;
+                                        padding: 20px 0;
+                                      }
+                                      .footer {
+                                        margin-top: 80px; 
+                                        text-align: center; 
+                                      }
+                                      .footer p {
+                                        color: #888; 
+                                        font-size: 12px; 
+                                        line-height: 1.6;
+                                        margin: 0;
+                                      }
+                                      .thank-you {
+                                        font-family: 'Playfair Display', serif;
+                                        font-size: 24px;
+                                        font-style: italic;
+                                        color: var(--ink);
+                                        margin-bottom: 15px;
+                                      }
+                                      @media print { 
+                                        body { padding: 0; background-color: white; } 
+                                        .invoice-container { border: none; box-shadow: none; padding: 0; }
+                                      }
                                     </style>
                                   </head>
                                   <body>
-                                    <div class="header">
-                                      <h1 style="margin: 0;">CUSTOMER INVOICE</h1>
-                                      <p style="color: #666; margin-top: 5px;">Thank you for your purchase!</p>
-                                    </div>
-                                    <div class="invoice-details">
-                                      <div>
-                                        <strong>Bill To:</strong><br/>
-                                        ${order.shippingInfo?.fullName || 'Customer'}<br/>
-                                        ${order.shippingInfo?.address || 'N/A'}<br/>
-                                        ${order.shippingInfo?.city || ''}, ${order.shippingInfo?.state || ''} ${order.shippingInfo?.pincode || ''}<br/>
-                                        Ph: ${order.shippingInfo?.phone || 'N/A'}
+                                    <div class="invoice-container">
+                                      <div class="header">
+                                        <h1 class="shop-title">${brandInfo.title}</h1>
+                                        <p class="shop-subtitle">${brandInfo.sub}</p>
+                                        <div class="shop-address">
+                                          Ambedkar Nagar, Uttar Pradesh<br/>
+                                          harshgupta07h@gmail.com | Ph: +91 8875810604
+                                        </div>
                                       </div>
-                                      <div style="text-align: right;">
-                                        <strong>Order Date:</strong> ${order.createdAt ? new Date(order.createdAt.toMillis ? order.createdAt.toMillis() : order.createdAt).toLocaleDateString() : 'Processing'}<br/>
-                                        <strong>Order ID:</strong> ${order.id}<br/>
-                                        <strong>Payment:</strong> ${order.paymentMethod?.toUpperCase() || 'N/A'}
+                                      
+                                      <div class="invoice-meta">
+                                        <div class="meta-block">
+                                          <strong>Invoice Number</strong>
+                                          <div class="meta-value">INV-${order.id.slice(-8).toUpperCase()}</div>
+                                        </div>
+                                        <div class="meta-block">
+                                          <strong>Date of Issue</strong>
+                                          <div class="meta-value">${order.createdAt ? new Date(order.createdAt.toMillis ? order.createdAt.toMillis() : order.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Processing'}</div>
+                                        </div>
+                                        <div class="meta-block">
+                                          <strong>Payment Method</strong>
+                                          <div class="meta-value">${order.paymentMethod?.toUpperCase() || 'N/A'}</div>
+                                        </div>
                                       </div>
-                                    </div>
-                                    <table>
-                                      <thead>
-                                        <tr>
-                                          <th>Item Description</th>
-                                          <th style="text-align: right;">Amount</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        ${productDetails}
-                                      </tbody>
-                                    </table>
-                                    <div class="totals">
-                                      <div class="totals-row">
-                                        <span>Subtotal:</span>
-                                        <span>₹${subtotal.toLocaleString('en-IN')}</span>
+
+                                      <div class="invoice-details">
+                                        <div class="bill-to">
+                                          <h3>Billed To</h3>
+                                          <p><strong style="color: var(--ink)">${order.shippingInfo?.fullName || 'Customer'}</strong></p>
+                                          <p>${order.shippingInfo?.address || 'N/A'}</p>
+                                          <p>${order.shippingInfo?.city || ''}, ${order.shippingInfo?.state || ''} ${order.shippingInfo?.pincode || ''}</p>
+                                          <p style="margin-top: 10px">Ph: ${order.shippingInfo?.phone || 'N/A'}</p>
+                                          <p>${order.shippingInfo?.email || ''}</p>
+                                        </div>
                                       </div>
-                                      <div class="totals-row">
-                                        <span>Estimated Tax (18%):</span>
-                                        <span>₹${tax.toLocaleString('en-IN')}</span>
+
+                                      <table>
+                                        <thead>
+                                          <tr>
+                                            <th>Item Description</th>
+                                            <th style="text-align: center;">Qty</th>
+                                            <th style="text-align: right;">Amount</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          ${(order.items || []).map((item: any) => {
+                                            const p = PRODUCTS.find(p => p.id === item.productId);
+                                            return p ? `<tr>
+                                              <td>
+                                                <div class="item-name">${p.name}</div>
+                                              </td>
+                                              <td style="text-align: center; color: #666">${item.quantity}</td>
+                                              <td style="text-align: right; color: var(--ink); font-weight: 500">₹${(p.price * item.quantity).toLocaleString('en-IN')}</td>
+                                            </tr>` : '';
+                                          }).join('')}
+                                        </tbody>
+                                      </table>
+
+                                      <div class="totals">
+                                        <div class="totals-row">
+                                          <span>Subtotal</span>
+                                          <span>₹${subtotal.toLocaleString('en-IN')}</span>
+                                        </div>
+                                        <div class="totals-row">
+                                          <span>Estimated Tax (18%)</span>
+                                          <span>₹${tax.toLocaleString('en-IN')}</span>
+                                        </div>
+                                        <div class="totals-row final">
+                                          <span>Total</span>
+                                          <span>₹${total.toLocaleString('en-IN')}</span>
+                                        </div>
                                       </div>
-                                      <div class="totals-row final">
-                                        <span>Total:</span>
-                                        <span>₹${total.toLocaleString('en-IN')}</span>
+
+                                      <div class="footer">
+                                        <div class="thank-you">Thank you for your business.</div>
+                                        <p>This is a computer generated premium invoice<br/>and does not require a physical signature.</p>
                                       </div>
-                                    </div>
-                                    <div style="margin-top: 60px; text-align: center; color: #888; font-size: 0.9em; border-top: 1px solid #ddd; padding-top: 20px;">
-                                      This is a computer generated invoice and does not require a physical signature.
                                     </div>
                                     <script>
-                                      window.onload = () => { setTimeout(() => { window.print(); }, 500); }
+                                      window.onload = () => { setTimeout(() => { window.print(); }, 800); }
                                     </script>
                                   </body>
                                 </html>
