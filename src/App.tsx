@@ -3621,6 +3621,98 @@ export default function App() {
                         <span className="inline-block px-3 py-1 bg-brand-gold/10 text-brand-gold text-[10px] uppercase tracking-widest font-medium">
                           {order.status}
                         </span>
+                        <button 
+                          onClick={() => {
+                            const printWindow = window.open('', '_blank');
+                            if (printWindow) {
+                              const productDetails = (order.items || []).map((item: any) => {
+                                const p = PRODUCTS.find(p => p.id === item.productId);
+                                return p ? `<tr>
+                                  <td style="padding: 12px; border-bottom: 1px solid #ddd;">${p.name} (Qty: ${item.quantity})</td>
+                                  <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: right;">₹${(p.price * item.quantity).toLocaleString('en-IN')}</td>
+                                </tr>` : '';
+                              }).join('');
+
+                              const subtotal = order.totalAmount || 0;
+                              const tax = Math.round(subtotal * 0.18);
+                              const total = subtotal + tax;
+
+                              printWindow.document.write(`
+                                <html>
+                                  <head>
+                                    <title>Invoice - ${order.id}</title>
+                                    <style>
+                                      body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto; padding: 40px; }
+                                      .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #333; padding-bottom: 20px; }
+                                      .invoice-details { display: flex; justify-content: space-between; margin-bottom: 40px; }
+                                      table { w-full; width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+                                      th { border-bottom: 2px solid #333; padding: 12px; text-align: left; }
+                                      .totals { margin-left: auto; width: 300px; }
+                                      .totals-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+                                      .totals-row.final { border-top: 2px solid #333; border-bottom: none; font-weight: bold; font-size: 1.2em; }
+                                      @media print { body { padding: 0; } }
+                                    </style>
+                                  </head>
+                                  <body>
+                                    <div class="header">
+                                      <h1 style="margin: 0;">CUSTOMER INVOICE</h1>
+                                      <p style="color: #666; margin-top: 5px;">Thank you for your purchase!</p>
+                                    </div>
+                                    <div class="invoice-details">
+                                      <div>
+                                        <strong>Bill To:</strong><br/>
+                                        ${order.shippingInfo?.fullName || 'Customer'}<br/>
+                                        ${order.shippingInfo?.address || 'N/A'}<br/>
+                                        ${order.shippingInfo?.city || ''}, ${order.shippingInfo?.state || ''} ${order.shippingInfo?.pincode || ''}<br/>
+                                        Ph: ${order.shippingInfo?.phone || 'N/A'}
+                                      </div>
+                                      <div style="text-align: right;">
+                                        <strong>Order Date:</strong> ${order.createdAt ? new Date(order.createdAt.toMillis ? order.createdAt.toMillis() : order.createdAt).toLocaleDateString() : 'Processing'}<br/>
+                                        <strong>Order ID:</strong> ${order.id}<br/>
+                                        <strong>Payment:</strong> ${order.paymentMethod?.toUpperCase() || 'N/A'}
+                                      </div>
+                                    </div>
+                                    <table>
+                                      <thead>
+                                        <tr>
+                                          <th>Item Description</th>
+                                          <th style="text-align: right;">Amount</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        ${productDetails}
+                                      </tbody>
+                                    </table>
+                                    <div class="totals">
+                                      <div class="totals-row">
+                                        <span>Subtotal:</span>
+                                        <span>₹${subtotal.toLocaleString('en-IN')}</span>
+                                      </div>
+                                      <div class="totals-row">
+                                        <span>Estimated Tax (18%):</span>
+                                        <span>₹${tax.toLocaleString('en-IN')}</span>
+                                      </div>
+                                      <div class="totals-row final">
+                                        <span>Total:</span>
+                                        <span>₹${total.toLocaleString('en-IN')}</span>
+                                      </div>
+                                    </div>
+                                    <div style="margin-top: 60px; text-align: center; color: #888; font-size: 0.9em; border-top: 1px solid #ddd; padding-top: 20px;">
+                                      This is a computer generated invoice and does not require a physical signature.
+                                    </div>
+                                    <script>
+                                      window.onload = () => { setTimeout(() => { window.print(); }, 500); }
+                                    </script>
+                                  </body>
+                                </html>
+                              `);
+                              printWindow.document.close();
+                            }
+                          }}
+                          className="ml-3 inline-block px-3 py-1 bg-brand-ink/5 hover:bg-brand-ink/10 text-brand-ink text-[10px] uppercase tracking-widest font-medium transition-colors border border-brand-ink/20 rounded cursor-pointer"
+                        >
+                          View Bill
+                        </button>
                       </div>
                     </div>
                     
@@ -4430,45 +4522,6 @@ export default function App() {
                         </form>
                       </div>
                     </div>
-                  </div>
-                </div>
-
-                {/* Related Products Section */}
-                <div className="w-full border-t border-brand-ink/10 bg-brand-surface p-6 md:p-8">
-                  <h3 className="text-xl font-serif text-brand-ink mb-6">You May Also Like</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                    {PRODUCTS
-                      .filter(p => p.id !== selectedProduct.id && (p.category === selectedProduct.category || p.department === selectedProduct.department))
-                      .slice(0, 4)
-                      .map(product => (
-                        <div 
-                          key={product.id} 
-                          className="group cursor-pointer"
-                          onClick={() => {
-                            setSelectedProduct(product);
-                            document.querySelector('.custom-scrollbar')?.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                        >
-                          <div className="relative aspect-[3/4] overflow-hidden mb-3 bg-brand-surface rounded">
-                            <img 
-                              src={product.image} 
-                              alt={product.name}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                              referrerPolicy="no-referrer"
-                            />
-                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                              <span className="bg-brand-bg text-brand-gold text-[10px] uppercase tracking-widest px-4 py-2 hover:bg-brand-gold hover:text-brand-bg transition-colors backdrop-blur-sm">
-                                View Details
-                              </span>
-                            </div>
-                          </div>
-                          <div>
-                            <p className="text-[9px] uppercase tracking-widest text-brand-gold mb-1">{product.category}</p>
-                            <h4 className="font-serif text-sm text-brand-ink line-clamp-1">{product.name}</h4>
-                            <p className="text-xs text-brand-ink/70 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
-                          </div>
-                        </div>
-                      ))}
                   </div>
                 </div>
               </div>

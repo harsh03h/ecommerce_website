@@ -58,7 +58,9 @@ async function connectDB() {
   
   isConnecting = true;
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000,
+    });
     console.log("Connected to MongoDB successfully!");
   } catch (err: any) {
     console.error("MongoDB connection error:", err.message);
@@ -195,6 +197,7 @@ app.post('/api/auth/register', async (req, res) => {
   if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
     const { email: rawEmail, password, displayName } = req.body;
+    if (!rawEmail || !password) return res.status(400).json({ error: "Email and password are required" });
     const email = rawEmail.toLowerCase();
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ error: "User already exists" });
@@ -217,6 +220,7 @@ app.post('/api/auth/login', async (req, res) => {
   if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
     const { email: rawEmail, password } = req.body;
+    if (!rawEmail || !password) return res.status(400).json({ error: "Email and password are required" });
     const email = rawEmail.toLowerCase();
     let user = await User.findOne({ email });
     
