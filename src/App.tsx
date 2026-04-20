@@ -73,7 +73,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 68,
-    "description": "Experience the elegant craftsmanship of the Smocked strappy Dress. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Smocked strappy dress. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -102,7 +102,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 135,
-    "description": "Experience the elegant craftsmanship of the Women Bodycon Black Midi/Calf Length Dress. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Women Bodycon Black Midi/Calf Length Dress. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -131,7 +131,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 698,
-    "description": "Experience the elegant craftsmanship of the Women Fit and Flare Black Below Knee Dress. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Fit and Flare Black Below Knee Dress. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -161,7 +161,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 618,
-    "description": "Experience the elegant craftsmanship of the Women Maxi Multicolor Full Length Dress. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Women Maxi Multicolor Full Length Dress. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -192,7 +192,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 42,
-    "description": "Experience the elegant craftsmanship of the Embellished, Solid/Plain, Applique, Woven. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Embellished, Solid/Plain. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -222,7 +222,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 413,
-    "description": "Experience the elegant craftsmanship of the Self Design Bollywood Georgette Saree. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Self Design Georgette Saree. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -252,7 +252,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 34,
-    "description": "Experience the elegant craftsmanship of the Deklook Women Self Design Flared Green Skirt. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Deklook Women Self Design Flared Green Skirt. Expertly crafted from premium cotton Blend, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton Blend",
     "occasion": "casual",
     "variants": [
@@ -282,7 +282,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 558,
-    "description": "Experience the elegant craftsmanship of the Vestis Women Solid Pencil Blue Skirt. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Vestis Women Solid Pencil Blue Skirt. Expertly crafted from premium Jeans, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "Jeans",
     "occasion": "casual",
     "variants": [
@@ -312,7 +312,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 337,
-    "description": "Experience the elegant craftsmanship of the Sahaj Women Printed Wrap Around Multicolor Skirt. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Sahaj Women Printed Wrap Around Multicolor Skirt. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -342,7 +342,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 456,
-    "description": "Experience the elegant craftsmanship of the PEDR TRENDS Embroidered Semi Stitched Lehenga Choli. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning PEDR TRENDS Embroidered Semi Stitched Lehenga Choli . Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -373,7 +373,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 604,
-    "description": "Experience the elegant craftsmanship of the GSH Men Straight Fit Mid Rise Dark Blue Jeans. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning GSH Men Straight Fit Mid Rise Dark Blue Jeans. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -403,7 +403,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 65,
-    "description": "Experience the elegant craftsmanship of the KAZAMAJEANS Men Regular Mid Rise Black Jeans. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Men Regular Mid Rise Black Jeans. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -434,7 +434,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 705,
-    "description": "Experience the elegant craftsmanship of the VTEXX Men Regular Fit Solid Spread Collar Formal Shirt. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning VTEXX Men Regular Fit Solid Spread Collar Formal Shirt. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -466,7 +466,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 702,
-    "description": "Experience the elegant craftsmanship of the Livitro Men Slim Fit Graphic Print Slim Collar Formal Shirt. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Livitro Men Slim Fit Graphic Print Slim Collar Formal Shirt. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -497,7 +497,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 258,
-    "description": "Experience the elegant craftsmanship of the Rabhya Fashion Men Solid, Self Design, Striped Red Track Pants. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Rabhya Fashion Men Solid, Self Design, Striped Red Track Pants. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -528,7 +528,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 487,
-    "description": "Experience the elegant craftsmanship of the INDICLUB Self Design Men Beige Cargo Shorts. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning INDICLUB Self Design Men Beige Cargo Shorts. Expertly crafted from premium Nylon, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "Nylon",
     "occasion": "casual",
     "variants": [
@@ -558,7 +558,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 248,
-    "description": "Experience the elegant craftsmanship of the Magneto Men Full Sleeve Printed Sweatshirt. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Men Full Sleeve Sweatshirt. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -588,7 +588,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 267,
-    "description": "Experience the elegant craftsmanship of the N.B.F Fashion Self Design Sherwani. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning N.B.F Self Design Sherwani. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -619,7 +619,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 136,
-    "description": "Experience the elegant craftsmanship of the Diamond Style Men’s White Embroidered Sherwani with Pajama, Maroon Dupatta & Mala Embroidered Sherwani. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning White Embroidered Sherwani with Pajama, Maroon Dupatta & Mala Embroidered Sherwani. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -652,7 +652,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 678,
-    "description": "Experience the elegant craftsmanship of the Men Solid Polo Neck Cotton Blend Green T-Shirt. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Men Solid Polo Neck Cotton Blend Green T-Shirt. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -681,7 +681,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 754,
-    "description": "Experience the elegant craftsmanship of the MSV Boys & Girls Printed Polyester Regular T Shirt (Red, Pack of 1). Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Boys & Girls Printed Polyester Regular T Shirt. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -713,7 +713,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 566,
-    "description": "Experience the elegant craftsmanship of the KILLER Boys Printed Pure Cotton Regular T Shirt (Green, Pack of 1). Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Printed Pure Cotton Regular T Shirt. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -745,7 +745,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 606,
-    "description": "Experience the elegant craftsmanship of the VALAKI Boys Festive & Party, Wedding Kurta and Pyjama Set (Purple Pack of 1). Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Boys Festive & Party, Wedding Kurta and Pyjama Set. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -779,7 +779,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 604,
-    "description": "Experience the elegant craftsmanship of the KDdress Boys Festive & Party Blazer and Pant Set (Black Pack of 1). Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Festive & Party Blazer and Pant Set. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -811,7 +811,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 299,
-    "description": "Experience the elegant craftsmanship of the KDM FASHION Girls Festive & Party Kurta and Sharara Set (Red Pack of 1). Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Girls Festive & Party Kurta and Sharara Set. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -842,7 +842,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 170,
-    "description": "Experience the elegant craftsmanship of the Cozy Knit Cardigan. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Boys Festive Kurta Pajama. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -872,7 +872,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 496,
-    "description": "Experience the elegant craftsmanship of the Polka Dot Raincoat. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Kids Party Dress. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -901,7 +901,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 448,
-    "description": "Experience the elegant craftsmanship of the Summer Linen Shorts. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Kids Denim Jacket. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -928,7 +928,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 655,
-    "description": "Experience the elegant craftsmanship of the CAVENDERS Brief For Boys. Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning CAVENDERS Brief For Boys. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -959,7 +959,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 59,
-    "description": "Experience the elegant craftsmanship of the barkatdesigningplanet Girls Festive & Party Kurta and Pyjama Set (Multicolor Pack of 1). Perfectly designed for your sophisticated taste.",
+    "description": "Elevate your wardrobe with the stunning Girls Festive & Party Kurta and Pyjama Set. Expertly crafted from premium cotton, this piece offers unparalleled comfort and durability. Perfectly suited for casual wear, its timeless silhouette and meticulous attention to detail ensure you'll stand out with effortless style. Experience the perfect blend of fashion and functionality.",
     "material": "cotton",
     "occasion": "casual",
     "variants": [
@@ -988,7 +988,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 4,
-    "description": "Experience the elegant craftsmanship of the Kundan Set. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Kundan Bridal Set. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1007,7 +1007,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 0,
-    "description": "Experience the elegant craftsmanship of the Diamond Bracelet. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Diamond Tennis Bracelet. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1026,7 +1026,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 178,
-    "description": "Experience the elegant craftsmanship of the . Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Polki Drop Earrings. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1046,7 +1046,7 @@ export const PRODUCTS: Product[] = [
 
     "isNew": false,
     "sales": 592,
-    "description": "Experience the elegant craftsmanship of the . Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Gold Temple Necklace. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1065,7 +1065,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 222,
-    "description": "Experience the elegant craftsmanship of the . Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Oxidized Silver Jhumkas. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1084,7 +1084,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 169,
-    "description": "Experience the elegant craftsmanship of the . Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Pearl Choker Set. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1102,7 +1102,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 725,
-    "description": "Experience the elegant craftsmanship of the Ruby Inset Pendant. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Solitaire Engagement Ring. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1119,7 +1119,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 364,
-    "description": "Experience the elegant craftsmanship of the Traditional Lakshmi Haar. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Traditional Lakshmi Haar. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1140,7 +1140,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 640,
-    "description": "Experience the elegant craftsmanship of the Gold & Pearl Drop Earrings. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Gold & Pearl Drop Earrings. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1160,7 +1160,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 373,
-    "description": "Experience the elegant craftsmanship of the Textured Gold Cuff. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Textured Gold Cuff. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1179,7 +1179,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 417,
-    "description": "Experience the elegant craftsmanship of the Oxidized Silver Tribal Choker. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Oxidized Silver Tribal Choker. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1198,7 +1198,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 23,
-    "description": "Experience the elegant craftsmanship of the Sterling Silver Anklet. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Sterling Silver Anklet. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1217,7 +1217,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 656,
-    "description": "Experience the elegant craftsmanship of the Artistic Silver Nose Pin. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Artistic Silver Nose Pin. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1237,7 +1237,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 651,
-    "description": "Experience the elegant craftsmanship of the Vintage Silver Danglers. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Vintage Silver Danglers. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1254,7 +1254,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 455,
-    "description": "Experience the elegant craftsmanship of the Bohemian Statement Ring. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Bohemian Statement Ring. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1272,7 +1272,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 460,
-    "description": "Experience the elegant craftsmanship of the Silver Ghungroo Bracelet. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Silver Ghungroo Bracelet. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1290,7 +1290,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 375,
-    "description": "Experience the elegant craftsmanship of the Enamelled Silver Jhumkis. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Enamelled Silver Jhumkis. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1309,7 +1309,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 660,
-    "description": "Experience the elegant craftsmanship of the Minimalist Silver Chain. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Minimalist Silver Chain. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1329,7 +1329,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 629,
-    "description": "Experience the elegant craftsmanship of the Filigree Silver Pendant. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Filigree Silver Pendant. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1349,7 +1349,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 450,
-    "description": "Experience the elegant craftsmanship of the Chunky Silver Cuff. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Chunky Silver Cuff. Forged with exceptional craftsmanship using high-quality silver, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "silver",
     "occasion": "casual",
     "variants": []
@@ -1368,7 +1368,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 190,
-    "description": "Experience the elegant craftsmanship of the Royal Polki Matha Patti. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Royal Polki Matha Patti. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1387,7 +1387,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 717,
-    "description": "Experience the elegant craftsmanship of the Heavy Kundan Bridal Set. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Heavy Kundan Bridal Set. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1404,7 +1404,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 655,
-    "description": "Experience the elegant craftsmanship of the Bridal Pearl Nath. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Bridal Pearl Nath. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1424,7 +1424,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 606,
-    "description": "Experience the elegant craftsmanship of the Elaborate Meenakari Choker. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Elaborate Meenakari Choker. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1443,7 +1443,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 797,
-    "description": "Experience the elegant craftsmanship of the Bridal Chura Sets. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Bridal Chura Sets. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1464,7 +1464,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 602,
-    "description": "Experience the elegant craftsmanship of the Emerald Drop Maang Tikka. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Emerald Drop Maang Tikka. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1483,7 +1483,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 266,
-    "description": "Experience the elegant craftsmanship of the Jadau Bridal Haaram. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Jadau Bridal Haaram. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1503,7 +1503,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 631,
-    "description": "Experience the elegant craftsmanship of the Diamond & Gold Maatha Patti. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Diamond & Gold Maatha Patti. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1520,7 +1520,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 100,
-    "description": "Experience the elegant craftsmanship of the Exquisite Bridal Passa. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Exquisite Bridal Passa. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1537,7 +1537,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 798,
-    "description": "Experience the elegant craftsmanship of the Traditional Temple Bridal Set. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Traditional Temple Bridal Set. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for festive occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "festive",
     "variants": []
@@ -1556,7 +1556,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 350,
-    "description": "Experience the elegant craftsmanship of the Solitaire Diamond Engagement Ring. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Kundan Bridal Set. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -1584,7 +1584,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 111,
-    "description": "Experience the elegant craftsmanship of the Vintage Sapphire Halo Ring. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Vintage Sapphire Halo Ring. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -1611,7 +1611,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 112,
-    "description": "Experience the elegant craftsmanship of the 18k Gold Eternity Band. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the 18k Gold Eternity Band. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -1638,7 +1638,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 127,
-    "description": "Experience the elegant craftsmanship of the Rose Gold Moissanite Ring. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Rose Gold Moissanite Ring. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -1665,7 +1665,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 438,
-    "description": "Experience the elegant craftsmanship of the Classic Platinum Wedding Band. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Classic Platinum Wedding Band. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -1692,7 +1692,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 384,
-    "description": "Experience the elegant craftsmanship of the Ruby Cluster Ring. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Ruby Cluster Ring. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -1720,7 +1720,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 756,
-    "description": "Experience the elegant craftsmanship of the Minimalist Gold Stacking Rings. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Minimalist Gold Stacking Rings. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -1747,7 +1747,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 98,
-    "description": "Experience the elegant craftsmanship of the Emerald Cut Engagement Ring. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Emerald Cut Engagement Ring. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -1777,7 +1777,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": false,
     "sales": 555,
-    "description": "Experience the elegant craftsmanship of the Oval Diamond Halo Ring. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Oval Diamond Halo Ring. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -1806,7 +1806,7 @@ export const PRODUCTS: Product[] = [
     ],
     "isNew": true,
     "sales": 530,
-    "description": "Experience the elegant craftsmanship of the Art Deco Sapphire Ring. Perfectly designed for your sophisticated taste.",
+    "description": "Discover the breathtaking beauty of the Art Deco Sapphire Ring. Forged with exceptional craftsmanship using high-quality gold, this masterpiece exudes luxury and sophistication. Ideal for casual occasions, it serves as a mesmerizing statement piece that perfectly complements your unique charm. A true symbol of timeless elegance.",
     "material": "gold",
     "occasion": "casual",
     "variants": [
@@ -2037,27 +2037,27 @@ const ProductCard: React.FC<{
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-2 flex-grow px-1 md:px-0">
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-1">
-          <div>
-            <p className="text-[8px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-0.5 md:mb-1">{product.category}</p>
-            <h4 className="font-serif text-xs md:text-lg text-brand-ink line-clamp-2 md:line-clamp-1 leading-tight">{product.name}</h4>
+      <div className="flex flex-col gap-1.5 md:gap-2 flex-grow px-1.5 md:px-2 pb-2">
+        <div className="flex flex-col xl:flex-row justify-between items-start gap-1">
+          <div className="flex-1 w-full truncate">
+            <p className="text-[7px] sm:text-[8px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-0.5 md:mb-1">{product.category}</p>
+            <h4 className="font-serif text-[10px] sm:text-xs md:text-lg text-brand-ink truncate leading-tight w-full" title={product.name}>{product.name}</h4>
             {reviews.length > 0 && (
-              <div className="flex items-center gap-1 md:gap-2 mt-1">
+              <div className="flex items-center gap-0.5 md:gap-2 mt-0.5 md:mt-1">
                 {renderStars(Math.round(avgRating))}
-                <span className="text-[9px] md:text-xs text-brand-ink/50">({reviews.length})</span>
+                <span className="text-[8px] md:text-xs text-brand-ink/50 ml-0.5">({reviews.length})</span>
               </div>
             )}
           </div>
-          <p className="text-[11px] md:text-sm font-medium tracking-wider text-brand-ink/80 pt-0.5 whitespace-nowrap">₹{product.price.toLocaleString('en-IN')}</p>
+          <p className="text-[10px] sm:text-[11px] md:text-sm font-medium tracking-wider text-brand-ink/80 pt-0.5 whitespace-nowrap">₹{product.price.toLocaleString('en-IN')}</p>
         </div>
-        <div className="grid grid-cols-2 gap-1.5 md:gap-2 mt-auto pt-2">
+        <div className="flex flex-col xl:flex-row gap-1.5 md:gap-2 mt-auto pt-2 w-full">
           <button 
              onClick={(e) => {
                e.stopPropagation();
                onSelect(product);
              }}
-             className="w-full border border-brand-ink/20 text-brand-ink text-[9px] md:text-[10px] uppercase tracking-widest px-1 py-1.5 md:px-2 md:py-2 hover:border-brand-gold hover:text-brand-gold transition-colors font-medium text-center"
+             className="w-full flex-1 border border-brand-ink/20 text-brand-ink text-[8px] sm:text-[9px] md:text-xs uppercase tracking-widest px-1 sm:px-2 py-1.5 md:py-2.5 hover:border-brand-gold hover:text-brand-gold transition-colors font-medium text-center truncate"
           >
             Quick View
           </button>
@@ -2073,7 +2073,7 @@ const ProductCard: React.FC<{
               }
               onAddToCart(e, product.id, defaultVariants);
             }}
-            className="w-full bg-brand-ink text-brand-surface text-[9px] md:text-[10px] uppercase tracking-widest px-1 py-1.5 md:px-2 md:py-2 hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium text-center"
+            className="w-full flex-1 bg-brand-ink text-brand-surface text-[8px] sm:text-[9px] md:text-xs uppercase tracking-widest px-1 sm:px-2 py-1.5 md:py-2.5 hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium text-center truncate"
           >
             Add to Cart
           </button>
@@ -3110,7 +3110,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 w-full">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map(product => (
                 <ProductCard
@@ -3137,8 +3137,28 @@ export default function App() {
           </div>
           
           {filteredProducts.length === 0 && (
-            <div className="text-center py-20 text-brand-ink/50">
-              <p>No products found in this category.</p>
+            <div className="text-center py-24 bg-brand-surface border border-brand-ink/10 flex flex-col items-center justify-center rounded-sm">
+              <div className="w-20 h-20 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
+                <Search className="w-8 h-8 text-brand-ink/30" />
+              </div>
+              <h3 className="font-serif text-2xl text-brand-ink mb-3">No results found</h3>
+              <p className="text-brand-ink/60 mb-8 max-w-md mx-auto text-sm">
+                No products found matching your query. Try clearing your filters or searching for something else.
+              </p>
+              {(searchQuery.trim() !== '' || department !== 'All' || priceRange !== 'all') && (
+                <button 
+                  onClick={() => {
+                    setSearchQuery('');
+                    setDepartment('All');
+                    setPriceRange('all');
+                    setMaterial('all');
+                    setOccasion('all');
+                  }} 
+                  className="bg-brand-ink text-brand-gold px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-gold hover:text-brand-bg transition-colors"
+                >
+                  Clear All Filters
+                </button>
+              )}
             </div>
           )}
         </section>
@@ -3460,7 +3480,7 @@ export default function App() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-10">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 w-full">
                 <AnimatePresence mode="popLayout">
                   {PRODUCTS.filter(p => wishlist.includes(p.id)).map(product => (
                     <ProductCard
@@ -3628,8 +3648,12 @@ export default function App() {
                             if (printWindow) {
                               const productDetails = (order.items || []).map((item: any) => {
                                 const p = PRODUCTS.find(p => p.id === item.productId);
+                                let variantsHtml = '';
+                                if (item.variants && Object.keys(item.variants).length > 0) {
+                                  variantsHtml = `<br/><span style="font-size: 10px; color: #666; text-transform: uppercase;">${Object.entries(item.variants).map(([k,v]) => `${k}: ${v}`).join(' | ')}</span>`;
+                                }
                                 return p ? `<tr>
-                                  <td style="padding: 12px; border-bottom: 1px solid #ddd;">${p.name} (Qty: ${item.quantity})</td>
+                                  <td style="padding: 12px; border-bottom: 1px solid #ddd;">${p.name} (Qty: ${item.quantity})${variantsHtml}</td>
                                   <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: right;">₹${(p.price * item.quantity).toLocaleString('en-IN')}</td>
                                 </tr>` : '';
                               }).join('');
@@ -3858,9 +3882,14 @@ export default function App() {
                                         <tbody>
                                           ${(order.items || []).map((item: any) => {
                                             const p = PRODUCTS.find(p => p.id === item.productId);
+                                            let variantsHtml = '';
+                                            if (item.variants && Object.keys(item.variants).length > 0) {
+                                              variantsHtml = `<div style="font-size: 10px; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.05em;">${Object.entries(item.variants).map(([k,v]) => `${k}: ${v}`).join(' | ')}</div>`;
+                                            }
                                             return p ? `<tr>
                                               <td>
                                                 <div class="item-name">${p.name}</div>
+                                                ${variantsHtml}
                                               </td>
                                               <td style="text-align: center; color: #666">${item.quantity}</td>
                                               <td style="text-align: right; color: var(--ink); font-weight: 500">₹${(p.price * item.quantity).toLocaleString('en-IN')}</td>
@@ -3976,6 +4005,15 @@ export default function App() {
                                   <div className="flex-grow py-1 pr-8">
                                     <p className="text-[#da7c44] text-xs font-medium mb-1">{product.category}</p>
                                     <h4 className="font-serif text-lg font-bold text-brand-ink">{product.name}</h4>
+                                    {item.variants && Object.keys(item.variants).length > 0 && (
+                                      <div className="flex flex-wrap gap-2 mt-2">
+                                        {Object.entries(item.variants).map(([key, val]) => (
+                                          <span key={key} className="text-[10px] uppercase tracking-widest bg-brand-ink/5 text-brand-ink/70 px-2 py-0.5 rounded-sm">
+                                            {key}: <span className="font-bold text-brand-ink">{val as string}</span>
+                                          </span>
+                                        ))}
+                                      </div>
+                                    )}
                                     
                                     <div className="flex items-center gap-4 mt-5">
                                       <div className="flex items-center bg-[#f4f4f4] rounded-full px-3 py-1.5">
@@ -4116,9 +4154,16 @@ export default function App() {
                            const product = PRODUCTS.find(p => p.id === item.productId);
                            if (!product) return null;
                            return (
-                             <div key={idx} className="flex justify-between items-center text-sm">
-                               <span className="text-brand-ink/70 truncate flex-grow pr-4">{product.name} <span className="text-brand-ink/40 text-[10px] ml-1">x{item.quantity}</span></span>
-                               <span className="font-bold text-brand-ink font-serif">₹{(product.price * item.quantity).toLocaleString('en-IN')}</span>
+                             <div key={idx} className="flex justify-between items-start text-sm">
+                               <div className="flex-grow pr-4">
+                                 <span className="text-brand-ink/70 break-words block leading-snug">{product.name} <span className="text-brand-ink/40 text-[10px] ml-1">x{item.quantity}</span></span>
+                                 {item.variants && Object.keys(item.variants).length > 0 && (
+                                   <span className="text-[10px] text-brand-ink/50 uppercase tracking-widest block mt-1">
+                                     {Object.entries(item.variants).map(([k, v]) => `${k}: ${v}`).join(' | ')}
+                                   </span>
+                                 )}
+                               </div>
+                               <span className="font-bold text-brand-ink font-serif whitespace-nowrap mt-0.5">₹{(product.price * item.quantity).toLocaleString('en-IN')}</span>
                              </div>
                            );
                          })}
@@ -4129,12 +4174,19 @@ export default function App() {
                            const product = PRODUCTS.find(p => p.id === item.productId);
                            if (!product) return null;
                            return (
-                             <div key={idx} className="flex gap-3 text-sm items-center">
-                               <img src={product.image} className="w-12 h-16 object-cover rounded shadow-sm" alt={product.name} referrerPolicy="no-referrer" />
-                               <div className="flex-grow pt-1">
+                             <div key={idx} className="flex gap-3 text-sm items-start">
+                               <img src={product.image} className="w-12 h-16 object-cover rounded shadow-sm flex-shrink-0" alt={product.name} referrerPolicy="no-referrer" />
+                               <div className="flex-grow pt-0.5">
                                   <div className="text-brand-ink/80 text-xs font-semibold leading-tight pr-4">{product.name}</div>
-                                  <div className="text-[10px] text-brand-ink/50 mt-1 uppercase tracking-widest">Qty: {item.quantity}</div>
-                                  <div className="text-xs font-bold text-[#da7c44] mt-1 font-serif">₹{(product.price * item.quantity).toLocaleString('en-IN')}</div>
+                                  {item.variants && Object.keys(item.variants).length > 0 && (
+                                    <div className="text-[9px] text-brand-ink/50 uppercase tracking-widest mt-1">
+                                      {Object.entries(item.variants).map(([k, v]) => `${k}: ${v}`).join(' | ')}
+                                    </div>
+                                  )}
+                                  <div className="flex justify-between items-end mt-1.5">
+                                    <div className="text-[10px] text-brand-ink/50 uppercase tracking-widest">Qty: {item.quantity}</div>
+                                    <div className="text-xs font-bold text-[#da7c44] font-serif">₹{(product.price * item.quantity).toLocaleString('en-IN')}</div>
+                                  </div>
                                </div>
                              </div>
                            )
