@@ -1,6 +1,3 @@
-<div align="center">
-<img width="1200" 
-
 ## Run Locally
 
 **Prerequisites:**  Node.js
