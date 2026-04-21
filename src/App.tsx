@@ -1945,6 +1945,8 @@ const ProductCard: React.FC<{
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length 
     : 0;
 
+
+
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
@@ -2051,31 +2053,27 @@ const ProductCard: React.FC<{
           </div>
           <p className="text-[10px] sm:text-[11px] md:text-sm font-medium tracking-wider text-brand-ink/80 pt-0.5 whitespace-nowrap">₹{product.price.toLocaleString('en-IN')}</p>
         </div>
-        <div className="flex flex-col xl:flex-row gap-1.5 md:gap-2 mt-auto pt-2 w-full">
+        
+        <div className="flex flex-row gap-1.5 md:gap-2 mt-auto pt-3 w-full">
           <button 
              onClick={(e) => {
                e.stopPropagation();
                onSelect(product);
              }}
-             className="w-full flex-1 border border-brand-ink/20 text-brand-ink text-[8px] sm:text-[9px] md:text-xs uppercase tracking-widest px-1 sm:px-2 py-1.5 md:py-2.5 hover:border-brand-gold hover:text-brand-gold transition-colors font-medium text-center truncate"
+             className="w-1/2 flex-1 border border-brand-ink/20 text-brand-ink text-[8px] sm:text-[9px] md:text-[10px] uppercase tracking-widest px-1 py-2 md:py-2.5 hover:border-brand-gold hover:text-brand-gold transition-colors font-medium text-center truncate flex justify-center items-center"
           >
-            Quick View
+            <span className="hidden sm:inline">Quick View</span>
+            <span className="sm:hidden">View</span>
           </button>
           <button 
             onClick={(e) => {
               e.stopPropagation();
-              let defaultVariants: Record<string, string> | undefined = undefined;
-              if (product.variants && product.variants.length > 0) {
-                defaultVariants = {};
-                product.variants.forEach(v => {
-                  defaultVariants![v.name] = v.options[0]; 
-                });
-              }
-              onAddToCart(e, product.id, defaultVariants);
+              onAddToCart(e, product.id);
             }}
-            className="w-full flex-1 bg-brand-ink text-brand-surface text-[8px] sm:text-[9px] md:text-xs uppercase tracking-widest px-1 sm:px-2 py-1.5 md:py-2.5 hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium text-center truncate"
+            className="w-1/2 flex-1 bg-brand-ink text-brand-surface text-[8px] sm:text-[9px] md:text-[10px] uppercase tracking-widest px-1 py-2 md:py-2.5 hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium text-center truncate flex justify-center items-center"
           >
-            Add to Cart
+            <span className="hidden sm:inline">Add to Cart</span>
+            <span className="sm:hidden">Add</span>
           </button>
         </div>
       </div>
@@ -2092,6 +2090,14 @@ export default function App() {
   const [material, setMaterial] = useState('all');
   const [occasion, setOccasion] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [localSearch, setLocalSearch] = useState('');
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(localSearch);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [localSearch]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about' | 'contact' | 'login' | 'admin' | 'cart' | 'checkout'>('home');
   
@@ -2101,6 +2107,8 @@ export default function App() {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [cart, setCart] = useState<{productId: string, quantity: number, variants?: Record<string, string>}[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [ordersPage, setOrdersPage] = useState(1);
+  const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutData, setCheckoutData] = useState({
     fullName: '',
@@ -2115,6 +2123,40 @@ export default function App() {
     expiry: '',
     cvv: ''
   });
+  const [checkoutErrors, setCheckoutErrors] = useState<Record<string, string>>({});
+  const [hasSubmittedCheckout, setHasSubmittedCheckout] = useState(false);
+
+  useEffect(() => {
+    const errors: Record<string, string> = {};
+    if (!checkoutData.fullName.trim()) errors.fullName = "Full name is required";
+    if (!checkoutData.phone.trim()) errors.phone = "Phone number is required";
+    else if (!/^\d{10}$/.test(checkoutData.phone.replace(/\D/g, ''))) errors.phone = "Invalid phone number";
+    
+    if (!checkoutData.email.trim()) errors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(checkoutData.email)) errors.email = "Invalid email";
+    
+    if (!checkoutData.address.trim()) errors.address = "Address is required";
+    if (!checkoutData.city.trim()) errors.city = "City is required";
+    
+    if (!checkoutData.pincode.trim()) errors.pincode = "Pincode is required";
+    else if (!/^\d{6}$/.test(checkoutData.pincode)) errors.pincode = "Invalid pincode";
+    
+    if (!checkoutData.state.trim()) errors.state = "State is required";
+
+    if (checkoutData.paymentMethod === 'card') {
+      if (!checkoutData.cardNumber.trim()) errors.cardNumber = "Card number is required";
+      else if (!/^\d{16}$/.test(checkoutData.cardNumber.replace(/\D/g, ''))) errors.cardNumber = "Card number must be 16 digits";
+      
+      if (!checkoutData.expiry.trim()) errors.expiry = "Expiry date is required";
+      else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(checkoutData.expiry)) errors.expiry = "Use MM/YY format";
+
+      if (!checkoutData.cvv.trim()) errors.cvv = "CVV is required";
+      else if (!/^\d{3,4}$/.test(checkoutData.cvv)) errors.cvv = "Invalid CVV";
+    }
+    
+    setCheckoutErrors(errors);
+  }, [checkoutData]);
+
   const [toast, setToast] = useState<{message: string, id: number} | null>(null);
   
   // Profile State
@@ -2361,6 +2403,14 @@ export default function App() {
     e.preventDefault();
     if (!user || cart.length === 0) return;
     
+    setHasSubmittedCheckout(true);
+    if (Object.keys(checkoutErrors).length > 0) {
+      const id = Date.now();
+      setToast({ message: "Please fix the errors in the form before paying.", id });
+      setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
+      return;
+    }
+    
     setIsCheckingOut(true);
     try {
       const totalAmount = cart.reduce((sum, item) => {
@@ -2403,6 +2453,42 @@ export default function App() {
     } finally {
       setIsCheckingOut(false);
     }
+  };
+
+  const handleReorder = (order: Order) => {
+    setCart(prev => {
+      let newCart = [...prev];
+      order.items.forEach(newItem => {
+        const existingIndex = newCart.findIndex(item => {
+          if (item.productId !== newItem.productId) return false;
+          if (!item.variants && !newItem.variants) return true;
+          if (!item.variants || !newItem.variants) return false;
+          const itemKeys = Object.keys(item.variants);
+          const newKeys = Object.keys(newItem.variants);
+          if (itemKeys.length !== newKeys.length) return false;
+          return itemKeys.every(key => item.variants![key] === newItem.variants![key]);
+        });
+        if (existingIndex >= 0) {
+          newCart[existingIndex].quantity += newItem.quantity;
+        } else {
+          newCart.push({ ...newItem });
+        }
+      });
+      return newCart;
+    });
+    const id = Date.now();
+    setToast({ message: "Items added to cart", id });
+    setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
+    setCurrentView('cart');
+  };
+
+  const confirmCancelOrder = () => {
+    if (!orderToCancel) return;
+    setOrders(prev => prev.map(o => o.id === orderToCancel ? { ...o, status: 'cancelled' } : o));
+    setOrderToCancel(null);
+    const id = Date.now();
+    setToast({ message: "Order cancelled successfully", id });
+    setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
   };
 
   const filteredProducts = useMemo(() => {
@@ -2522,10 +2608,11 @@ export default function App() {
               <input 
                 type="text" 
                 placeholder="Search products..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
+                    setSearchQuery(localSearch);
                     setCurrentView('home');
                     setIsMobileMenuOpen(false);
                     setTimeout(() => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }), 100);
@@ -2654,10 +2741,11 @@ export default function App() {
             <input 
               type="text" 
               placeholder="Search products..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
+                  setSearchQuery(localSearch);
                   setCurrentView('home');
                   document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
                 }
@@ -3110,7 +3198,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 w-full">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 w-full">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map(product => (
                 <ProductCard
@@ -3123,8 +3211,8 @@ export default function App() {
                     setSelectedImageIndex(0);
                     const defaultVariants: Record<string, string> = {};
                     if (p.variants) {
-                      p.variants.forEach(v => {
-                        defaultVariants[v.name] = v.options[0];
+                      p.variants.forEach(variant => {
+                        defaultVariants[variant.name] = variant.options[0];
                       });
                     }
                     setSelectedVariants(defaultVariants);
@@ -3148,6 +3236,7 @@ export default function App() {
               {(searchQuery.trim() !== '' || department !== 'All' || priceRange !== 'all') && (
                 <button 
                   onClick={() => {
+                    setLocalSearch('');
                     setSearchQuery('');
                     setDepartment('All');
                     setPriceRange('all');
@@ -3480,7 +3569,7 @@ export default function App() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 w-full">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 w-full">
                 <AnimatePresence mode="popLayout">
                   {PRODUCTS.filter(p => wishlist.includes(p.id)).map(product => (
                     <ProductCard
@@ -3621,13 +3710,13 @@ export default function App() {
               </div>
             ) : (
               <div className="space-y-8">
-                {orders.map(order => (
+                {orders.slice((ordersPage - 1) * 5, ordersPage * 5).map(order => (
                   <div key={order.id} className="bg-brand-surface border border-brand-ink/10 p-6 md:p-8">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-6 border-b border-brand-ink/10 gap-4">
                       <div>
                         <p className="text-[10px] uppercase tracking-widest text-brand-ink/60 mb-1">Order Placed</p>
                         <p className="text-sm font-medium text-brand-ink">
-                          {order.createdAt ? new Date(order.createdAt.toMillis()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Processing...'}
+                          {order.createdAt ? new Date(order.createdAt.toMillis ? order.createdAt.toMillis() : order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Processing...'}
                         </p>
                       </div>
                       <div>
@@ -3638,13 +3727,20 @@ export default function App() {
                         <p className="text-[10px] uppercase tracking-widest text-brand-ink/60 mb-1">Order ID</p>
                         <p className="text-sm font-medium text-brand-ink">{order.id}</p>
                       </div>
-                      <div>
-                        <span className="inline-block px-3 py-1 bg-brand-gold/10 text-brand-gold text-[10px] uppercase tracking-widest font-medium">
+                      <div className="flex flex-col items-end gap-2">
+                        <span className={`inline-block px-3 py-1 text-[10px] uppercase tracking-widest font-medium ${order.status === 'cancelled' ? 'bg-red-500/10 text-red-600' : 'bg-brand-gold/10 text-brand-gold'}`}>
                           {order.status}
                         </span>
-                        <button 
-                          onClick={() => {
-                            const printWindow = window.open('', '_blank');
+                        <div className="flex gap-2">
+                          <button 
+                            onClick={() => handleReorder(order)}
+                            className="inline-block px-3 py-1 bg-brand-ink hover:bg-brand-gold text-brand-surface text-[10px] uppercase tracking-widest font-medium transition-colors border border-brand-ink rounded cursor-pointer"
+                          >
+                            Reorder
+                          </button>
+                          <button 
+                            onClick={() => {
+                              const printWindow = window.open('', '_blank');
                             if (printWindow) {
                               const productDetails = (order.items || []).map((item: any) => {
                                 const p = PRODUCTS.find(p => p.id === item.productId);
@@ -3927,14 +4023,64 @@ export default function App() {
                               printWindow.document.close();
                             }
                           }}
-                          className="ml-3 inline-block px-3 py-1 bg-brand-ink/5 hover:bg-brand-ink/10 text-brand-ink text-[10px] uppercase tracking-widest font-medium transition-colors border border-brand-ink/20 rounded cursor-pointer"
+                          className="inline-block px-3 py-1 bg-brand-ink/5 hover:bg-brand-ink/10 text-brand-ink text-[10px] uppercase tracking-widest font-medium transition-colors border border-brand-ink/20 rounded cursor-pointer"
                         >
                           View Bill
                         </button>
+                        {order.status === 'pending' && (
+                          <button 
+                            onClick={() => setOrderToCancel(order.id)}
+                            className="inline-block px-3 py-1 bg-red-50 hover:bg-red-100 text-red-600 text-[10px] uppercase tracking-widest font-medium transition-colors border border-red-200 rounded cursor-pointer"
+                          >
+                            Cancel Order
+                          </button>
+                        )}
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="space-y-6">
+                    {/* Order Fulfillment Timeline */}
+                    <div className="mb-12 mt-6 pt-6 border-t border-brand-ink/5">
+                      <div className="relative flex justify-between items-center w-full max-w-3xl mx-auto px-4 md:px-8">
+                        {/* Connecting Line */}
+                        <div className="absolute top-1/2 left-8 right-8 h-[2px] bg-brand-ink/10 -translate-y-1/2 z-0"></div>
+                        
+                        {/* Dynamic Progress Line */}
+                        <div className="absolute top-1/2 left-8 h-[2px] bg-brand-gold -translate-y-1/2 z-0 transition-all duration-500" 
+                             style={{ 
+                               width: order.status === 'delivered' ? 'calc(100% - 64px)' : 
+                                      order.status === 'shipped' ? 'calc(66.66% - 32px)' : 
+                                      order.status === 'processing' ? 'calc(33.33% - 16px)' : '0%' 
+                             }}>
+                        </div>
+
+                        {[
+                          { key: 'pending', label: 'Placed', icon: PackageOpen },
+                          { key: 'processing', label: 'Processing', icon: RefreshCw },
+                          { key: 'shipped', label: 'Shipped', icon: Truck },
+                          { key: 'delivered', label: 'Delivered', icon: ShieldCheck }
+                        ].map((step, stepIdx) => {
+                          const statusOrder = ['pending', 'processing', 'shipped', 'delivered'];
+                          const currentIdx = statusOrder.indexOf(order.status?.toLowerCase() || 'pending');
+                          const isCompleted = stepIdx <= currentIdx;
+                          const isActive = stepIdx === currentIdx;
+                          const StepIcon = step.icon;
+
+                          return (
+                            <div key={step.key} className="relative z-10 flex flex-col items-center">
+                              <div className={`w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-300 ${isCompleted ? 'bg-brand-gold text-brand-bg border-4 border-brand-surface shadow-sm' : 'bg-brand-surface text-brand-ink/30 border-2 border-brand-ink/10'} ${isActive ? 'ring-4 ring-brand-gold/20' : ''}`}>
+                                <StepIcon className="w-4 h-4 md:w-5 md:h-5" />
+                              </div>
+                              <span className={`absolute top-14 text-[9px] md:text-xs font-bold uppercase tracking-widest text-center w-24 ${isCompleted ? 'text-brand-ink' : 'text-brand-ink/40'} ${isActive ? 'text-brand-gold' : ''}`}>
+                                {step.label}
+                              </span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-6 mt-16 pt-6 border-t border-brand-ink/5">
                       {(order.items || []).map((item: OrderItem, idx: number) => {
                         const product = PRODUCTS.find(p => p.id === item.productId);
                         if (!product) return null;
@@ -3955,8 +4101,90 @@ export default function App() {
                     </div>
                   </div>
                 ))}
+                
+                {/* Pagination Controls */}
+                {orders.length > 5 && (
+                  <div className="flex justify-center items-center gap-4 mt-12 bg-white p-4 rounded-xl shadow-sm border border-brand-ink/5">
+                    <button 
+                      onClick={() => setOrdersPage(p => Math.max(1, p - 1))}
+                      disabled={ordersPage === 1}
+                      className="p-2 disabled:opacity-50 hover:bg-brand-ink/5 rounded-full transition-colors"
+                      aria-label="Previous page"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <div className="flex gap-2">
+                      {Array.from({ length: Math.ceil(orders.length / 5) }).map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setOrdersPage(i + 1)}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${ordersPage === i + 1 ? 'bg-brand-ink text-white' : 'hover:bg-brand-ink/5 text-brand-ink/70'}`}
+                          aria-label={`Go to page ${i + 1}`}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
+                    </div>
+                    <button 
+                      onClick={() => setOrdersPage(p => Math.min(Math.ceil(orders.length / 5), p + 1))}
+                      disabled={ordersPage === Math.ceil(orders.length / 5)}
+                      className="p-2 disabled:opacity-50 hover:bg-brand-ink/5 rounded-full transition-colors"
+                      aria-label="Next page"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
               </div>
             )}
+            
+            {/* Cancel Modal */}
+            <AnimatePresence>
+              {orderToCancel && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-brand-ink/60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
+                  onClick={() => setOrderToCancel(null)}
+                >
+                  <motion.div 
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                    className="bg-brand-surface border border-brand-ink/10 p-6 md:p-8 max-w-sm w-full relative shadow-2xl rounded-2xl"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <button 
+                      onClick={() => setOrderToCancel(null)}
+                      className="absolute top-4 right-4 text-brand-ink/50 hover:text-brand-ink"
+                      aria-label="Close cancellation modal"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                    <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-6">
+                      <Trash2 className="w-6 h-6 text-red-600" />
+                    </div>
+                    <h3 className="text-xl font-serif font-bold text-brand-ink mb-2">Cancel Order?</h3>
+                    <p className="text-brand-ink/70 text-sm mb-8 leading-relaxed">Are you sure you want to cancel this order? This action cannot be undone.</p>
+                    <div className="flex gap-4">
+                      <button 
+                        onClick={() => setOrderToCancel(null)}
+                        className="flex-1 py-3 text-sm font-medium border border-brand-ink/20 hover:bg-brand-ink/5 transition-colors rounded-xl"
+                      >
+                        Keep Order
+                      </button>
+                      <button 
+                        onClick={confirmCancelOrder}
+                        className="flex-1 py-3 text-sm font-medium bg-red-600 hover:bg-red-700 text-white transition-colors rounded-xl shadow-lg shadow-red-600/20"
+                      >
+                        Yes, Cancel
+                      </button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </section>
         ) : currentView === 'login' ? (
           <Login onLoginSuccess={(view, token, userData) => { setCurrentView(view); setUser(userData); }} />
@@ -4024,6 +4252,7 @@ export default function App() {
                                              }
                                           }}
                                           className="text-brand-ink/50 hover:text-brand-ink px-2"
+                                          aria-label={`Decrease quantity for ${product.name}`}
                                         >−</button>
                                         <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
                                         <button 
@@ -4031,6 +4260,7 @@ export default function App() {
                                              setCart(prev => prev.map((c, i) => i === idx ? { ...c, quantity: c.quantity + 1 } : c));
                                           }}
                                           className="text-brand-ink/50 hover:text-brand-ink px-2"
+                                          aria-label={`Increase quantity for ${product.name}`}
                                         >+</button>
                                       </div>
                                     </div>
@@ -4040,6 +4270,7 @@ export default function App() {
                                     <button 
                                       onClick={() => setCart(prev => prev.filter((_, i) => i !== idx))}
                                       className="text-brand-ink/30 hover:text-red-500 transition-colors mb-auto p-1"
+                                      aria-label={`Remove ${product.name} from cart`}
                                     >
                                       <Trash2 className="w-4 h-4" />
                                     </button>
@@ -4067,16 +4298,19 @@ export default function App() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                           <div>
                             <label className="block text-xs font-bold text-brand-ink/80 mb-2">Full Name *</label>
-                            <input type="text" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.fullName} onChange={e => setCheckoutData({...checkoutData, fullName: e.target.value})} />
+                            <input type="text" className={`w-full border ${checkoutErrors.fullName && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.fullName} onChange={e => setCheckoutData({...checkoutData, fullName: e.target.value})} />
+                            {checkoutErrors.fullName && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.fullName}</p>}
                           </div>
                           <div>
                             <label className="block text-xs font-bold text-brand-ink/80 mb-2">Phone Number *</label>
-                            <input type="tel" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.phone} onChange={e => setCheckoutData({...checkoutData, phone: e.target.value})} />
+                            <input type="tel" className={`w-full border ${checkoutErrors.phone && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.phone} onChange={e => setCheckoutData({...checkoutData, phone: e.target.value})} maxLength={10} />
+                            {checkoutErrors.phone && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.phone}</p>}
                           </div>
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-brand-ink/80 mb-2">Email Address</label>
-                          <input type="email" className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.email} onChange={e => setCheckoutData({...checkoutData, email: e.target.value})} />
+                          <label className="block text-xs font-bold text-brand-ink/80 mb-2">Email Address *</label>
+                          <input type="email" className={`w-full border ${checkoutErrors.email && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.email} onChange={e => setCheckoutData({...checkoutData, email: e.target.value})} />
+                          {checkoutErrors.email && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.email}</p>}
                         </div>
                       </div>
 
@@ -4085,20 +4319,24 @@ export default function App() {
                         <h3 className="font-serif text-xl font-bold mb-6 text-brand-ink">Delivery Address</h3>
                         <div className="mb-4">
                           <label className="block text-xs font-bold text-brand-ink/80 mb-2">Full Address *</label>
-                          <textarea required placeholder="House No, Street, Locality" className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" rows={2} value={checkoutData.address} onChange={e => setCheckoutData({...checkoutData, address: e.target.value})}></textarea>
+                          <textarea placeholder="House No, Street, Locality" className={`w-full border ${checkoutErrors.address && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} rows={2} value={checkoutData.address} onChange={e => setCheckoutData({...checkoutData, address: e.target.value})}></textarea>
+                          {checkoutErrors.address && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.address}</p>}
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div>
                             <label className="block text-xs font-bold text-brand-ink/80 mb-2">City *</label>
-                            <input type="text" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.city} onChange={e => setCheckoutData({...checkoutData, city: e.target.value})} />
+                            <input type="text" className={`w-full border ${checkoutErrors.city && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.city} onChange={e => setCheckoutData({...checkoutData, city: e.target.value})} />
+                            {checkoutErrors.city && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.city}</p>}
                           </div>
                           <div>
                             <label className="block text-xs font-bold text-brand-ink/80 mb-2">Pincode *</label>
-                            <input type="text" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.pincode} onChange={e => setCheckoutData({...checkoutData, pincode: e.target.value})} />
+                            <input type="text" maxLength={6} className={`w-full border ${checkoutErrors.pincode && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.pincode} onChange={e => setCheckoutData({...checkoutData, pincode: e.target.value})} />
+                            {checkoutErrors.pincode && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.pincode}</p>}
                           </div>
                           <div>
                             <label className="block text-xs font-bold text-brand-ink/80 mb-2">State *</label>
-                            <input type="text" required className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent" value={checkoutData.state} onChange={e => setCheckoutData({...checkoutData, state: e.target.value})} />
+                            <input type="text" className={`w-full border ${checkoutErrors.state && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.state} onChange={e => setCheckoutData({...checkoutData, state: e.target.value})} />
+                            {checkoutErrors.state && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.state}</p>}
                           </div>
                         </div>
                       </div>
@@ -4127,16 +4365,41 @@ export default function App() {
                               <div className="text-xs text-brand-ink/60 mt-1">PhonePe, GPay, Paytm, etc.</div>
                             </div>
                           </label>
-                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'bank' ? 'border-brand-gold bg-[#fffdf0]' : 'border-brand-ink/10'}`}>
+                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'card' ? 'border-brand-gold bg-[#fffdf0]' : 'border-brand-ink/10'}`}>
                             <div className="flex items-center pt-1">
-                              <input type="radio" value="bank" checked={checkoutData.paymentMethod === 'bank'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
+                              <input type="radio" value="card" checked={checkoutData.paymentMethod === 'card'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
                             </div>
                             <div className="text-brand-gold mt-1"><CreditCard className="w-5 h-5" /></div>
                             <div>
-                              <div className="font-bold text-sm text-brand-ink">Bank/Card Transfer</div>
-                              <div className="text-xs text-brand-ink/60 mt-1">Direct card or bank account</div>
+                              <div className="font-bold text-sm text-brand-ink">Credit / Debit Card</div>
+                              <div className="text-xs text-brand-ink/60 mt-1">Visa, MasterCard, Amex, RuPay</div>
                             </div>
                           </label>
+                          {checkoutData.paymentMethod === 'card' && (
+                            <div className="mt-4 pl-12 pr-4 space-y-4">
+                              <div>
+                                <label className="block text-xs font-bold text-brand-ink/80 mb-1">Card Number *</label>
+                                <input type="text" maxLength={16} placeholder="0000 0000 0000 0000" className={`w-full border ${checkoutErrors.cardNumber && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.cardNumber} onChange={e => setCheckoutData({...checkoutData, cardNumber: e.target.value.replace(/\D/g, '')})} />
+                                {checkoutErrors.cardNumber && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.cardNumber}</p>}
+                              </div>
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <label className="block text-xs font-bold text-brand-ink/80 mb-1">Expiry (MM/YY) *</label>
+                                  <input type="text" maxLength={5} placeholder="MM/YY" className={`w-full border ${checkoutErrors.expiry && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.expiry} onChange={e => {
+                                    let val = e.target.value.replace(/\D/g, '');
+                                    if (val.length >= 2) val = val.substring(0, 2) + '/' + val.substring(2, 4);
+                                    setCheckoutData({...checkoutData, expiry: val});
+                                  }} />
+                                  {checkoutErrors.expiry && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.expiry}</p>}
+                                </div>
+                                <div>
+                                  <label className="block text-xs font-bold text-brand-ink/80 mb-1">CVV *</label>
+                                  <input type="password" maxLength={4} placeholder="123" className={`w-full border ${checkoutErrors.cvv && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.cvv} onChange={e => setCheckoutData({...checkoutData, cvv: e.target.value.replace(/\D/g, '')})} />
+                                  {checkoutErrors.cvv && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.cvv}</p>}
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </form>

@@ -45,30 +45,41 @@ if (MONGODB_URI && MONGODB_URI.startsWith('mongodb+srv://')) {
   }
 }
 
-let isConnecting = false;
+let connectionPromise: Promise<any> | null = null;
+
+// Disable Mongoose buffering to prevent Vercel 10s timeouts 
+// when the MongoDB connection fails (e.g. un-whitelisted IP)
+mongoose.set('bufferCommands', false);
 
 async function connectDB() {
-  if (mongoose.connection.readyState >= 1) return;
-  if (isConnecting) return;
+  if (mongoose.connection.readyState === 1) return;
   
   if (!MONGODB_URI) {
     console.warn("⚠️ MONGODB_URI is not defined in environment variables. Data will not be saved to MongoDB.");
     return;
   }
   
-  isConnecting = true;
-  try {
-    await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000,
+  if (!connectionPromise) {
+    connectionPromise = mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 4000, // Fail fast in serverless
+    }).then(() => {
+      console.log("Connected to MongoDB successfully!");
+    }).catch((err: any) => {
+      console.error("MongoDB connection error:", err.message);
+      if (err.message.includes("IP that isn't whitelisted")) {
+         console.warn("⚠️ Please go to your MongoDB Atlas dashboard -> Network Access -> Add IP Address, and choose 'Allow Access From Anywhere' (0.0.0.0/0)");
+      }
+      connectionPromise = null;
+      throw err;
     });
-    console.log("Connected to MongoDB successfully!");
-  } catch (err: any) {
-    console.error("MongoDB connection error:", err.message);
-    if (err.message.includes("IP that isn't whitelisted")) {
-       console.warn("⚠️ Please go to your MongoDB Atlas dashboard -> Network Access -> Add IP Address, and choose 'Allow Access From Anywhere' (0.0.0.0/0)");
-    }
-  } finally {
-    isConnecting = false;
+  }
+  
+  try {
+    await connectionPromise;
+  } catch (err) {
+    // Logged above, we just swallow the error here so the request continues.
+    // Since bufferCommands is false, subsequent DB queries will immediately fail with a catchable error 
+    // instead of hanging indefinitely and causing a Vercel 500 timeout.
   }
 }
 
