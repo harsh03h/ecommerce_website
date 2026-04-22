@@ -147,9 +147,9 @@ app.get('/api/auth/google/url', (req, res) => {
   res.json({ url });
 });
 
-app.get(['/auth/callback', '/auth/callback/'], async (req, res) => {
+app.get(['/api/auth/callback', '/api/auth/callback/'], async (req, res) => {
   const { code, state } = req.query; // we pass redirect URL via state if needed, or rely on URL
-  const redirectUri = req.query.redirectUri || (req.headers.referer ? new URL('/auth/callback', req.headers.referer).toString() : '');
+  const redirectUri = req.query.redirectUri || (req.headers.referer ? new URL('/api/auth/callback', req.headers.referer).toString() : '');
   
   try {
     // If not exchanging token server-side, we can just pass the code to the parent window

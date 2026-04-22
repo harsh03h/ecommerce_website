@@ -14,12 +14,12 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
 
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
-      if (!event.origin.endsWith('.run.app') && !event.origin.includes('localhost')) {
+      if (event.origin !== window.location.origin && !event.origin.endsWith('.run.app') && !event.origin.includes('localhost')) {
         return;
       }
       if (event.data?.type === 'OAUTH_AUTH_SUCCESS') {
         try {
-          const redirectUri = `${window.location.origin}/auth/callback`;
+          const redirectUri = `${window.location.origin}/api/auth/callback`;
           const res = await fetch('/api/auth/google/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -41,7 +41,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
 
   const handleGoogleLogin = async () => {
     try {
-      const redirectUri = `${window.location.origin}/auth/callback`;
+      const redirectUri = `${window.location.origin}/api/auth/callback`;
       const response = await fetch(`/api/auth/google/url?redirectUri=${encodeURIComponent(redirectUri)}`);
       
       const text = await response.text();
