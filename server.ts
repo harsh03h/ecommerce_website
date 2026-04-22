@@ -62,25 +62,22 @@ async function connectDB() {
   if (!connectionPromise) {
     connectionPromise = mongoose.connect(MONGODB_URI, {
       serverSelectionTimeoutMS: 4000, // Fail fast in serverless
-    }).then(() => {
+      connectTimeoutMS: 4000, // Abort TCP connection attempts fast
+      socketTimeoutMS: 4000,
+    }).then((m) => {
       console.log("Connected to MongoDB successfully!");
+      return m;
     }).catch((err: any) => {
       console.error("MongoDB connection error:", err.message);
       if (err.message.includes("IP that isn't whitelisted")) {
          console.warn("⚠️ Please go to your MongoDB Atlas dashboard -> Network Access -> Add IP Address, and choose 'Allow Access From Anywhere' (0.0.0.0/0)");
       }
       connectionPromise = null;
-      throw err;
+      return null;
     });
   }
   
-  try {
-    await connectionPromise;
-  } catch (err) {
-    // Logged above, we just swallow the error here so the request continues.
-    // Since bufferCommands is false, subsequent DB queries will immediately fail with a catchable error 
-    // instead of hanging indefinitely and causing a Vercel 500 timeout.
-  }
+  await connectionPromise;
 }
 
 // Automatically initiate connection on startup
@@ -171,7 +168,7 @@ app.get(['/auth/callback', '/auth/callback/'], async (req, res) => {
 });
 
 app.post('/api/auth/google/verify', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(500).json({ error: "DB not connected" });
   try {
     const { code, redirectUri } = req.body;
     const { tokens } = await googleClient.getToken({ code, redirect_uri: redirectUri });
@@ -205,7 +202,7 @@ app.post('/api/auth/google/verify', async (req, res) => {
 });
 
 app.post('/api/auth/register', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
+  if (mongoose.connection.readyState !== 1) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
     const { email: rawEmail, password, displayName } = req.body;
     if (!rawEmail || !password) return res.status(400).json({ error: "Email and password are required" });
@@ -228,7 +225,7 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 app.post('/api/auth/login', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
+  if (mongoose.connection.readyState !== 1) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
   try {
     const { email: rawEmail, password } = req.body;
     if (!rawEmail || !password) return res.status(400).json({ error: "Email and password are required" });
@@ -261,7 +258,7 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.get('/api/auth/me', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).json({ error: "No token provided" });
@@ -278,7 +275,7 @@ app.get('/api/auth/me', async (req, res) => {
 
 // Users
 app.get('/api/users/:userId', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const user = await User.findOne({ userId: req.params.userId });
     res.json(user || {});
@@ -288,7 +285,7 @@ app.get('/api/users/:userId', async (req, res) => {
 });
 
 app.post('/api/users/:userId', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const { displayName, phone, address } = req.body;
     let user = await User.findOne({ userId: req.params.userId });
@@ -309,7 +306,7 @@ app.post('/api/users/:userId', async (req, res) => {
 
 // Wishlist
 app.get('/api/wishlist/:userId', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const wl = await Wishlist.findOne({ userId: req.params.userId });
     res.json(wl ? wl.productIds : []);
@@ -319,7 +316,7 @@ app.get('/api/wishlist/:userId', async (req, res) => {
 });
 
 app.post('/api/wishlist/:userId', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const { productIds } = req.body;
     let wl = await Wishlist.findOne({ userId: req.params.userId });
@@ -338,7 +335,7 @@ app.post('/api/wishlist/:userId', async (req, res) => {
 
 // Orders
 app.get('/api/orders/:userId', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const orders = await Order.find({ userId: req.params.userId }).sort({ createdAt: -1 });
     res.json(orders);
@@ -348,7 +345,7 @@ app.get('/api/orders/:userId', async (req, res) => {
 });
 
 app.get('/api/admin/orders', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
@@ -358,7 +355,7 @@ app.get('/api/admin/orders', async (req, res) => {
 });
 
 app.post('/api/orders', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const order = new Order(req.body);
     await order.save();
@@ -369,7 +366,7 @@ app.post('/api/orders', async (req, res) => {
 });
 
 app.put('/api/orders/:orderId/status', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const { status } = req.body;
     const order = await Order.findByIdAndUpdate(req.params.orderId, { status }, { new: true });
@@ -380,7 +377,7 @@ app.put('/api/orders/:orderId/status', async (req, res) => {
 });
 
 app.delete('/api/orders/:orderId', async (req, res) => {
-  if (!mongoose.connection.readyState) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     await Order.findByIdAndDelete(req.params.orderId);
     res.json({ success: true });
