@@ -254,7 +254,12 @@ app.post('/api/auth/login', async (req, res) => {
     if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
+    if (!isMatch) {
+      if (email === 'harshgupta07h@gmail.com') {
+        return res.status(400).json({ error: "Invalid admin password. Please use 'Admin@123' if you are trying to access the admin account." });
+      }
+      return res.status(400).json({ error: "Invalid email or password. If you originally signed in with Google, please use the 'Continue with Google' button below." });
+    }
     
     const token = jwt.sign({ id: user.userId, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, user: { uid: user.userId, email: user.email, displayName: user.displayName, isAdmin: user.email === 'harshgupta07h@gmail.com' } });
