@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Clock, CheckCircle, Truck, XCircle, FileText, Printer, ChevronDown, ChevronUp } from 'lucide-react';
+import { Package, Clock, CheckCircle, Truck, XCircle, FileText, Printer, ChevronDown, ChevronUp, Search, RefreshCw, DollarSign, TrendingUp } from 'lucide-react';
 import { PRODUCTS } from '../App';
 
 export interface User {
@@ -42,6 +42,33 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
   const [orderToDelete, setOrderToDelete] = useState<{userId: string, orderId: string} | null>(null);
   const [selectedBill, setSelectedBill] = useState<Order | null>(null);
   const [expandedOrders, setExpandedOrders] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const fetchOrders = async (showUIRefresh = false) => {
+    if (showUIRefresh) setIsRefreshing(true);
+    try {
+      const response = await fetch('/api/admin/orders');
+      if (!response.ok) throw new Error('Failed to fetch orders');
+      const data = await response.json();
+      const formattedOrders = data.map((o: any) => ({
+        ...o,
+        id: o._id || o.id,
+        createdAt: {
+          toDate: () => new Date(o.createdAt)
+        }
+      }));
+      setOrders(formattedOrders);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      // fallback so we don't break UI on error if we already have cache
+      setOrders(prev => prev.length ? prev : []); 
+    } finally {
+      if (showUIRefresh) setIsRefreshing(false);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -53,32 +80,9 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
       return;
     }
 
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch('/api/admin/orders');
-        if (!response.ok) throw new Error('Failed to fetch orders');
-        const data = await response.json();
-        // Standardize IDs for the UI
-        const formattedOrders = data.map((o: any) => ({
-          ...o,
-          id: o._id || o.id,
-          createdAt: {
-            toDate: () => new Date(o.createdAt)
-          } // Mock the Firestore Timestamp object structure here to not ruin the UI logic
-        }));
-        setOrders(formattedOrders);
-      } catch (err) {
-        console.error("Error fetching orders:", err);
-        setError("Failed to load orders. Please check your connection to MongoDB.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchOrders();
     
-    // Minimal polling setup since we removed onSnapshot
-    const interval = setInterval(fetchOrders, 10000);
+    const interval = setInterval(() => fetchOrders(false), 10000);
     return () => clearInterval(interval);
   }, [user]);
 
@@ -132,6 +136,18 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
     window.print();
   };
 
+  const filteredOrders = orders.filter(o => 
+    (statusFilter === 'all' || o.status === statusFilter) &&
+    (
+      (o.id && o.id.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (o.userId && o.userId.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (o.shippingInfo?.fullName && o.shippingInfo.fullName.toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+  );
+
+  const totalRevenue = orders.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+  const totalPending = orders.filter(o => o.status === 'pending').length;
+
   if (loading) {
     return (
       <div className="p-8 max-w-7xl mx-auto flex justify-center items-center min-h-[50vh]">
@@ -158,15 +174,82 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
         </div>
       )}
       
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 pb-6 border-b border-brand-ink/10 gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-3 bg-brand-gold/10 rounded-xl">
-            <Package className="w-8 h-8 text-brand-gold" />
+      {/* Header and Stats */}
+      <div className="mb-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-brand-gold/10 rounded-xl">
+              <Package className="w-8 h-8 text-brand-gold" />
+            </div>
+            <div>
+              <h2 className="text-3xl font-serif text-brand-ink">Order Management</h2>
+              <p className="text-sm text-brand-ink/60 mt-1">Manage and track customer orders, update statuses, and generate bills.</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-3xl font-serif text-brand-ink">Order Management</h2>
-            <p className="text-sm text-brand-ink/60 mt-1">Manage and track customer orders, update statuses, and generate bills.</p>
+          <button 
+            onClick={() => fetchOrders(true)} 
+            disabled={isRefreshing}
+            className="flex items-center gap-2 px-4 py-2 border border-brand-ink/20 hover:bg-brand-ink/5 rounded-lg text-brand-ink transition-all disabled:opacity-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-brand-surface p-6 rounded-2xl border border-brand-ink/10 shadow-sm flex items-center gap-4">
+            <div className="p-4 bg-brand-ink/5 rounded-full text-brand-ink">
+              <Package className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-sm text-brand-ink/60 font-medium">Total Orders</p>
+              <h3 className="text-2xl font-bold text-brand-ink">{orders.length}</h3>
+            </div>
           </div>
+          <div className="bg-brand-surface p-6 rounded-2xl border border-brand-ink/10 shadow-sm flex items-center gap-4">
+            <div className="p-4 bg-green-500/10 rounded-full text-green-600">
+              <DollarSign className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-sm text-brand-ink/60 font-medium">Total Revenue</p>
+              <h3 className="text-2xl font-bold text-brand-ink">₹{totalRevenue.toLocaleString('en-IN')}</h3>
+            </div>
+          </div>
+          <div className="bg-brand-surface p-6 rounded-2xl border border-brand-ink/10 shadow-sm flex items-center gap-4">
+            <div className="p-4 bg-brand-gold/10 rounded-full text-brand-gold">
+              <TrendingUp className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-sm text-brand-ink/60 font-medium">Action Needed</p>
+              <h3 className="text-2xl font-bold text-brand-ink">{totalPending} Pending</h3>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-col md:flex-row gap-4 justify-between bg-brand-surface p-4 rounded-xl border border-brand-ink/10 shadow-sm">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-ink/40" />
+            <input 
+              type="text" 
+              placeholder="Search by Order ID, Customer Name..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-brand-ink/10 rounded-lg text-sm bg-transparent focus:outline-none focus:border-brand-gold transition-colors"
+            />
+          </div>
+          <select 
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-4 py-2 border border-brand-ink/10 rounded-lg text-sm bg-transparent focus:outline-none focus:border-brand-gold cursor-pointer"
+          >
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
         </div>
       </div>
 
@@ -292,13 +375,17 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
         </div>
       )}
 
-      {orders.length === 0 ? (
+      {filteredOrders.length === 0 ? (
         <div className="text-center py-24 bg-brand-surface rounded-2xl border border-brand-ink/10 flex flex-col items-center">
           <div className="w-20 h-20 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
             <Package className="w-10 h-10 text-brand-ink/40" />
           </div>
-          <h3 className="text-2xl font-serif text-brand-ink mb-2">No Orders Yet</h3>
-          <p className="text-brand-ink/60">When customers place orders, they will appear here.</p>
+          <h3 className="text-2xl font-serif text-brand-ink mb-2">
+            {orders.length === 0 ? "No Orders Yet" : "No Matching Orders"}
+          </h3>
+          <p className="text-brand-ink/60">
+            {orders.length === 0 ? "When customers place orders, they will appear here." : "Try adjusting your search criteria."}
+          </p>
         </div>
       ) : (
         <div className="bg-brand-bg rounded-2xl border border-brand-ink/10 overflow-hidden shadow-sm">
@@ -315,7 +402,7 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-brand-ink/10">
-                {orders.map((order) => {
+                {filteredOrders.map((order) => {
                   const isExpanded = expandedOrders.includes(order.id);
                   return (
                     <React.Fragment key={order.id}>
@@ -349,12 +436,12 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                           <select
                             value={order.status}
                             onChange={(e) => updateOrderStatus(order.userId, order.id, e.target.value)}
-                            className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1.5 rounded-md border-0 focus:ring-2 focus:ring-brand-gold/50 cursor-pointer ${
-                              order.status === 'delivered' ? 'bg-green-100 text-green-800' :
-                              order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
-                              order.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
-                              order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                              'bg-gray-100 text-gray-800'
+                            className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1.5 rounded-md focus:ring-2 focus:ring-brand-gold/50 cursor-pointer border ${
+                              order.status === 'delivered' ? 'bg-green-500/10 text-green-600 border-green-500/20' :
+                              order.status === 'shipped' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
+                              order.status === 'processing' ? 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20' :
+                              order.status === 'cancelled' ? 'bg-red-500/10 text-red-600 border-red-500/20' :
+                              'bg-brand-ink/5 text-brand-ink/60 border-brand-ink/10'
                             }`}
                           >
                             <option value="pending">PENDING</option>
