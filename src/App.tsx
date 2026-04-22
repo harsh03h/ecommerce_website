@@ -2717,13 +2717,13 @@ export default function App() {
 
       {/* Navigation */}
       <nav className="border-b border-brand-ink/10 px-4 md:px-6 py-4 flex items-center justify-between sticky top-0 bg-brand-bg/90 backdrop-blur-md z-40">
-        <div className="flex items-center gap-4 md:gap-6 w-1/3">
+        <div className="flex items-center gap-2 md:gap-6 w-1/4 md:w-1/3">
           <button 
             onClick={() => setIsMobileMenuOpen(true)}
             className="p-2 -ml-2 hover:bg-brand-ink/10 rounded-full transition-colors md:hidden"
             aria-label="Open mobile menu"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-6 h-6" />
           </button>
           <div className="hidden md:flex gap-8 text-[15px] font-medium">
             <button onClick={() => setCurrentView('home')} className={`transition-colors ${currentView === 'home' ? 'text-brand-gold' : 'text-brand-ink/70 hover:text-brand-ink'}`}>Home</button>
@@ -2732,8 +2732,8 @@ export default function App() {
           </div>
         </div>
         
-        <div className="text-center w-1/3 flex flex-col items-center cursor-pointer" onClick={() => setCurrentView('home')}>
-          <h1 className="font-serif text-base sm:text-xl md:text-3xl leading-none tracking-tight text-brand-gold transition-all">
+        <div className="text-center w-2/4 md:w-1/3 flex flex-col items-center cursor-pointer" onClick={() => setCurrentView('home')}>
+          <h1 className="font-serif text-lg sm:text-xl md:text-3xl leading-none tracking-tight text-brand-gold transition-all truncate w-full">
             {brandInfo.title}
           </h1>
           <p className="hidden md:block text-[9px] uppercase tracking-[0.2em] mt-1 text-brand-ink/60 transition-all">
@@ -2759,7 +2759,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 md:gap-4 w-1/3">
+        <div className="flex items-center justify-end gap-1 md:gap-4 w-1/4 md:w-1/3">
           <div className="hidden md:flex items-center bg-brand-surface border border-brand-ink/20 rounded-full px-3 py-1.5 focus-within:border-brand-gold transition-colors">
             <Search className="w-4 h-4 text-brand-ink/60" />
             <input 
@@ -2779,11 +2779,11 @@ export default function App() {
           </div>
           <button 
             onClick={() => setIsDarkMode(!isDarkMode)} 
-            className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors hidden md:block"
+            className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors"
             title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
             aria-label={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {isDarkMode ? <Sun className="w-5 h-5 md:w-5 md:h-5" /> : <Moon className="w-5 h-5 md:w-5 md:h-5" />}
           </button>
           {isAuthReady && user ? (
             <div className="relative group/auth hidden md:block">
@@ -2819,18 +2819,11 @@ export default function App() {
             </button>
           )}
           <button 
-            className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors md:hidden"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open user menu"
-          >
-            <UserIcon className="w-5 h-5" />
-          </button>
-          <button 
             className="p-2 hover:bg-brand-ink/10 rounded-full transition-colors relative" 
             onClick={() => setCurrentView('cart')}
             aria-label={`Open cart, ${cart.reduce((sum, item) => sum + item.quantity, 0)} items`}
           >
-            <ShoppingBag className="w-5 h-5" />
+            <ShoppingBag className="w-5 h-5 md:w-5 md:h-5" />
             {cart.reduce((sum, item) => sum + item.quantity, 0) > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-bg text-[10px] font-bold rounded-full flex items-center justify-center">
                 {cart.reduce((sum, item) => sum + item.quantity, 0)}
@@ -4232,7 +4225,7 @@ export default function App() {
                <div className="absolute right-0 top-0 w-[500px] h-[500px] bg-[#3a1d0b] rounded-full blur-[80px] -translate-y-1/4 translate-x-1/4 opacity-60 pointer-events-none"></div>
             </div>
 
-            <div className="bg-[#f9f9f9] min-h-[50vh] py-12 px-4 md:px-12">
+            <div className="bg-brand-bg min-h-[50vh] py-12 px-4 md:px-12">
               <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
                 
                 {/* Left Column (Items or Checkout Forms) */}
@@ -4268,7 +4261,7 @@ export default function App() {
                                     )}
                                     
                                     <div className="flex items-center gap-4 mt-5">
-                                      <div className="flex items-center bg-[#f4f4f4] rounded-full px-3 py-1.5">
+                                      <div className="flex items-center bg-brand-ink/5 rounded-full px-3 py-1.5">
                                         <button 
                                           onClick={() => {
                                              if (item.quantity > 1) {
@@ -4492,7 +4485,7 @@ export default function App() {
                        </div>
                        
                        {currentView === 'cart' && (
-                         <div className="bg-[#f0fdf4] text-[#166534] px-4 py-3 rounded-lg text-xs font-semibold flex items-center gap-2 mt-4 shadow-sm border border-green-100">
+                         <div className="bg-green-500/10 text-green-600 px-4 py-3 rounded-lg text-xs font-semibold flex items-center gap-2 mt-4 shadow-sm border border-green-500/20">
                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
                            You saved on delivery charges!
                          </div>
