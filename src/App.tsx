@@ -2105,7 +2105,18 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthReady, setIsAuthReady] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
-  const [cart, setCart] = useState<{productId: string, quantity: number, variants?: Record<string, string>}[]>([]);
+  const [cart, setCart] = useState<{productId: string, quantity: number, variants?: Record<string, string>}[]>(() => {
+    try {
+      const saved = localStorage.getItem('harsh_emporium_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('harsh_emporium_cart', JSON.stringify(cart));
+  }, [cart]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [ordersPage, setOrdersPage] = useState(1);
   const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
@@ -2482,13 +2493,26 @@ export default function App() {
     setCurrentView('cart');
   };
 
-  const confirmCancelOrder = () => {
+  const confirmCancelOrder = async () => {
     if (!orderToCancel) return;
-    setOrders(prev => prev.map(o => o.id === orderToCancel ? { ...o, status: 'cancelled' } : o));
-    setOrderToCancel(null);
-    const id = Date.now();
-    setToast({ message: "Order cancelled successfully", id });
-    setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
+    try {
+      const res = await fetch(`/api/orders/${orderToCancel}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'cancelled' })
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to cancel order.');
+      }
+      setOrders(prev => prev.map(o => o.id === orderToCancel ? { ...o, status: 'cancelled' } : o));
+      setOrderToCancel(null);
+      const id = Date.now();
+      setToast({ message: "Order cancelled successfully", id });
+      setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
+    } catch (err: any) {
+      alert("Error cancelling order: " + err.message);
+    }
   };
 
   const filteredProducts = useMemo(() => {
