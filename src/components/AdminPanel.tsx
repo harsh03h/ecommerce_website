@@ -197,13 +197,13 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
       )}
 
       {selectedBill && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-brand-ink/50 backdrop-blur-sm p-2 md:p-6 print:p-0 print:bg-white print:block">
-          <div className="bg-white p-6 md:p-10 rounded-none md:rounded-2xl shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto print:max-h-none print:shadow-none print:overflow-visible relative">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-brand-ink/50 backdrop-blur-sm p-2 md:p-6 print:p-0 print:bg-transparent print:block">
+          <div className="bg-brand-surface p-6 md:p-10 rounded-none md:rounded-2xl shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto print:max-h-none print:shadow-none print:overflow-visible relative">
             <div className="print:hidden absolute top-4 right-4 flex gap-2">
               <button onClick={printBill} className="p-2 bg-brand-gold text-brand-bg rounded hover:bg-brand-ink transition-colors" title="Print Bill">
                 <Printer className="w-5 h-5" />
               </button>
-              <button onClick={() => setSelectedBill(null)} className="p-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors" title="Close">
+              <button onClick={() => setSelectedBill(null)} className="p-2 bg-brand-ink/10 text-brand-ink/80 rounded hover:bg-brand-ink/20 transition-colors" title="Close">
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
@@ -211,37 +211,37 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
             <div className="text-center mb-8 border-b-2 border-brand-ink/10 pb-6">
               <h1 className="text-3xl font-serif text-brand-ink font-bold mb-2">INVOICE</h1>
               <h2 className="text-xl text-brand-gold font-serif">Harsh Imporium & Anand Jewellars</h2>
-              <p className="text-sm text-gray-500 mt-2">Ambedkar Nagar, Uttar Pradesh</p>
-              <p className="text-sm text-gray-500">harshgupta07h@gmail.com | +91 8875810604</p>
+              <p className="text-sm text-brand-ink/60 mt-2">Ambedkar Nagar, Uttar Pradesh</p>
+              <p className="text-sm text-brand-ink/60">harshgupta07h@gmail.com | +91 8875810604</p>
             </div>
 
             <div className="flex justify-between mb-8 text-sm">
               <div>
-                <p className="text-gray-500 font-medium mb-1">Billed To:</p>
+                <p className="text-brand-ink/60 font-medium mb-1">Billed To:</p>
                 {selectedBill.shippingInfo ? (
                   <>
                     <p className="font-bold text-brand-ink text-base">{selectedBill.shippingInfo.fullName}</p>
-                    <p className="text-gray-600">{selectedBill.shippingInfo.address}</p>
-                    <p className="text-gray-600">{selectedBill.shippingInfo.city}, {selectedBill.shippingInfo.state} {selectedBill.shippingInfo.zipCode}</p>
-                    <p className="text-gray-600 mt-1">{selectedBill.shippingInfo.phone}</p>
-                    <p className="text-gray-600">{selectedBill.shippingInfo.email}</p>
+                    <p className="text-brand-ink/80">{selectedBill.shippingInfo.address}</p>
+                    <p className="text-brand-ink/80">{selectedBill.shippingInfo.city}, {selectedBill.shippingInfo.state} {selectedBill.shippingInfo.zipCode}</p>
+                    <p className="text-brand-ink/80 mt-1">{selectedBill.shippingInfo.phone}</p>
+                    <p className="text-brand-ink/80">{selectedBill.shippingInfo.email}</p>
                   </>
                 ) : (
-                  <p className="text-gray-600">Customer ID: {selectedBill.userId}</p>
+                  <p className="text-brand-ink/80">Customer ID: {selectedBill.userId}</p>
                 )}
               </div>
               <div className="text-right">
-                <p className="text-gray-500 font-medium mb-1">Invoice Details:</p>
-                <p className="text-gray-600"><span className="font-medium text-brand-ink">Order ID:</span> {selectedBill.id}</p>
-                <p className="text-gray-600"><span className="font-medium text-brand-ink">Date:</span> {selectedBill.createdAt?.toDate ? selectedBill.createdAt.toDate().toLocaleDateString() : 'N/A'}</p>
-                <p className="text-gray-600"><span className="font-medium text-brand-ink">Payment Method:</span> {selectedBill.paymentMethod || 'Credit Card'}</p>
-                <p className="text-gray-600"><span className="font-medium text-brand-ink">Status:</span> {selectedBill.status.toUpperCase()}</p>
+                <p className="text-brand-ink/60 font-medium mb-1">Invoice Details:</p>
+                <p className="text-brand-ink/80"><span className="font-medium text-brand-ink">Order ID:</span> {selectedBill.id}</p>
+                <p className="text-brand-ink/80"><span className="font-medium text-brand-ink">Date:</span> {selectedBill.createdAt?.toDate ? selectedBill.createdAt.toDate().toLocaleDateString() : 'N/A'}</p>
+                <p className="text-brand-ink/80"><span className="font-medium text-brand-ink">Payment Method:</span> {selectedBill.paymentMethod || 'Credit Card'}</p>
+                <p className="text-brand-ink/80"><span className="font-medium text-brand-ink">Status:</span> {selectedBill.status.toUpperCase()}</p>
               </div>
             </div>
 
             <table className="w-full text-left border-collapse mb-8">
               <thead>
-                <tr className="bg-gray-100 text-brand-ink text-xs uppercase tracking-widest">
+                <tr className="bg-brand-ink/5 text-brand-ink text-xs uppercase tracking-widest">
                   <th className="p-3 font-semibold rounded-tl">Product Name</th>
                   <th className="p-3 font-semibold text-center">Qty</th>
                   <th className="p-3 font-semibold text-right rounded-tr">Amount</th>
@@ -251,17 +251,17 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                 {selectedBill.items.map((item, idx) => {
                   const product = PRODUCTS.find(p => p.id === item.productId);
                   return (
-                  <tr key={idx} className="border-b border-gray-200 text-sm py-2">
-                    <td className="p-3 text-gray-800">
+                  <tr key={idx} className="border-b border-brand-ink/10 text-sm py-2">
+                    <td className="p-3 text-brand-ink">
                       {product ? product.name : item.productId}
                       {item.variant && Object.keys(item.variant).length > 0 && (
-                        <div className="text-xs text-gray-400 mt-0.5">
+                        <div className="text-xs text-brand-ink/50 mt-0.5">
                           {Object.entries(item.variant).map(([k, v]) => `${k}: ${v}`).join(', ')}
                         </div>
                       )}
                     </td>
-                    <td className="p-3 text-center text-gray-600">{item.quantity}</td>
-                    <td className="p-3 text-right text-gray-800">{product ? `₹${(product.price * item.quantity).toLocaleString('en-IN')}` : '-'}</td>
+                    <td className="p-3 text-center text-brand-ink/80">{item.quantity}</td>
+                    <td className="p-3 text-right text-brand-ink">{product ? `₹${(product.price * item.quantity).toLocaleString('en-IN')}` : '-'}</td>
                   </tr>
                 )})}
               </tbody>
@@ -269,22 +269,22 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
 
             <div className="flex justify-end border-t-2 border-brand-ink/10 pt-4">
               <div className="w-64">
-                <div className="flex justify-between mb-2 text-gray-600">
+                <div className="flex justify-between mb-2 text-brand-ink/80">
                   <span>Subtotal:</span>
                   <span>₹{selectedBill.totalAmount.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between mb-2 text-gray-600">
+                <div className="flex justify-between mb-2 text-brand-ink/80">
                   <span>Shipping:</span>
                   <span>Free</span>
                 </div>
-                <div className="flex justify-between text-lg font-bold text-brand-ink mt-2 border-t border-gray-200 pt-2">
+                <div className="flex justify-between text-lg font-bold text-brand-ink mt-2 border-t border-brand-ink/10 pt-2">
                   <span>Total:</span>
                   <span className="text-brand-gold">₹{selectedBill.totalAmount.toLocaleString()}</span>
                 </div>
               </div>
             </div>
             
-            <div className="mt-12 text-center text-xs text-gray-400 border-t border-gray-100 pt-6">
+            <div className="mt-12 text-center text-xs text-brand-ink/50 border-t border-brand-ink/5 pt-6">
               <p>Thank you for shopping with us! This is a computer-generated invoice.</p>
               <p className="mt-1">Returns and exchanges are valid for 7 days from the date of delivery.</p>
             </div>
@@ -393,7 +393,7 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                                   {order.items.map((item, idx) => {
                                     const product = PRODUCTS.find(p => p.id === item.productId);
                                     return (
-                                    <li key={idx} className="flex justify-between text-sm text-brand-ink/80 bg-white p-2 rounded border border-brand-ink/5">
+                                    <li key={idx} className="flex justify-between text-sm text-brand-ink/80 bg-brand-surface p-2 rounded border border-brand-ink/5">
                                       <span>
                                         <span className="font-medium text-brand-ink text-xs">{item.quantity}x</span> {product ? product.name : item.productId}
                                         {item.variant && Object.keys(item.variant).length > 0 && (
@@ -407,7 +407,7 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                                 </ul>
                               </div>
                               {order.shippingInfo ? (
-                                <div className="bg-white p-4 rounded-lg border border-brand-ink/5">
+                                <div className="bg-brand-surface p-4 rounded-lg border border-brand-ink/5">
                                   <h4 className="text-xs font-bold uppercase tracking-widest text-brand-ink/80 mb-3 border-b border-brand-ink/10 pb-2">Shipping Details</h4>
                                   <div className="space-y-1 text-sm text-brand-ink/80">
                                     <p><span className="font-medium text-brand-ink">Name:</span> {order.shippingInfo.fullName}</p>
@@ -418,7 +418,7 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                                   </div>
                                 </div>
                               ) : (
-                                <div className="bg-white p-4 rounded-lg border border-brand-ink/5 flex items-center justify-center text-sm text-brand-ink/50">
+                                <div className="bg-brand-surface p-4 rounded-lg border border-brand-ink/5 flex items-center justify-center text-sm text-brand-ink/50">
                                   No shipping details available for this legacy order.
                                 </div>
                               )}

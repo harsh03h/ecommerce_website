@@ -4104,7 +4104,7 @@ export default function App() {
                 
                 {/* Pagination Controls */}
                 {orders.length > 5 && (
-                  <div className="flex justify-center items-center gap-4 mt-12 bg-white p-4 rounded-xl shadow-sm border border-brand-ink/5">
+                  <div className="flex justify-center items-center gap-4 mt-12 bg-brand-surface p-4 rounded-xl shadow-sm border border-brand-ink/5">
                     <button 
                       onClick={() => setOrdersPage(p => Math.max(1, p - 1))}
                       disabled={ordersPage === 1}
@@ -4118,7 +4118,7 @@ export default function App() {
                         <button
                           key={i}
                           onClick={() => setOrdersPage(i + 1)}
-                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${ordersPage === i + 1 ? 'bg-brand-ink text-white' : 'hover:bg-brand-ink/5 text-brand-ink/70'}`}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${ordersPage === i + 1 ? 'bg-brand-ink text-brand-surface' : 'hover:bg-brand-ink/5 text-brand-ink/70'}`}
                           aria-label={`Go to page ${i + 1}`}
                         >
                           {i + 1}
@@ -4215,7 +4215,7 @@ export default function App() {
                 <div className="flex-grow space-y-6">
                   {currentView === 'cart' ? (
                     <>
-                      <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-brand-ink/5 p-6 md:p-8">
+                      <div className="bg-brand-surface rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-brand-ink/5 p-6 md:p-8">
                         {cart.length === 0 ? (
                           <div className="text-center py-12">
                             <ShoppingCart className="w-12 h-12 text-brand-ink/20 mx-auto mb-4" />
@@ -4293,7 +4293,7 @@ export default function App() {
                   ) : (
                     <form id="checkout-form" onSubmit={completeCheckout} className="space-y-6 w-full max-w-2xl">
                       {/* Personal Information */}
-                      <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8">
+                      <div className="bg-brand-surface rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8">
                         <h3 className="font-serif text-xl font-bold mb-6 text-brand-ink">Personal Information</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                           <div>
@@ -4315,7 +4315,7 @@ export default function App() {
                       </div>
 
                       {/* Delivery Address */}
-                      <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8">
+                      <div className="bg-brand-surface rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8">
                         <h3 className="font-serif text-xl font-bold mb-6 text-brand-ink">Delivery Address</h3>
                         <div className="mb-4">
                           <label className="block text-xs font-bold text-brand-ink/80 mb-2">Full Address *</label>
@@ -4342,10 +4342,10 @@ export default function App() {
                       </div>
 
                       {/* Payment Method */}
-                      <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8">
+                      <div className="bg-brand-surface rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8">
                         <h3 className="font-serif text-xl font-bold mb-6 text-brand-ink">Payment Method</h3>
                         <div className="space-y-3">
-                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'cod' ? 'border-brand-gold bg-[#fffdf0]' : 'border-brand-ink/10'}`}>
+                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'cod' ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-ink/10'}`}>
                             <div className="flex items-center pt-1">
                               <input type="radio" value="cod" checked={checkoutData.paymentMethod === 'cod'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
                             </div>
@@ -4355,7 +4355,7 @@ export default function App() {
                               <div className="text-xs text-brand-ink/60 mt-1">Pay when your order arrives</div>
                             </div>
                           </label>
-                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'upi' ? 'border-brand-gold bg-[#fffdf0]' : 'border-brand-ink/10'}`}>
+                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'upi' ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-ink/10'}`}>
                             <div className="flex items-center pt-1">
                               <input type="radio" value="upi" checked={checkoutData.paymentMethod === 'upi'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
                             </div>
@@ -4365,7 +4365,7 @@ export default function App() {
                               <div className="text-xs text-brand-ink/60 mt-1">PhonePe, GPay, Paytm, etc.</div>
                             </div>
                           </label>
-                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'card' ? 'border-brand-gold bg-[#fffdf0]' : 'border-brand-ink/10'}`}>
+                          <label className={`flex gap-4 p-4 rounded-xl border cursor-pointer transition-all ${checkoutData.paymentMethod === 'card' ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-ink/10'}`}>
                             <div className="flex items-center pt-1">
                               <input type="radio" value="card" checked={checkoutData.paymentMethod === 'card'} onChange={e => setCheckoutData({...checkoutData, paymentMethod: e.target.value})} className="accent-brand-gold w-4 h-4" />
                             </div>
@@ -4408,7 +4408,7 @@ export default function App() {
 
                 {/* Right Column (Order Summary) */}
                 <div className="w-full lg:w-[380px] flex-shrink-0">
-                  <div className="bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-brand-ink/5 p-6 md:p-8 sticky top-24 relative overflow-hidden">
+                  <div className="bg-brand-surface rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-brand-ink/5 p-6 md:p-8 sticky top-24 relative overflow-hidden">
                      <h3 className="font-serif text-xl font-bold mb-6 text-brand-ink">Order Summary</h3>
                      
                      {currentView === 'cart' ? (
@@ -4593,7 +4593,7 @@ export default function App() {
                 <input 
                   type="email" 
                   placeholder="Enter your email" 
-                  className="w-full bg-brand-bg md:bg-white border border-brand-ink/20 border-r-0 px-4 py-2 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors"
+                  className="w-full bg-brand-bg md:bg-brand-surface border border-brand-ink/20 border-r-0 px-4 py-2 text-sm text-brand-ink focus:outline-none focus:border-brand-gold transition-colors"
                 />
                 <button className="bg-brand-ink text-brand-gold px-4 py-2 text-sm uppercase tracking-widest border border-brand-ink hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium">Subscribe</button>
               </div>

@@ -127,7 +127,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
                placeholder="Full Name"
                value={displayName}
                onChange={(e) => setDisplayName(e.target.value)}
-               className="w-full px-4 py-3 bg-white border border-brand-ink/20 rounded focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none"
+               className="w-full px-4 py-3 bg-brand-bg border border-brand-ink/20 rounded focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none"
                required
              />
           )}
@@ -136,7 +136,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
             placeholder="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 bg-white border border-brand-ink/20 rounded focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none"
+            className="w-full px-4 py-3 bg-brand-bg border border-brand-ink/20 rounded focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none"
             required
           />
           <input
@@ -144,7 +144,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 bg-white border border-brand-ink/20 rounded focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none"
+            className="w-full px-4 py-3 bg-brand-bg border border-brand-ink/20 rounded focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none"
             required
           />
           
@@ -170,7 +170,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-2 bg-white border border-brand-ink/20 text-brand-ink py-3 rounded hover:bg-brand-gold/10 hover:border-brand-gold transition-colors font-medium mb-4"
+            className="w-full flex items-center justify-center gap-2 bg-brand-bg border border-brand-ink/20 text-brand-ink py-3 rounded hover:bg-brand-gold/10 hover:border-brand-gold transition-colors font-medium mb-4"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
