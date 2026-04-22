@@ -18,6 +18,7 @@ app.use(express.json());
 
 // MongoDB connection
 let MONGODB_URI = process.env.MONGODB_URI;
+let dbConnectionError = "";
 
 if (MONGODB_URI && MONGODB_URI.startsWith('mongodb+srv://')) {
   try {
@@ -55,6 +56,7 @@ async function connectDB() {
   if (mongoose.connection.readyState === 1) return;
   
   if (!MONGODB_URI) {
+    dbConnectionError = "MONGODB_URI is extremely missing in your environment variables. Please add it to your Netlify/Vercel settings.";
     console.warn("⚠️ MONGODB_URI is not defined in environment variables. Data will not be saved to MongoDB.");
     return;
   }
@@ -66,11 +68,15 @@ async function connectDB() {
       socketTimeoutMS: 4000,
     }).then((m) => {
       console.log("Connected to MongoDB successfully!");
+      dbConnectionError = "";
       return m;
     }).catch((err: any) => {
       console.error("MongoDB connection error:", err.message);
-      if (err.message.includes("IP that isn't whitelisted")) {
+      if (err.message.includes("IP that isn't whitelisted") || err.message.includes("ENOTFOUND")) {
+         dbConnectionError = "MongoDB Atlas Network Access issue. Please ensure your IP whitelist includes 0.0.0.0/0 (Allow Access From Anywhere).";
          console.warn("⚠️ Please go to your MongoDB Atlas dashboard -> Network Access -> Add IP Address, and choose 'Allow Access From Anywhere' (0.0.0.0/0)");
+      } else {
+         dbConnectionError = "Failed to connect to MongoDB: " + err.message;
       }
       connectionPromise = null;
       return null;
@@ -168,7 +174,7 @@ app.get(['/auth/callback', '/auth/callback/'], async (req, res) => {
 });
 
 app.post('/api/auth/google/verify', async (req, res) => {
-  if (mongoose.connection.readyState !== 1) return res.status(500).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(500).json({ error: dbConnectionError || "DB not connected" });
   try {
     const { code, redirectUri } = req.body;
     const { tokens } = await googleClient.getToken({ code, redirect_uri: redirectUri });
@@ -202,7 +208,7 @@ app.post('/api/auth/google/verify', async (req, res) => {
 });
 
 app.post('/api/auth/register', async (req, res) => {
-  if (mongoose.connection.readyState !== 1) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
+  if (mongoose.connection.readyState !== 1) return res.status(500).json({ error: dbConnectionError || "DB not connected" });
   try {
     const { email: rawEmail, password, displayName } = req.body;
     if (!rawEmail || !password) return res.status(400).json({ error: "Email and password are required" });
@@ -225,7 +231,7 @@ app.post('/api/auth/register', async (req, res) => {
 });
 
 app.post('/api/auth/login', async (req, res) => {
-  if (mongoose.connection.readyState !== 1) return res.status(500).json({ error: "DB not connected. Please ensure your MongoDB Atlas Network Access is set to allow access from anywhere (0.0.0.0/0)" });
+  if (mongoose.connection.readyState !== 1) return res.status(500).json({ error: dbConnectionError || "DB not connected" });
   try {
     const { email: rawEmail, password } = req.body;
     if (!rawEmail || !password) return res.status(400).json({ error: "Email and password are required" });
@@ -258,7 +264,7 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.get('/api/auth/me', async (req, res) => {
-  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
+  if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: dbConnectionError || "DB not connected" });
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).json({ error: "No token provided" });
