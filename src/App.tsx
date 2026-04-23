@@ -2864,106 +2864,107 @@ export default function App() {
       <main className="flex-grow">
         {currentView === 'home' ? (
           <>
-            {/* Hero Section */}
-        <section className="relative h-[70vh] md:h-[85vh] flex flex-col md:flex-row border-b border-brand-ink/10">
-          {/* Left: Clothing */}
-          {storeMode === 'clothing' && (
-            <div className="relative group overflow-hidden border-brand-ink/10 w-full h-full">
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
-              <img 
-                src="https://png.pngtree.com/background/20230519/original/pngtree-the-interior-of-a-clothing-store-with-clothing-on-display-picture-image_2654940.jpg" 
-                alt="Harsh Cloth Imporium" 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 z-20 p-6 md:p-12 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white">
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  key={`hero-clothing-${storeMode}`}
-                >
-                  <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] mb-3 md:mb-4 text-brand-gold">Harsh Cloth Imporium</p>
-                  <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl font-light mb-4 md:mb-6 leading-tight">
-                    Elegance in <br /> Every Thread.
-                  </h2>
-                  <button 
-                    onClick={() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
-                    className="flex items-center gap-3 text-xs md:text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
+            {searchQuery.trim() === '' && (
+              <>
+                {/* Hero Section */}
+                <section className="relative h-[70vh] md:h-[85vh] flex flex-col md:flex-row border-b border-brand-ink/10">
+                  {/* Left: Clothing */}
+                  {storeMode === 'clothing' && (
+                    <div className="relative group overflow-hidden border-brand-ink/10 w-full h-full">
+                      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
+                      <img 
+                        src="https://png.pngtree.com/background/20230519/original/pngtree-the-interior-of-a-clothing-store-with-clothing-on-display-picture-image_2654940.jpg" 
+                        alt="Harsh Cloth Imporium" 
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 z-20 p-6 md:p-12 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white">
+                        <motion.div 
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.8, delay: 0.2 }}
+                          key={`hero-clothing-${storeMode}`}
+                        >
+                          <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] mb-3 md:mb-4 text-brand-gold">Harsh Cloth Imporium</p>
+                          <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl font-light mb-4 md:mb-6 leading-tight">
+                            Elegance in <br /> Every Thread.
+                          </h2>
+                          <button 
+                            onClick={() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                            className="flex items-center gap-3 text-xs md:text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
+                          >
+                            Explore Collection
+                            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                          </button>
+                        </motion.div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Right: Jewellery */}
+                  {storeMode === 'jewellery' && (
+                    <div className="relative group overflow-hidden w-full h-full">
+                      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
+                      <img 
+                        src="https://i.pinimg.com/736x/90/a8/a0/90a8a061bc471f400e3e8bc2816582fe.jpg" 
+                        alt="Anand Jewellars" 
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 z-20 p-6 md:p-12 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white">
+                        <motion.div 
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.8, delay: 0.4 }}
+                          key={`hero-jewellery-${storeMode}`}
+                        >
+                          <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] mb-3 md:mb-4 text-brand-gold">Anand Jewellars</p>
+                          <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl font-light mb-4 md:mb-6 leading-tight">
+                            Timeless <br /> Brilliance.
+                          </h2>
+                          <button 
+                            onClick={() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
+                            className="flex items-center gap-3 text-xs md:text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
+                          >
+                            Discover Pieces
+                            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                          </button>
+                        </motion.div>
+                      </div>
+                    </div>
+                  )}
+                </section>
+
+                {/* Intro Section */}
+                <section className="py-16 md:py-24 px-6 md:px-12 max-w-5xl mx-auto text-center">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    key={`intro-${storeMode}`}
                   >
-                    Explore Collection
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
-                </motion.div>
-              </div>
-            </div>
-          )}
+                    <h3 className="font-serif text-2xl md:text-5xl font-light leading-tight mb-6 md:mb-8">
+                      {storeMode === 'clothing' && <>A legacy of <span className="italic text-brand-gold">elegance</span> and <span className="italic text-brand-gold">style</span>, woven into every thread.</>}
+                      {storeMode === 'jewellery' && <>A legacy of <span className="italic text-brand-gold">brilliance</span> and <span className="italic text-brand-gold">trust</span>, crafted for eternity.</>}
+                    </h3>
+                    <p className="text-sm md:text-base text-brand-ink/70 max-w-2xl mx-auto leading-relaxed">
+                      {storeMode === 'clothing' && 'Experience the finest premium textiles from Harsh Cloth Imporium. We curate collections that celebrate traditional weaving techniques while embracing modern sophistication and comfort.'}
+                      {storeMode === 'jewellery' && 'Experience exquisite ornaments from Anand Jewellars. We curate collections that celebrate traditional craftsmanship while embracing modern sophistication and timeless brilliance.'}
+                    </p>
+                  </motion.div>
+                </section>
 
-          {/* Right: Jewellery */}
-          {storeMode === 'jewellery' && (
-            <div className="relative group overflow-hidden w-full h-full">
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-700 z-10" />
-              <img 
-                src="https://i.pinimg.com/736x/90/a8/a0/90a8a061bc471f400e3e8bc2816582fe.jpg" 
-                alt="Anand Jewellars" 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 z-20 p-6 md:p-12 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white">
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  key={`hero-jewellery-${storeMode}`}
-                >
-                  <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] mb-3 md:mb-4 text-brand-gold">Anand Jewellars</p>
-                  <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl font-light mb-4 md:mb-6 leading-tight">
-                    Timeless <br /> Brilliance.
-                  </h2>
-                  <button 
-                    onClick={() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
-                    className="flex items-center gap-3 text-xs md:text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
-                  >
-                    Discover Pieces
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
-                </motion.div>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* Intro Section */}
-        <section className="py-16 md:py-24 px-6 md:px-12 max-w-5xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            key={`intro-${storeMode}`}
-          >
-            <h3 className="font-serif text-2xl md:text-5xl font-light leading-tight mb-6 md:mb-8">
-              {storeMode === 'clothing' && <>A legacy of <span className="italic text-brand-gold">elegance</span> and <span className="italic text-brand-gold">style</span>, woven into every thread.</>}
-              {storeMode === 'jewellery' && <>A legacy of <span className="italic text-brand-gold">brilliance</span> and <span className="italic text-brand-gold">trust</span>, crafted for eternity.</>}
-            </h3>
-            <p className="text-sm md:text-base text-brand-ink/70 max-w-2xl mx-auto leading-relaxed">
-              {storeMode === 'clothing' && 'Experience the finest premium textiles from Harsh Cloth Imporium. We curate collections that celebrate traditional weaving techniques while embracing modern sophistication and comfort.'}
-              {storeMode === 'jewellery' && 'Experience exquisite ornaments from Anand Jewellars. We curate collections that celebrate traditional craftsmanship while embracing modern sophistication and timeless brilliance.'}
-            </p>
-          </motion.div>
-        </section>
-
-        {/* Browse By Section */}
-        {currentView === 'home' && (
-          <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto bg-brand-bg">
-            <div className="text-center mb-10">
-              <p className="text-[10px] md:text-xs uppercase tracking-widest text-brand-gold mb-3 font-semibold">BROWSE BY</p>
-              <h2 className="font-serif text-3xl md:text-4xl text-brand-ink">
-                {storeMode === 'clothing' ? 'Browse Our Clothing' : 'Browse Our Jewellery'}
-              </h2>
-            </div>
-            
-            {storeMode === 'clothing' ? (
+                {/* Browse By Section */}
+                <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto bg-brand-bg">
+                  <div className="text-center mb-10">
+                    <p className="text-[10px] md:text-xs uppercase tracking-widest text-brand-gold mb-3 font-semibold">BROWSE BY</p>
+                    <h2 className="font-serif text-3xl md:text-4xl text-brand-ink">
+                      {storeMode === 'clothing' ? 'Browse Our Clothing' : 'Browse Our Jewellery'}
+                    </h2>
+                  </div>
+                  
+                  {storeMode === 'clothing' ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* Sarees */}
                 <div 
@@ -3073,29 +3074,42 @@ export default function App() {
               </div>
             )}
           </section>
-        )}
+              </>
+            )}
 
         {/* Shop / Filter Section */}
-        <section id="shop" className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto border-t border-brand-ink/10">
+        <section id="shop" className={`py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto ${searchQuery.trim() === '' ? 'border-t border-brand-ink/10' : ''}`}>
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-6">
             <div>
               <nav className="flex items-center gap-2 text-[9px] md:text-[10px] uppercase tracking-widest mb-4 text-brand-ink/60">
-                <button onClick={() => { setCurrentView('home'); setDepartment('All'); }} className="hover:text-brand-gold transition-colors">Home</button>
-                <span>/</span>
-                <button onClick={() => setDepartment('All')} className={`transition-colors ${department === 'All' ? 'text-brand-gold' : 'hover:text-brand-gold'}`}>
-                  {storeMode === 'clothing' ? 'Clothing' : 'Jewellery'}
-                </button>
-                {department !== 'All' && (
+                <button onClick={() => { setCurrentView('home'); setDepartment('All'); setSearchQuery(''); setLocalSearch(''); }} className="hover:text-brand-gold transition-colors">Home</button>
+                {searchQuery.trim() !== '' ? (
                   <>
                     <span>/</span>
-                    <span className="text-brand-gold">{department}</span>
+                    <span className="text-brand-gold">Search</span>
+                  </>
+                ) : (
+                  <>
+                    <span>/</span>
+                    <button onClick={() => setDepartment('All')} className={`transition-colors ${department === 'All' ? 'text-brand-gold' : 'hover:text-brand-gold'}`}>
+                      {storeMode === 'clothing' ? 'Clothing' : 'Jewellery'}
+                    </button>
+                    {department !== 'All' && (
+                      <>
+                        <span>/</span>
+                        <span className="text-brand-gold">{department}</span>
+                      </>
+                    )}
                   </>
                 )}
               </nav>
-              <h3 className="font-serif text-2xl md:text-4xl mb-3">Curated Collection</h3>
+              
+              <h3 className="font-serif text-2xl md:text-4xl mb-3">
+                {searchQuery.trim() !== '' ? `Search Results for "${searchQuery}"` : 'Curated Collection'}
+              </h3>
               <div className="w-12 h-px bg-brand-gold mb-6"></div>
               
-              {storeMode === 'clothing' && (
+              {searchQuery.trim() === '' && storeMode === 'clothing' && (
                 <div className="flex gap-4 md:gap-8 text-xs uppercase tracking-widest font-medium overflow-x-auto pb-2">
                   {['All', 'Men', 'Women', 'Kids'].map((dept) => (
                     <button
@@ -3108,7 +3122,7 @@ export default function App() {
                   ))}
                 </div>
               )}
-              {storeMode === 'jewellery' && (
+              {searchQuery.trim() === '' && storeMode === 'jewellery' && (
                 <div className="flex gap-4 md:gap-8 text-xs uppercase tracking-widest font-medium overflow-x-auto pb-2">
                   {['All', 'Gold', 'Silver', 'Bridal', 'Rings'].map((dept) => (
                     <button
