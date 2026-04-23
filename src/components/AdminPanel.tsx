@@ -49,6 +49,9 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [paymentFilter, setPaymentFilter] = useState('all');
+  const [priceFilter, setPriceFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('all');
 
   const fetchOrders = async (showUIRefresh = false) => {
     if (showUIRefresh) setIsRefreshing(true);
@@ -140,16 +143,48 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
     window.print();
   };
 
-  const filteredOrders = orders.filter(o => 
-    (statusFilter === 'all' || o.status === statusFilter) &&
-    (
-      (o.id && o.id.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (o.userId && o.userId.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (o.shippingInfo?.fullName && o.shippingInfo.fullName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (o.userInfo?.displayName && o.userInfo.displayName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (o.userInfo?.email && o.userInfo.email.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
-  );
+  const filteredOrders = orders.filter(o => {
+    // Status filter
+    if (statusFilter !== 'all' && o.status !== statusFilter) return false;
+    
+    // Payment method filter
+    if (paymentFilter !== 'all' && o.paymentMethod !== paymentFilter) return false;
+    
+    // Price range filter
+    if (priceFilter !== 'all') {
+      if (priceFilter === 'under-1000' && o.totalAmount >= 1000) return false;
+      if (priceFilter === '1000-5000' && (o.totalAmount < 1000 || o.totalAmount > 5000)) return false;
+      if (priceFilter === '5000-10000' && (o.totalAmount < 5000 || o.totalAmount > 10000)) return false;
+      if (priceFilter === 'over-10000' && o.totalAmount <= 10000) return false;
+    }
+    
+    // Date range filter
+    if (dateFilter !== 'all') {
+      const orderDate = o.createdAt?.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
+      const now = new Date();
+      const daysDiff = Math.floor((now.getTime() - orderDate.getTime()) / (1000 * 60 * 60 * 24));
+      
+      if (dateFilter === 'today' && daysDiff !== 0) return false;
+      if (dateFilter === 'yesterday' && daysDiff !== 1) return false;
+      if (dateFilter === 'last-7-days' && daysDiff > 7) return false;
+      if (dateFilter === 'last-30-days' && daysDiff > 30) return false;
+      if (dateFilter === 'last-90-days' && daysDiff > 90) return false;
+    }
+    
+    // Search query
+    if (searchQuery.trim() !== '') {
+      const query = searchQuery.toLowerCase();
+      return (
+        (o.id && o.id.toLowerCase().includes(query)) ||
+        (o.userId && o.userId.toLowerCase().includes(query)) ||
+        (o.shippingInfo?.fullName && o.shippingInfo.fullName.toLowerCase().includes(query)) ||
+        (o.userInfo?.displayName && o.userInfo.displayName.toLowerCase().includes(query)) ||
+        (o.userInfo?.email && o.userInfo.email.toLowerCase().includes(query))
+      );
+    }
+    
+    return true;
+  });
 
   const totalRevenue = orders.filter(o => o.status !== 'cancelled').reduce((sum, o) => sum + (o.totalAmount || 0), 0);
   const totalPending = orders.filter(o => o.status === 'pending').length;
