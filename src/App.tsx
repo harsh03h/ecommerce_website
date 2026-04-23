@@ -2526,7 +2526,7 @@ export default function App() {
     if (searchQuery.trim() !== '') {
       const queryTerms = searchQuery.toLowerCase().split(/\s+/);
       result = result.filter(p => {
-        const searchableText = `${p.name} ${p.category} ${p.department || ''}`.toLowerCase();
+        const searchableText = p.name.toLowerCase();
         return queryTerms.every(term => {
           // Escape special regex characters in the term just to be safe
           const safeTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
