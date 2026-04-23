@@ -2526,7 +2526,7 @@ export default function App() {
     if (searchQuery.trim() !== '') {
       const queryTerms = searchQuery.toLowerCase().split(/\s+/);
       result = result.filter(p => {
-        const searchableText = `${p.name} ${p.description || ''} ${p.category} ${p.department || ''} ${p.material || ''} ${p.occasion || ''}`.toLowerCase();
+        const searchableText = `${p.name} ${p.category} ${p.department || ''}`.toLowerCase();
         return queryTerms.every(term => {
           const singularTerm = term.endsWith('s') && term.length > 3 ? term.slice(0, -1) : term;
           return searchableText.includes(term) || searchableText.includes(singularTerm);
