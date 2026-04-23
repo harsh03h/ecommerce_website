@@ -2524,20 +2524,10 @@ export default function App() {
     
     // Global Search Query Mode
     if (searchQuery.trim() !== '') {
-      const queryTerms = searchQuery.toLowerCase().split(/\s+/);
-      result = result.filter(p => {
-        const searchableText = p.name.toLowerCase();
-        return queryTerms.every(term => {
-          // Escape special regex characters in the term just to be safe
-          const safeTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          const singularTerm = safeTerm.endsWith('s') && safeTerm.length > 3 ? safeTerm.slice(0, -1) : safeTerm;
-          
-          const regexTerm = new RegExp(`\\b${safeTerm}`, 'i');
-          const regexSingular = new RegExp(`\\b${singularTerm}`, 'i');
-          
-          return regexTerm.test(searchableText) || regexSingular.test(searchableText);
-        });
-      });
+      const searchTerm = searchQuery.trim().toLowerCase();
+      result = result.filter(product =>
+        product.name.toLowerCase().includes(searchTerm)
+      );
     } else {
       // Normal Browsing Mode
       // Filter by Store Mode
