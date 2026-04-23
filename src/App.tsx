@@ -2524,10 +2524,22 @@ export default function App() {
     
     // Global Search Query Mode
     if (searchQuery.trim() !== '') {
-      const searchTerm = searchQuery.trim().toLowerCase();
-      result = result.filter(product =>
-        product.name.toLowerCase().includes(searchTerm)
-      );
+      const queryTerms = searchQuery.trim().toLowerCase().split(/\s+/);
+      result = result.filter(product => {
+        return queryTerms.every(term => {
+          // Escape special regex characters in the term
+          const safeTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          // Support matching singular if plural is searched (e.g., 'shirts' -> 'shirt')
+          const singularTerm = safeTerm.endsWith('s') && safeTerm.length > 3 ? safeTerm.slice(0, -1) : safeTerm;
+          
+          // Use word boundaries (\b) so "shirt" doesn't match inside "sweatshirt"
+          // but will still match "T-Shirt" (as hyphen is a boundary) or "Shirt"
+          const regexTerm = new RegExp(`\\b${safeTerm}`, 'i');
+          const regexSingular = new RegExp(`\\b${singularTerm}`, 'i');
+          
+          return regexTerm.test(product.name) || regexSingular.test(product.name);
+        });
+      });
     } else {
       // Normal Browsing Mode
       // Filter by Store Mode
