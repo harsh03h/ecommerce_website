@@ -2524,13 +2524,14 @@ export default function App() {
     
     // Global Search Query Mode
     if (searchQuery.trim() !== '') {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(p => 
-        p.name.toLowerCase().includes(query) || 
-        (p.description && p.description.toLowerCase().includes(query)) ||
-        p.category.toLowerCase().includes(query) ||
-        (p.department && p.department.toLowerCase().includes(query))
-      );
+      const queryTerms = searchQuery.toLowerCase().split(/\s+/);
+      result = result.filter(p => {
+        const searchableText = `${p.name} ${p.description || ''} ${p.category} ${p.department || ''} ${p.material || ''} ${p.occasion || ''}`.toLowerCase();
+        return queryTerms.every(term => {
+          const singularTerm = term.endsWith('s') && term.length > 3 ? term.slice(0, -1) : term;
+          return searchableText.includes(term) || searchableText.includes(singularTerm);
+        });
+      });
     } else {
       // Normal Browsing Mode
       // Filter by Store Mode
@@ -2541,23 +2542,23 @@ export default function App() {
       if (department !== 'All') {
         result = result.filter(p => p.department === department);
       }
-    }
 
-    // Filter by Price Range
-    if (priceRange !== 'all') {
-      if (priceRange === 'under-1000') result = result.filter(p => p.price < 1000);
-      else if (priceRange === '1000-5000') result = result.filter(p => p.price >= 1000 && p.price <= 5000);
-      else if (priceRange === 'over-5000') result = result.filter(p => p.price > 5000);
-    }
+      // Filter by Price Range
+      if (priceRange !== 'all') {
+        if (priceRange === 'under-1000') result = result.filter(p => p.price < 1000);
+        else if (priceRange === '1000-5000') result = result.filter(p => p.price >= 1000 && p.price <= 5000);
+        else if (priceRange === 'over-5000') result = result.filter(p => p.price > 5000);
+      }
 
-    // Filter by Material
-    if (material !== 'all') {
-      result = result.filter(p => p.material === material);
-    }
+      // Filter by Material
+      if (material !== 'all') {
+        result = result.filter(p => p.material === material);
+      }
 
-    // Filter by Occasion
-    if (occasion !== 'all') {
-      result = result.filter(p => p.occasion === occasion);
+      // Filter by Occasion
+      if (occasion !== 'all') {
+        result = result.filter(p => p.occasion === occasion);
+      }
     }
 
     switch (sortBy) {
