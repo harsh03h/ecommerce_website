@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles, Trash2, CreditCard, Banknote, Smartphone } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles, Trash2, CreditCard, Banknote, Smartphone, Check, Filter } from 'lucide-react';
 
 import { Login } from './components/Login';
 import { AdminPanel } from './components/AdminPanel';
@@ -2103,6 +2103,7 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [localSearch]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'home' | 'wishlist' | 'profile' | 'orders' | 'about' | 'contact' | 'login' | 'admin' | 'cart' | 'checkout'>('home');
   
   // Auth State
@@ -3131,108 +3132,136 @@ export default function App() {
                 </div>
               )}
             </div>
-            
-            <div className="flex flex-wrap items-center gap-4 text-sm w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-brand-ink/10 pt-4 md:pt-0">
-              <div className="flex items-center gap-2">
-                <SlidersHorizontal className="w-4 h-4 text-brand-gold" />
-                <span className="uppercase tracking-widest text-brand-ink/60 text-[10px] md:text-xs">Filters:</span>
-              </div>
-              
-              <div className="grid grid-cols-2 lg:flex lg:flex-row gap-3 w-full md:w-auto">
-                <div className="relative">
-                  <select 
-                    value={priceRange}
-                    onChange={(e) => setPriceRange(e.target.value)}
-                    className="w-full bg-transparent border border-brand-ink/20 rounded-none text-brand-ink py-2 pl-3 pr-8 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs transition-colors hover:border-brand-ink/40"
-                    style={{ 
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-                      backgroundPosition: 'calc(100% - 0.5rem) center', 
-                      backgroundRepeat: 'no-repeat', 
-                      backgroundSize: '1em' 
-                    }}
-                  >
-                    <option value="all" className="bg-brand-surface">All Prices</option>
-                    <option value="under-1000" className="bg-brand-surface">Under ₹1,000</option>
-                    <option value="1000-5000" className="bg-brand-surface">₹1,000 - ₹5,000</option>
-                    <option value="over-5000" className="bg-brand-surface">Over ₹5,000</option>
-                  </select>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
+            {/* Desktop Filter Sidebar */}
+            <div className="hidden lg:block w-48 xl:w-56 flex-shrink-0">
+              <div className="sticky top-24">
+                <div className="flex items-center justify-between mb-8 pb-4 border-b border-brand-ink/10">
+                  <h3 className="font-serif text-xl text-brand-ink">Filters</h3>
+                  {(priceRange !== 'all' || material !== 'all' || occasion !== 'all') && (
+                    <button 
+                      onClick={() => { setPriceRange('all'); setMaterial('all'); setOccasion('all'); }}
+                      className="text-[10px] uppercase tracking-widest text-brand-ink/50 hover:text-brand-ink transition-colors"
+                    >
+                      Clear All
+                    </button>
+                  )}
                 </div>
 
-                <div className="relative">
-                  <select 
-                    value={material}
-                    onChange={(e) => setMaterial(e.target.value)}
-                    className="w-full bg-transparent border border-brand-ink/20 rounded-none text-brand-ink py-2 pl-3 pr-8 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs transition-colors hover:border-brand-ink/40"
-                    style={{ 
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-                      backgroundPosition: 'calc(100% - 0.5rem) center', 
-                      backgroundRepeat: 'no-repeat', 
-                      backgroundSize: '1em' 
-                    }}
-                  >
-                    <option value="all" className="bg-brand-surface">All Materials</option>
-                    {storeMode === 'clothing' ? (
-                      <>
-                        <option value="cotton" className="bg-brand-surface">Cotton</option>
-                        <option value="silk" className="bg-brand-surface">Silk</option>
-                        <option value="velvet" className="bg-brand-surface">Velvet</option>
-                      </>
-                    ) : (
-                      <>
-                        <option value="gold" className="bg-brand-surface">Gold</option>
-                        <option value="silver" className="bg-brand-surface">Silver</option>
-                        <option value="diamond" className="bg-brand-surface">Diamond</option>
-                      </>
-                    )}
-                  </select>
+                {/* Price Filter */}
+                <div className="mb-8">
+                  <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Price Range</h4>
+                  <div className="flex flex-col gap-3 text-sm text-brand-ink/80">
+                    {[
+                      { v: 'all', l: 'All Prices' },
+                      { v: 'under-1000', l: 'Under ₹1,000' },
+                      { v: '1000-5000', l: '₹1,000 - ₹5,000' },
+                      { v: 'over-5000', l: 'Over ₹5,000' }
+                    ].map(opt => (
+                      <label key={opt.v} className="flex items-center gap-3 cursor-pointer group">
+                        <div className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${priceRange === opt.v ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20 group-hover:border-brand-gold'}`}>
+                          {priceRange === opt.v && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
+                        </div>
+                        <input type="radio" name="price" className="hidden" checked={priceRange === opt.v} onChange={() => setPriceRange(opt.v)} />
+                        <span className={`transition-colors text-[13px] ${priceRange === opt.v ? 'font-medium text-brand-ink' : 'group-hover:text-brand-ink'}`}>{opt.l}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="relative">
-                  <select 
-                    value={occasion}
-                    onChange={(e) => setOccasion(e.target.value)}
-                    className="w-full bg-transparent border border-brand-ink/20 rounded-none text-brand-ink py-2 pl-3 pr-8 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs transition-colors hover:border-brand-ink/40"
-                    style={{ 
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-                      backgroundPosition: 'calc(100% - 0.5rem) center', 
-                      backgroundRepeat: 'no-repeat', 
-                      backgroundSize: '1em' 
-                    }}
-                  >
-                    <option value="all" className="bg-brand-surface">All Occasions</option>
-                    <option value="casual" className="bg-brand-surface">Casual</option>
-                    <option value="festive" className="bg-brand-surface">Festive</option>
-                    <option value="bridal" className="bg-brand-surface">Bridal</option>
-                    <option value="party" className="bg-brand-surface">Party</option>
-                  </select>
+                {/* Material Filter */}
+                <div className="mb-8">
+                  <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Material</h4>
+                  <div className="flex flex-col gap-3 text-sm text-brand-ink/80">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <div className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${material === 'all' ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20 group-hover:border-brand-gold'}`}>
+                        {material === 'all' && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
+                      </div>
+                      <input type="radio" name="material" className="hidden" checked={material === 'all'} onChange={() => setMaterial('all')} />
+                      <span className={`transition-colors text-[13px] ${material === 'all' ? 'font-medium text-brand-ink' : 'group-hover:text-brand-ink'}`}>All Materials</span>
+                    </label>
+                    
+                    {(storeMode === 'clothing' ? ['cotton', 'silk', 'velvet'] : ['gold', 'silver', 'diamond']).map(opt => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer group">
+                        <div className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${material === opt ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20 group-hover:border-brand-gold'}`}>
+                          {material === opt && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
+                        </div>
+                        <input type="radio" name="material" className="hidden" checked={material === opt} onChange={() => setMaterial(opt)} />
+                        <span className={`capitalize transition-colors text-[13px] ${material === opt ? 'font-medium text-brand-ink' : 'group-hover:text-brand-ink'}`}>{opt}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="relative">
-                  <select 
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full bg-transparent border border-brand-ink/20 rounded-none text-brand-ink py-2 pl-3 pr-8 focus:outline-none focus:border-brand-gold cursor-pointer appearance-none uppercase tracking-widest text-[10px] md:text-xs transition-colors hover:border-brand-ink/40"
-                    style={{ 
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
-                      backgroundPosition: 'calc(100% - 0.5rem) center', 
-                      backgroundRepeat: 'no-repeat', 
-                      backgroundSize: '1em' 
-                    }}
-                  >
-                    <option value="featured" className="bg-brand-surface">Sort: Featured</option>
-                    <option value="newest" className="bg-brand-surface">Sort: Newest</option>
-                    <option value="bestsellers" className="bg-brand-surface">Sort: Best</option>
-                    <option value="price-asc" className="bg-brand-surface">Low to High</option>
-                    <option value="price-desc" className="bg-brand-surface">High to Low</option>
-                  </select>
+                {/* Occasion Filter */}
+                <div className="mb-8">
+                  <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Occasion</h4>
+                  <div className="flex flex-col gap-3 text-sm text-brand-ink/80">
+                    {['all', 'casual', 'festive', 'bridal', 'party'].map(opt => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer group">
+                        <div className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${occasion === opt ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20 group-hover:border-brand-gold'}`}>
+                          {occasion === opt && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
+                        </div>
+                        <input type="radio" name="occasion" className="hidden" checked={occasion === opt} onChange={() => setOccasion(opt)} />
+                        <span className={`capitalize transition-colors text-[13px] ${occasion === opt ? 'font-medium text-brand-ink' : 'group-hover:text-brand-ink'}`}>
+                          {opt === 'all' ? 'All Occasions' : opt}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:gap-x-6 md:gap-y-10 w-full">
-            <AnimatePresence mode="popLayout">
-              {filteredProducts.map(product => (
+            {/* Main Product Content */}
+            <div className="flex-1 min-w-0">
+              {/* Toolbar */}
+              <div className="flex flex-wrap items-center justify-between mb-8 pb-4 border-b border-brand-ink/10 gap-4">
+                <span className="text-[10px] md:text-xs uppercase tracking-widest text-brand-ink/60 font-medium">
+                  {filteredProducts.length} Products
+                </span>
+                
+                <div className="flex items-center gap-4 md:gap-6">
+                  {/* Mobile Filter Toggle */}
+                  <button 
+                    className="lg:hidden flex items-center gap-2 text-[10px] sm:text-xs uppercase tracking-widest font-medium text-brand-ink hover:text-brand-gold transition-colors"
+                    onClick={() => setIsMobileFilterOpen(true)}
+                  >
+                    <Filter className="w-4 h-4" /> Filters
+                    {(priceRange !== 'all' || material !== 'all' || occasion !== 'all') && (
+                      <span className="w-2 h-2 rounded-full bg-brand-gold"></span>
+                    )}
+                  </button>
+                  
+                  {/* Sort By */}
+                  <div className="flex items-center gap-2">
+                    <span className="hidden sm:inline-block text-[10px] uppercase tracking-widest text-brand-ink/50 font-medium">Sort by:</span>
+                    <select 
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="bg-transparent border-none text-brand-ink focus:ring-0 cursor-pointer appearance-none uppercase tracking-widest text-[10px] sm:text-xs font-bold transition-colors hover:text-brand-gold pr-4"
+                      style={{ 
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23333'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, 
+                        backgroundPosition: 'right center', 
+                        backgroundRepeat: 'no-repeat', 
+                        backgroundSize: '1em' 
+                      }}
+                    >
+                      <option value="featured" className="bg-brand-surface text-brand-ink">Featured</option>
+                      <option value="newest" className="bg-brand-surface text-brand-ink">Newest</option>
+                      <option value="bestsellers" className="bg-brand-surface text-brand-ink">Best Selling</option>
+                      <option value="price-asc" className="bg-brand-surface text-brand-ink">Price: Low to High</option>
+                      <option value="price-desc" className="bg-brand-surface text-brand-ink">Price: High to Low</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-8 sm:gap-x-4 sm:gap-y-10 w-full">
+                <AnimatePresence mode="popLayout">
+                  {filteredProducts.map(product => (
                 <ProductCard
                   key={product.id}
                   product={product}
@@ -3252,37 +3281,151 @@ export default function App() {
                   onToggleWishlist={toggleWishlist}
                   onAddToCart={addToCart}
                 />
-              ))}
-            </AnimatePresence>
-          </div>
-          
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-24 bg-brand-surface border border-brand-ink/10 flex flex-col items-center justify-center rounded-sm">
-              <div className="w-20 h-20 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
-                <Search className="w-8 h-8 text-brand-ink/30" />
+                  ))}
+                </AnimatePresence>
               </div>
-              <h3 className="font-serif text-2xl text-brand-ink mb-3">No results found</h3>
-              <p className="text-brand-ink/60 mb-8 max-w-md mx-auto text-sm">
-                No products found matching your query. Try clearing your filters or searching for something else.
-              </p>
-              {(searchQuery.trim() !== '' || department !== 'All' || priceRange !== 'all') && (
-                <button 
-                  onClick={() => {
-                    setLocalSearch('');
-                    setSearchQuery('');
-                    setDepartment('All');
-                    setPriceRange('all');
-                    setMaterial('all');
-                    setOccasion('all');
-                  }} 
-                  className="bg-brand-ink text-brand-gold px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-gold hover:text-brand-bg transition-colors"
-                >
-                  Clear All Filters
-                </button>
+              
+              {filteredProducts.length === 0 && (
+                <div className="text-center py-24 bg-brand-surface border border-brand-ink/10 flex flex-col items-center justify-center rounded-sm mt-8">
+                  <div className="w-20 h-20 bg-brand-ink/5 rounded-full flex items-center justify-center mb-6">
+                    <Search className="w-8 h-8 text-brand-ink/30" />
+                  </div>
+                  <h3 className="font-serif text-2xl text-brand-ink mb-3">No results found</h3>
+                  <p className="text-brand-ink/60 mb-8 max-w-md mx-auto text-sm">
+                    No products found matching your query. Try clearing your filters or searching for something else.
+                  </p>
+                  {(searchQuery.trim() !== '' || department !== 'All' || priceRange !== 'all' || material !== 'all' || occasion !== 'all') && (
+                    <button 
+                      onClick={() => {
+                        setLocalSearch('');
+                        setSearchQuery('');
+                        setDepartment('All');
+                        setPriceRange('all');
+                        setMaterial('all');
+                        setOccasion('all');
+                      }} 
+                      className="bg-brand-ink text-brand-gold px-8 py-3 text-xs uppercase tracking-widest font-medium hover:bg-brand-gold hover:text-brand-bg transition-colors"
+                    >
+                      Clear All Filters
+                    </button>
+                  )}
+                </div>
               )}
             </div>
-          )}
+          </div>
         </section>
+
+        {/* Mobile Filter Drawer */}
+        <AnimatePresence>
+          {isMobileFilterOpen && (
+            <div className="fixed inset-0 z-50 flex lg:hidden">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-brand-ink/30 backdrop-blur-sm"
+                onClick={() => setIsMobileFilterOpen(false)}
+              />
+              <motion.div 
+                initial={{ x: '-100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '-100%' }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                className="relative w-[260px] max-w-[85vw] bg-brand-bg h-full shadow-2xl flex flex-col pt-4 pb-0"
+              >
+                <div className="flex items-center justify-between p-6 border-b border-brand-ink/10">
+                  <h3 className="font-serif text-xl text-brand-ink">Filters</h3>
+                  <button onClick={() => setIsMobileFilterOpen(false)} className="p-2 hover:bg-brand-ink/5 rounded-full transition-colors">
+                    <X className="w-5 h-5 text-brand-ink/70" />
+                  </button>
+                </div>
+                
+                <div className="p-6 overflow-y-auto flex-1">
+                  {(priceRange !== 'all' || material !== 'all' || occasion !== 'all') && (
+                    <button 
+                      onClick={() => { setPriceRange('all'); setMaterial('all'); setOccasion('all'); }}
+                      className="w-full py-3 border border-brand-ink/20 text-brand-ink text-xs uppercase tracking-widest font-medium mb-8 hover:bg-brand-ink/5 transition-colors"
+                    >
+                      Clear All Filters
+                    </button>
+                  )}
+
+                  {/* Mobile Price Filter */}
+                  <div className="mb-8">
+                    <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Price Range</h4>
+                    <div className="flex flex-col gap-4 text-sm text-brand-ink/80">
+                      {[
+                        { v: 'all', l: 'All Prices' },
+                        { v: 'under-1000', l: 'Under ₹1,000' },
+                        { v: '1000-5000', l: '₹1,000 - ₹5,000' },
+                        { v: 'over-5000', l: 'Over ₹5,000' }
+                      ].map(opt => (
+                        <label key={opt.v} className="flex items-center gap-3 cursor-pointer">
+                          <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${priceRange === opt.v ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20'}`}>
+                            {priceRange === opt.v && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                          </div>
+                          <input type="radio" name="mobile-price" className="hidden" checked={priceRange === opt.v} onChange={() => setPriceRange(opt.v)} />
+                          <span className={priceRange === opt.v ? 'font-medium text-brand-ink' : ''}>{opt.l}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Mobile Material Filter */}
+                  <div className="mb-8">
+                    <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Material</h4>
+                    <div className="flex flex-col gap-4 text-sm text-brand-ink/80">
+                      <label className="flex items-center gap-3 cursor-pointer">
+                        <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${material === 'all' ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20'}`}>
+                          {material === 'all' && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                        </div>
+                        <input type="radio" name="mobile-material" className="hidden" checked={material === 'all'} onChange={() => setMaterial('all')} />
+                        <span className={material === 'all' ? 'font-medium text-brand-ink' : ''}>All Materials</span>
+                      </label>
+                      
+                      {(storeMode === 'clothing' ? ['cotton', 'silk', 'velvet'] : ['gold', 'silver', 'diamond']).map(opt => (
+                        <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                          <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${material === opt ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20'}`}>
+                            {material === opt && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                          </div>
+                          <input type="radio" name="mobile-material" className="hidden" checked={material === opt} onChange={() => setMaterial(opt)} />
+                          <span className={`capitalize ${material === opt ? 'font-medium text-brand-ink' : ''}`}>{opt}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Mobile Occasion Filter */}
+                  <div className="mb-8">
+                    <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Occasion</h4>
+                    <div className="flex flex-col gap-4 text-sm text-brand-ink/80">
+                      {['all', 'casual', 'festive', 'bridal', 'party'].map(opt => (
+                        <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                          <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${occasion === opt ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20'}`}>
+                            {occasion === opt && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                          </div>
+                          <input type="radio" name="mobile-occasion" className="hidden" checked={occasion === opt} onChange={() => setOccasion(opt)} />
+                          <span className={`capitalize ${occasion === opt ? 'font-medium text-brand-ink' : ''}`}>
+                            {opt === 'all' ? 'All Occasions' : opt}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-6 border-t border-brand-ink/10 bg-brand-surface">
+                  <button 
+                    onClick={() => setIsMobileFilterOpen(false)}
+                    className="w-full bg-brand-ink text-brand-gold py-4 text-xs uppercase tracking-widest font-bold"
+                  >
+                    Apply Filters
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
 
 
 
