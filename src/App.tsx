@@ -2574,7 +2574,7 @@ export default function App() {
     }
 
     return result;
-  }, [storeMode, sortBy, department]);
+   }, [storeMode, sortBy, department, searchQuery, priceRange, material, occasion]);
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
