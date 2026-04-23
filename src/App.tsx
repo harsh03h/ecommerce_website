@@ -2524,22 +2524,9 @@ export default function App() {
     
     // Global Search Query Mode
     if (searchQuery.trim() !== '') {
-      const queryTerms = searchQuery.trim().toLowerCase().split(/\s+/);
-      result = result.filter(product => {
-        return queryTerms.every(term => {
-          // Escape special regex characters in the term
-          const safeTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          // Support matching singular if plural is searched (e.g., 'shirts' -> 'shirt')
-          const singularTerm = safeTerm.endsWith('s') && safeTerm.length > 3 ? safeTerm.slice(0, -1) : safeTerm;
-          
-          // Use word boundaries (\b) so "shirt" doesn't match inside "sweatshirt"
-          // but will still match "T-Shirt" (as hyphen is a boundary) or "Shirt"
-          const regexTerm = new RegExp(`\\b${safeTerm}`, 'i');
-          const regexSingular = new RegExp(`\\b${singularTerm}`, 'i');
-          
-          return regexTerm.test(product.name) || regexSingular.test(product.name);
-        });
-      });
+      result = result.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.trim().toLowerCase())
+      );
     } else {
       // Normal Browsing Mode
       // Filter by Store Mode
@@ -4897,7 +4884,16 @@ export default function App() {
                 <div className="w-full border-t border-brand-ink/10 p-6 md:p-8 bg-brand-surface">
                   <h3 className="text-xl font-medium text-brand-ink mb-6">Similar Products</h3>
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                    {PRODUCTS.filter(p => p.category === selectedProduct.category && p.id !== selectedProduct.id).slice(0, 4).map(product => {
+                    {PRODUCTS.filter(p => {
+                      if (p.id === selectedProduct.id) return false;
+                      if (p.category !== selectedProduct.category) return false;
+                      
+                      const selectedType = selectedProduct.name.split(' ').pop()?.toLowerCase();
+                      const pType = p.name.split(' ').pop()?.toLowerCase();
+                      
+                      // Match same product type (e.g. both end in 'Shirt') or same department
+                      return selectedType === pType || p.department === selectedProduct.department;
+                    }).slice(0, 4).map(product => {
                       const isSaved = wishlist.includes(product.id);
                       return (
                         <div 
