@@ -32,6 +32,10 @@ interface Order {
     zipCode: string;
   };
   paymentMethod?: string;
+    userInfo?: {
+    displayName: string | null;
+    email: string | null;
+  };
 }
 
 export const AdminPanel = ({ user }: { user: User | null }) => {
@@ -141,7 +145,9 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
     (
       (o.id && o.id.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (o.userId && o.userId.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (o.shippingInfo?.fullName && o.shippingInfo.fullName.toLowerCase().includes(searchQuery.toLowerCase()))
+      (o.shippingInfo?.fullName && o.shippingInfo.fullName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (o.userInfo?.displayName && o.userInfo.displayName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (o.userInfo?.email && o.userInfo.email.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   );
 
