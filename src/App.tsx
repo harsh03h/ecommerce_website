@@ -2089,6 +2089,10 @@ export default function App() {
   const [priceRange, setPriceRange] = useState('all');
   const [material, setMaterial] = useState('all');
   const [occasion, setOccasion] = useState('all');
+  const [colorFilter, setColorFilter] = useState('all');
+  const [showNewOnly, setShowNewOnly] = useState(false);
+  const [showPopularOnly, setShowPopularOnly] = useState(false);
+  const [minRating, setMinRating] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [localSearch, setLocalSearch] = useState('');
   
@@ -2554,6 +2558,45 @@ export default function App() {
       // Filter by Occasion
       if (occasion !== 'all') {
         result = result.filter(p => p.occasion === occasion);
+      }
+       // Filter by Color (for clothing)
+      if (colorFilter !== 'all' && storeMode === 'clothing') {
+        result = result.filter(p => {
+          const productName = p.name.toLowerCase();
+          const colorMap: {[key: string]: string[]} = {
+            'black': ['black', 'jet', 'charcoal'],
+            'white': ['white', 'cream', 'ivory'],
+            'red': ['red', 'crimson', 'burgundy'],
+            'blue': ['blue', 'navy', 'indigo'],
+            'green': ['green', 'olive', 'emerald'],
+            'gold': ['gold', 'golden', 'mustard'],
+            'pink': ['pink', 'rose', 'blush'],
+            'purple': ['purple', 'violet', 'lavender']
+          };
+          const colors = colorMap[colorFilter] || [];
+          return colors.some(color => productName.includes(color));
+        });
+      }
+
+      // Filter to show only new products
+      if (showNewOnly) {
+        result = result.filter(p => p.isNew);
+      }
+
+      // Filter to show only popular products
+      if (showPopularOnly) {
+        result = result.filter(p => p.sales > 100);
+      }
+
+      // Filter by minimum rating
+      if (minRating !== 'all') {
+        const ratingThreshold = parseInt(minRating);
+        result = result.filter(p => {
+          const productReviews = reviews[p.id] || [];
+          if (productReviews.length === 0) return false;
+          const avgRating = productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length;
+          return avgRating >= ratingThreshold;
+        });
       }
     }
 
