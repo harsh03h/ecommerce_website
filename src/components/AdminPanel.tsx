@@ -266,33 +266,85 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
             </div>
           </div>
         </div>
-
-        {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 justify-between bg-brand-surface p-4 rounded-xl border border-brand-ink/10 shadow-sm">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-ink/40" />
-            <input 
-              type="text" 
-              placeholder="Search by Order ID, Customer Name..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-brand-ink/10 rounded-lg text-sm bg-transparent focus:outline-none focus:border-brand-gold transition-colors"
-            />
-          </div>
-          <select 
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-brand-ink/10 rounded-lg text-sm bg-transparent focus:outline-none focus:border-brand-gold cursor-pointer"
-          >
-            <option value="all">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="processing">Processing</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-        </div>
       </div>
+
+      {/* Filters */}
+      <div className="bg-brand-surface p-4 rounded-xl border border-brand-ink/10 shadow-sm">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="relative flex-1 max-w-[200px] xl:max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-ink/40" />
+              <input 
+                type="text" 
+                placeholder="Search..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-brand-ink/10 rounded-lg text-sm bg-transparent focus:outline-none focus:border-brand-gold transition-colors"
+              />
+            </div>
+            <div className="flex flex-wrap lg:flex-nowrap gap-3 flex-1">
+              <select 
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="flex-1 min-w-[120px] px-3 py-2 border border-brand-ink/10 rounded-lg text-xs bg-transparent focus:outline-none focus:border-brand-gold cursor-pointer"
+              >
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+
+              <select 
+                value={paymentFilter}
+                onChange={(e) => setPaymentFilter(e.target.value)}
+                className="flex-1 min-w-[120px] px-3 py-2 border border-brand-ink/10 rounded-lg text-xs bg-transparent focus:outline-none focus:border-brand-gold cursor-pointer"
+              >
+                <option value="all">All Payments</option>
+                <option value="cod">Cash on Delivery</option>
+                <option value="upi">UPI</option>
+                <option value="card">Card</option>
+              </select>
+
+              <select 
+                value={priceFilter}
+                onChange={(e) => setPriceFilter(e.target.value)}
+                className="flex-1 min-w-[120px] px-3 py-2 border border-brand-ink/10 rounded-lg text-xs bg-transparent focus:outline-none focus:border-brand-gold cursor-pointer"
+              >
+                <option value="all">All Prices</option>
+                <option value="under-1000">Under ₹1,000</option>
+                <option value="1000-5000">₹1,000 - ₹5,000</option>
+                <option value="5000-10000">₹5,000 - ₹10,000</option>
+                <option value="over-10000">Over ₹10,000</option>
+              </select>
+
+              <select 
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="flex-1 min-w-[120px] px-3 py-2 border border-brand-ink/10 rounded-lg text-xs bg-transparent focus:outline-none focus:border-brand-gold cursor-pointer"
+              >
+                <option value="all">All Dates</option>
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="last-7-days">Last 7 Days</option>
+                <option value="last-30-days">Last 30 Days</option>
+                <option value="last-90-days">Last 90 Days</option>
+              </select>
+               <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setStatusFilter('all');
+                  setPaymentFilter('all');
+                  setPriceFilter('all');
+                  setDateFilter('all');
+                }}
+                className="px-4 py-2 bg-brand-gold text-brand-bg rounded-lg text-sm font-medium hover:bg-brand-gold/90 transition-colors"
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+        </div>
 
       {orderToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/50 backdrop-blur-sm p-4">
