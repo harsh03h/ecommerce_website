@@ -2528,8 +2528,14 @@ export default function App() {
       result = result.filter(p => {
         const searchableText = `${p.name} ${p.category} ${p.department || ''}`.toLowerCase();
         return queryTerms.every(term => {
-          const singularTerm = term.endsWith('s') && term.length > 3 ? term.slice(0, -1) : term;
-          return searchableText.includes(term) || searchableText.includes(singularTerm);
+          // Escape special regex characters in the term just to be safe
+          const safeTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const singularTerm = safeTerm.endsWith('s') && safeTerm.length > 3 ? safeTerm.slice(0, -1) : safeTerm;
+          
+          const regexTerm = new RegExp(`\\b${safeTerm}`, 'i');
+          const regexSingular = new RegExp(`\\b${singularTerm}`, 'i');
+          
+          return regexTerm.test(searchableText) || regexSingular.test(searchableText);
         });
       });
     } else {
