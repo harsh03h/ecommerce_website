@@ -2095,6 +2095,10 @@ export default function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setSearchQuery(localSearch);
+      if (localSearch.trim() !== '' && currentView !== 'home') {
+        setCurrentView('home');
+        document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+      }
     }, 400);
     return () => clearTimeout(timer);
   }, [localSearch]);
@@ -2518,16 +2522,7 @@ export default function App() {
   const filteredProducts = useMemo(() => {
     let result = [...PRODUCTS];
     
-    // Filter by Store Mode
-    if (storeMode === 'clothing') result = result.filter(p => p.category === 'Clothing');
-    if (storeMode === 'jewellery') result = result.filter(p => p.category === 'Jewellery');
-
-    // Filter by Department
-    if (department !== 'All') {
-      result = result.filter(p => p.department === department);
-    }
-
-    // Filter by Search Query
+    // Global Search Query Mode
     if (searchQuery.trim() !== '') {
       const query = searchQuery.toLowerCase();
       result = result.filter(p => 
@@ -2536,6 +2531,16 @@ export default function App() {
         p.category.toLowerCase().includes(query) ||
         (p.department && p.department.toLowerCase().includes(query))
       );
+    } else {
+      // Normal Browsing Mode
+      // Filter by Store Mode
+      if (storeMode === 'clothing') result = result.filter(p => p.category === 'Clothing');
+      if (storeMode === 'jewellery') result = result.filter(p => p.category === 'Jewellery');
+
+      // Filter by Department
+      if (department !== 'All') {
+        result = result.filter(p => p.department === department);
+      }
     }
 
     // Filter by Price Range
