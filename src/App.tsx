@@ -2618,7 +2618,7 @@ export default function App() {
     }
 
     return result;
-   }, [storeMode, sortBy, department, searchQuery, priceRange, material, occasion]);
+  }, [storeMode, sortBy, department, searchQuery, priceRange, material, occasion, colorFilter, showNewOnly, showPopularOnly, minRating]);
 
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -3180,17 +3180,56 @@ export default function App() {
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
             {/* Desktop Filter Sidebar */}
             <div className="hidden lg:block w-48 xl:w-56 flex-shrink-0">
-              <div className="sticky top-24">
+              <div className="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto pr-4 pb-12 custom-scrollbar">
                 <div className="flex items-center justify-between mb-8 pb-4 border-b border-brand-ink/10">
                   <h3 className="font-serif text-xl text-brand-ink">Filters</h3>
-                  {(priceRange !== 'all' || material !== 'all' || occasion !== 'all') && (
+                  {(priceRange !== 'all' || material !== 'all' || occasion !== 'all' || colorFilter !== 'all' || showNewOnly || showPopularOnly || minRating !== 'all') && (
                     <button 
-                      onClick={() => { setPriceRange('all'); setMaterial('all'); setOccasion('all'); }}
+                      onClick={() => { setPriceRange('all'); setMaterial('all'); setOccasion('all'); setColorFilter('all'); setShowNewOnly(false); setShowPopularOnly(false); setMinRating('all'); }}
                       className="text-[10px] uppercase tracking-widest text-brand-ink/50 hover:text-brand-ink transition-colors"
                     >
                       Clear All
                     </button>
                   )}
+                </div>
+
+                {/* Status & Ratings Filters */}
+                <div className="mb-8">
+                  <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Highlights</h4>
+                  <div className="flex flex-col gap-3 text-sm text-brand-ink/80">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <div className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${showNewOnly ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20 group-hover:border-brand-gold'}`}>
+                        {showNewOnly && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
+                      </div>
+                      <input type="checkbox" className="hidden" checked={showNewOnly} onChange={(e) => setShowNewOnly(e.target.checked)} />
+                      <span className={`transition-colors text-[13px] ${showNewOnly ? 'font-medium text-brand-ink' : 'group-hover:text-brand-ink'}`}>New Arrivals</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <div className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${showPopularOnly ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20 group-hover:border-brand-gold'}`}>
+                        {showPopularOnly && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
+                      </div>
+                      <input type="checkbox" className="hidden" checked={showPopularOnly} onChange={(e) => setShowPopularOnly(e.target.checked)} />
+                      <span className={`transition-colors text-[13px] ${showPopularOnly ? 'font-medium text-brand-ink' : 'group-hover:text-brand-ink'}`}>Popular (100+ Sales)</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Rating Filter */}
+                <div className="mb-8">
+                  <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Minimum Rating</h4>
+                  <div className="flex flex-col gap-3 text-sm text-brand-ink/80">
+                    {['all', '4', '3'].map(opt => (
+                      <label key={opt} className="flex items-center gap-3 cursor-pointer group">
+                        <div className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${minRating === opt ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20 group-hover:border-brand-gold'}`}>
+                          {minRating === opt && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
+                        </div>
+                        <input type="radio" name="minrating" className="hidden" checked={minRating === opt} onChange={() => setMinRating(opt)} />
+                        <span className={`capitalize transition-colors text-[13px] ${minRating === opt ? 'font-medium text-brand-ink' : 'group-hover:text-brand-ink'}`}>
+                          {opt === 'all' ? 'Any Rating' : `${opt} Stars & Up`}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Price Filter */}
@@ -3237,6 +3276,38 @@ export default function App() {
                     ))}
                   </div>
                 </div>
+
+                {/* Color Filter (Clothing Only) */}
+                {storeMode === 'clothing' && (
+                  <div className="mb-8">
+                    <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Color</h4>
+                    <div className="flex flex-col gap-3 text-sm text-brand-ink/80">
+                      <label className="flex items-center gap-3 cursor-pointer group">
+                        <div className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${colorFilter === 'all' ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20 group-hover:border-brand-gold'}`}>
+                          {colorFilter === 'all' && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
+                        </div>
+                        <input type="radio" name="color" className="hidden" checked={colorFilter === 'all'} onChange={() => setColorFilter('all')} />
+                        <span className={`transition-colors text-[13px] ${colorFilter === 'all' ? 'font-medium text-brand-ink' : 'group-hover:text-brand-ink'}`}>All Colors</span>
+                      </label>
+                      
+                      {['black', 'white', 'red', 'blue', 'green', 'gold', 'pink', 'purple'].map(opt => (
+                        <label key={opt} className="flex items-center gap-3 cursor-pointer group">
+                          <div className={`w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-colors ${colorFilter === opt ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20 group-hover:border-brand-gold'}`}>
+                            {colorFilter === opt && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
+                          </div>
+                          <input type="radio" name="color" className="hidden" checked={colorFilter === opt} onChange={() => setColorFilter(opt)} />
+                          <div className="flex items-center gap-2">
+                            <span 
+                              className={`w-3 h-3 rounded-full border border-brand-ink/10`} 
+                              style={{ backgroundColor: opt === 'white' ? '#fff' : opt === 'black' ? '#222' : opt === 'gold' ? '#D4AF37' : opt }}
+                            />
+                            <span className={`capitalize transition-colors text-[13px] ${colorFilter === opt ? 'font-medium text-brand-ink' : 'group-hover:text-brand-ink'}`}>{opt}</span>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Occasion Filter */}
                 <div className="mb-8">
@@ -3383,15 +3454,54 @@ export default function App() {
                   </button>
                 </div>
                 
-                <div className="p-6 overflow-y-auto flex-1">
-                  {(priceRange !== 'all' || material !== 'all' || occasion !== 'all') && (
+                <div className="p-6 overflow-y-auto flex-1 custom-scrollbar pr-2 pb-12">
+                  {(priceRange !== 'all' || material !== 'all' || occasion !== 'all' || colorFilter !== 'all' || showNewOnly || showPopularOnly || minRating !== 'all') && (
                     <button 
-                      onClick={() => { setPriceRange('all'); setMaterial('all'); setOccasion('all'); }}
+                      onClick={() => { setPriceRange('all'); setMaterial('all'); setOccasion('all'); setColorFilter('all'); setShowNewOnly(false); setShowPopularOnly(false); setMinRating('all'); }}
                       className="w-full py-3 border border-brand-ink/20 text-brand-ink text-xs uppercase tracking-widest font-medium mb-8 hover:bg-brand-ink/5 transition-colors"
                     >
                       Clear All Filters
                     </button>
                   )}
+
+                  {/* Mobile Highlights */}
+                  <div className="mb-8">
+                    <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Highlights</h4>
+                    <div className="flex flex-col gap-4 text-sm text-brand-ink/80">
+                      <label className="flex items-center gap-3 cursor-pointer">
+                        <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${showNewOnly ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20'}`}>
+                          {showNewOnly && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                        </div>
+                        <input type="checkbox" className="hidden" checked={showNewOnly} onChange={(e) => setShowNewOnly(e.target.checked)} />
+                        <span className={showNewOnly ? 'font-medium text-brand-ink' : ''}>New Arrivals</span>
+                      </label>
+                      <label className="flex items-center gap-3 cursor-pointer">
+                        <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${showPopularOnly ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20'}`}>
+                          {showPopularOnly && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                        </div>
+                        <input type="checkbox" className="hidden" checked={showPopularOnly} onChange={(e) => setShowPopularOnly(e.target.checked)} />
+                        <span className={showPopularOnly ? 'font-medium text-brand-ink' : ''}>Popular (100+ Sales)</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Mobile Rating */}
+                  <div className="mb-8">
+                    <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Minimum Rating</h4>
+                    <div className="flex flex-col gap-4 text-sm text-brand-ink/80">
+                      {['all', '4', '3'].map(opt => (
+                        <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                          <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${minRating === opt ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20'}`}>
+                            {minRating === opt && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                          </div>
+                          <input type="radio" name="mobile-minrating" className="hidden" checked={minRating === opt} onChange={() => setMinRating(opt)} />
+                          <span className={`capitalize ${minRating === opt ? 'font-medium text-brand-ink' : ''}`}>
+                            {opt === 'all' ? 'Any Rating' : `${opt} Stars & Up`}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
 
                   {/* Mobile Price Filter */}
                   <div className="mb-8">
@@ -3437,6 +3547,38 @@ export default function App() {
                       ))}
                     </div>
                   </div>
+
+                  {/* Mobile Color Filter (Clothing Only) */}
+                  {storeMode === 'clothing' && (
+                    <div className="mb-8">
+                      <h4 className="text-xs uppercase tracking-widest font-bold text-brand-ink mb-4">Color</h4>
+                      <div className="flex flex-col gap-4 text-sm text-brand-ink/80">
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${colorFilter === 'all' ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20'}`}>
+                            {colorFilter === 'all' && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                          </div>
+                          <input type="radio" name="mobile-color" className="hidden" checked={colorFilter === 'all'} onChange={() => setColorFilter('all')} />
+                          <span className={colorFilter === 'all' ? 'font-medium text-brand-ink' : ''}>All Colors</span>
+                        </label>
+                        
+                        {['black', 'white', 'red', 'blue', 'green', 'gold', 'pink', 'purple'].map(opt => (
+                          <label key={opt} className="flex items-center gap-3 cursor-pointer">
+                            <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${colorFilter === opt ? 'border-brand-gold bg-brand-gold' : 'border-brand-ink/20'}`}>
+                              {colorFilter === opt && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                            </div>
+                            <input type="radio" name="mobile-color" className="hidden" checked={colorFilter === opt} onChange={() => setColorFilter(opt)} />
+                            <div className="flex items-center gap-2">
+                              <span 
+                                className={`w-3 h-3 rounded-full border border-brand-ink/10`} 
+                                style={{ backgroundColor: opt === 'white' ? '#fff' : opt === 'black' ? '#222' : opt === 'gold' ? '#D4AF37' : opt }}
+                              />
+                              <span className={`capitalize ${colorFilter === opt ? 'font-medium text-brand-ink' : ''}`}>{opt}</span>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Mobile Occasion Filter */}
                   <div className="mb-8">
