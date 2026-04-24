@@ -1977,7 +1977,7 @@ const ProductCard: React.FC<{
       whileHover={{ scale: 1.02, y: -4 }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.3 }}
-      className="group cursor-pointer bg-brand-bg rounded-xl sm:rounded-2xl transition-all duration-300 relative z-0 hover:z-10 flex flex-col h-full"
+      className="group cursor-pointer bg-brand-surface rounded-xl sm:rounded-2xl transition-all duration-300 relative z-0 hover:z-10 flex flex-col h-full border border-brand-ink/5 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
       onClick={() => onSelect(product)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
@@ -2074,7 +2074,7 @@ const ProductCard: React.FC<{
                e.stopPropagation();
                onSelect(product);
              }}
-             className="w-1/2 flex-1 border border-brand-ink/20 text-brand-ink text-[8px] sm:text-[9px] md:text-[10px] uppercase tracking-widest px-1 py-2 md:py-2.5 hover:border-brand-gold hover:text-brand-gold transition-colors font-medium text-center truncate flex justify-center items-center"
+             className="w-1/2 flex-1 border border-brand-ink/20 text-brand-ink text-[10px] uppercase tracking-widest px-1 py-2 md:py-2.5 hover:border-brand-gold hover:text-brand-gold transition-colors font-medium text-center truncate flex justify-center items-center rounded-lg"
           >
             <span className="hidden sm:inline">Quick View</span>
             <span className="sm:hidden">View</span>
@@ -2084,7 +2084,7 @@ const ProductCard: React.FC<{
               e.stopPropagation();
               onAddToCart(e, product.id, selectedVariants);
             }}
-            className="w-1/2 flex-1 bg-brand-ink text-brand-surface text-[8px] sm:text-[9px] md:text-[10px] uppercase tracking-widest px-1 py-2 md:py-2.5 hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium text-center truncate flex justify-center items-center"
+            className="w-1/2 flex-1 bg-brand-ink text-brand-surface text-[10px] uppercase tracking-widest px-1 py-2 md:py-2.5 hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium text-center truncate flex justify-center items-center rounded-lg"
           >
             <span className="hidden sm:inline">Add to Cart</span>
             <span className="sm:hidden">Add</span>
@@ -2883,7 +2883,7 @@ export default function App() {
         </div>
         
         <div className="text-center w-2/4 md:w-1/3 flex flex-col items-center cursor-pointer" onClick={() => setCurrentView('home')}>
-          <h1 className="font-serif text-lg sm:text-xl md:text-3xl leading-none tracking-tight text-brand-gold transition-all truncate w-full">
+          <h1 className="font-serif text-xl sm:text-2xl md:text-4xl leading-none tracking-tight text-brand-gold transition-all truncate w-full uppercase">
             {brandInfo.title}
           </h1>
           <p className="hidden md:block text-[9px] uppercase tracking-[0.2em] mt-1 text-brand-ink/60 transition-all">
@@ -3035,7 +3035,7 @@ export default function App() {
                           </h2>
                           <button 
                             onClick={() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
-                            className="flex items-center gap-3 text-xs md:text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
+                            className="bg-brand-gold text-brand-bg px-8 py-4 text-xs md:text-sm uppercase tracking-widest font-bold hover:bg-brand-ink hover:text-brand-gold transition-colors inline-flex items-center gap-3 group/btn rounded-none w-fit"
                           >
                             Explore Collection
                             <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -3068,7 +3068,7 @@ export default function App() {
                           </h2>
                           <button 
                             onClick={() => { document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }}
-                            className="flex items-center gap-3 text-xs md:text-sm uppercase tracking-widest hover:text-brand-gold transition-colors group/btn"
+                            className="bg-brand-gold text-brand-bg px-8 py-4 text-xs md:text-sm uppercase tracking-widest font-bold hover:bg-brand-ink hover:text-brand-gold transition-colors inline-flex items-center gap-3 group/btn rounded-none w-fit"
                           >
                             Discover Pieces
                             <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -4677,12 +4677,12 @@ export default function App() {
         ) : currentView === 'cart' || currentView === 'checkout' ? (
           <div>
             {/* Header */}
-            <div className="bg-[#2a1306] py-12 md:py-20 px-4 md:px-12 relative overflow-hidden">
+            <div className="bg-brand-surface py-12 md:py-20 px-4 md:px-12 border-b border-brand-ink/10 relative overflow-hidden">
                <div className="max-w-7xl mx-auto relative z-10">
                  <div className="inline-block border border-brand-gold/30 rounded-full px-4 py-1.5 text-[10px] uppercase tracking-widest font-bold mb-4 text-brand-gold">
                    YOUR BAG
                  </div>
-                 <h1 className="text-4xl md:text-5xl font-serif text-white mb-2">
+                 <h1 className="text-4xl md:text-5xl font-serif text-brand-ink mb-2">
                    {currentView === 'cart' ? 'Shopping Cart' : 'Checkout'}
                  </h1>
                  <p className="text-brand-gold/80">{cart.reduce((sum, item) => sum + item.quantity, 0)} items in your cart</p>
@@ -4759,8 +4759,8 @@ export default function App() {
                                       <Trash2 className="w-4 h-4" />
                                     </button>
                                     <div className="text-right">
-                                      <span className="font-bold text-brand-ink text-lg">₹{(product.price * item.quantity).toLocaleString('en-IN')}</span>
-                                      <p className="text-xs text-brand-ink/40">₹{product.price.toLocaleString('en-IN')} each</p>
+                                      <span className="font-bold text-[#da7c44] text-lg">₹{(product.price * item.quantity).toLocaleString('en-IN')}</span>
+                                      <p className="text-xs text-brand-ink/40 line-through">₹{(Math.round(product.price / 0.9) * item.quantity).toLocaleString('en-IN')}</p>
                                     </div>
                                   </div>
                                 </div>
@@ -5195,7 +5195,7 @@ export default function App() {
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-brand-surface border-t md:border border-brand-ink/20 w-full max-w-6xl h-[95vh] md:h-[90vh] flex flex-col shadow-2xl relative rounded-t-2xl md:rounded-none overflow-hidden"
+              className="bg-brand-surface border-t md:border border-brand-ink/10 w-full max-w-6xl h-[95vh] md:h-[90vh] flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative rounded-t-2xl md:rounded-2xl overflow-hidden"
             >
               {/* Header / Close Button */}
               <div className="absolute top-4 right-4 z-50">
@@ -5318,6 +5318,8 @@ export default function App() {
 
                     <div className="flex items-end gap-3 mb-6">
                       <p className="text-2xl md:text-3xl font-medium text-brand-ink">₹{selectedProduct.price.toLocaleString('en-IN')}</p>
+                      <p className="text-sm md:text-base text-brand-ink/40 line-through mb-1">₹{(Math.round(selectedProduct.price / 0.9)).toLocaleString('en-IN')}</p>
+                      <p className="text-sm md:text-base text-green-600 font-medium mb-1">10% OFF</p>
                     </div>
                     
                     {/* Variants */}
@@ -5331,7 +5333,7 @@ export default function App() {
                                 <button
                                   key={option}
                                   onClick={() => setSelectedVariants(prev => ({ ...prev, [variant.name]: option }))}
-                                  className={`px-4 py-2 text-sm font-medium border transition-colors ${
+                                  className={`px-4 py-2 text-sm font-medium border rounded-md transition-colors ${
                                     selectedVariants[variant.name] === option 
                                       ? 'border-brand-gold text-brand-gold bg-brand-gold/5' 
                                       : 'border-brand-ink/20 text-brand-ink hover:border-brand-ink/50'
