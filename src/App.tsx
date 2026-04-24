@@ -2144,6 +2144,25 @@ export default function App() {
   const [ordersPage, setOrdersPage] = useState(1);
   const [orderToCancel, setOrderToCancel] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<{code: string, type: 'percent' | 'flat', value: number} | null>(() => {
+    try {
+      const saved = localStorage.getItem('harsh_emporium_coupon');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [couponError, setCouponError] = useState('');
+  
+  useEffect(() => {
+    if (appliedCoupon) {
+      localStorage.setItem('harsh_emporium_coupon', JSON.stringify(appliedCoupon));
+    } else {
+      localStorage.removeItem('harsh_emporium_coupon');
+    }
+  }, [appliedCoupon]);
+  
   const [checkoutData, setCheckoutData] = useState({
     fullName: '',
     phone: '',
@@ -2413,6 +2432,31 @@ export default function App() {
     }
   };
 
+  const applyCoupon = () => {
+    setCouponError('');
+    const code = couponCode.trim().toUpperCase();
+    if (!code) {
+      setCouponError('Please enter a valid coupon code.');
+      return;
+    }
+    
+    // Sample coupon configurations
+    if (code === 'SAVE20') {
+      setAppliedCoupon({ code: 'SAVE20', type: 'percent', value: 20 });
+    } else if (code === 'FLAT500') {
+      setAppliedCoupon({ code: 'FLAT500', type: 'flat', value: 500 });
+    } else {
+      setCouponError('Invalid coupon code. Try SAVE20 or FLAT500.');
+      return;
+    }
+    setCouponCode('');
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponError('');
+  };
+
   const proceedToCheckout = () => {
     if (!user) {
       setCurrentView('login');
@@ -2447,10 +2491,22 @@ export default function App() {
     
     setIsCheckingOut(true);
     try {
-      const totalAmount = cart.reduce((sum, item) => {
+      const subtotal = cart.reduce((sum, item) => {
         const product = PRODUCTS.find(p => p.id === item.productId);
         return sum + (product?.price || 0) * item.quantity;
       }, 0);
+      
+      const autoDiscount = subtotal * 0.10;
+      let couponDiscount = 0;
+      if (appliedCoupon) {
+        if (appliedCoupon.type === 'percent') {
+          couponDiscount = subtotal * (appliedCoupon.value / 100);
+        } else {
+          couponDiscount = appliedCoupon.value;
+        }
+      }
+      
+      const totalAmount = Math.max(0, subtotal - autoDiscount - couponDiscount);
 
       await fetch('/api/orders', {
         method: 'POST',
@@ -2459,6 +2515,10 @@ export default function App() {
           userId: user.uid,
           items: cart,
           totalAmount,
+          subtotal,
+          autoDiscount,
+          couponCode: appliedCoupon?.code || null,
+          couponDiscount,
           status: 'pending',
           shippingInfo: {
             fullName: checkoutData.fullName,
@@ -2474,6 +2534,7 @@ export default function App() {
       });
       
       setCart([]);
+      setAppliedCoupon(null);
       setCurrentView('orders');
       
       const id = Date.now();
@@ -2659,6 +2720,22 @@ export default function App() {
     clothing: { title: 'Harsh Imporium', sub: 'Luxury Clothing' },
     jewellery: { title: 'Anand Jewellars', sub: 'Fine Jewellery' }
   }[storeMode];
+
+  // Cart calculations
+  const cartSubtotal = cart.reduce((sum, item) => {
+    const product = PRODUCTS.find(p => p.id === item.productId);
+    return sum + (product?.price || 0) * item.quantity;
+  }, 0);
+  const cartAutoDiscount = cartSubtotal * 0.10;
+  let cartCouponDiscount = 0;
+  if (appliedCoupon) {
+    if (appliedCoupon.type === 'percent') {
+      cartCouponDiscount = cartSubtotal * (appliedCoupon.value / 100);
+    } else {
+      cartCouponDiscount = appliedCoupon.value;
+    }
+  }
+  const cartTotalAmount = Math.max(0, cartSubtotal - cartAutoDiscount - cartCouponDiscount);
 
   return (
     <div className="min-h-screen flex flex-col relative">
@@ -4834,23 +4911,74 @@ export default function App() {
                      <div className="space-y-4 text-sm">
                        <div className="flex justify-between items-center">
                          <span className="text-brand-ink/60">Subtotal</span>
-                         <span className="text-brand-ink font-serif font-bold">₹{cart.reduce((s,i) => s + ((PRODUCTS.find(p => p.id === i.productId)?.price || 0) * i.quantity), 0).toLocaleString('en-IN')}</span>
+                         <span className="text-brand-ink font-serif font-bold">₹{cartSubtotal.toLocaleString('en-IN')}</span>
                        </div>
+                       
+                       <div className="flex justify-between items-center text-green-600">
+                         <span className="tracking-widest text-[10px] uppercase font-bold">Auto Discount (10%)</span>
+                         <span className="font-serif font-bold">-₹{cartAutoDiscount.toLocaleString('en-IN')}</span>
+                       </div>
+
+                       {appliedCoupon && (
+                         <div className="flex justify-between items-center text-green-600">
+                           <span className="tracking-widest text-[10px] uppercase font-bold">Coupon ({appliedCoupon.code})</span>
+                           <span className="font-serif font-bold">-₹{cartCouponDiscount.toLocaleString('en-IN')}</span>
+                         </div>
+                       )}
+
                        <div className="flex justify-between items-center">
                          <span className="text-brand-ink/60">Delivery</span>
                          <span className="text-green-600 font-bold uppercase tracking-widest text-[10px]">Free</span>
                        </div>
                        
                        {currentView === 'cart' && (
-                         <div className="bg-green-500/10 text-green-600 px-4 py-3 rounded-lg text-xs font-semibold flex items-center gap-2 mt-4 shadow-sm border border-green-500/20">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                           You saved on delivery charges!
-                         </div>
+                         <>
+                           <div className="bg-green-500/10 text-green-600 px-4 py-3 rounded-lg text-xs font-semibold flex items-center gap-2 mt-4 shadow-sm border border-green-500/20">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                             You saved on delivery charges!
+                           </div>
+                           
+                           <div className="mt-6 pt-6 border-t border-brand-ink/10">
+                             <label className="block text-xs font-bold text-brand-ink/80 mb-2">Have a Coupon?</label>
+                             {!appliedCoupon ? (
+                               <div className="flex gap-2">
+                                 <div className="flex-1">
+                                   <input 
+                                     type="text" 
+                                     placeholder="Enter Code (e.g., SAVE20)" 
+                                     value={couponCode} 
+                                     onChange={(e) => setCouponCode(e.target.value)}
+                                     className="w-full border border-brand-ink/10 rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent uppercase"
+                                   />
+                                   {couponError && <p className="text-red-500 text-[10px] mt-1.5">{couponError}</p>}
+                                 </div>
+                                 <button 
+                                   onClick={applyCoupon}
+                                   className="bg-brand-ink text-brand-surface px-4 rounded-lg font-bold hover:bg-brand-gold transition-colors text-xs whitespace-nowrap h-[46px]"
+                                 >
+                                   Apply
+                                 </button>
+                               </div>
+                             ) : (
+                               <div className="flex justify-between items-center bg-green-500/10 border border-green-500/20 p-3 rounded-lg">
+                                 <div>
+                                   <span className="text-xs font-bold text-green-700">{appliedCoupon.code} applied!</span>
+                                 </div>
+                                 <button 
+                                   onClick={removeCoupon}
+                                   className="text-red-500 hover:text-red-700 text-xs font-bold transition-colors"
+                                 >
+                                   Remove
+                                 </button>
+                               </div>
+                             )}
+                           </div>
+                         </>
                        )}
 
                        <div className="flex justify-between border-t border-brand-ink/10 pt-4 mt-6 items-center">
                          <span className="text-lg font-bold text-brand-ink">Total</span>
-                         <span className="text-2xl font-bold text-[#da7c44] font-serif">₹{cart.reduce((s,i) => s + ((PRODUCTS.find(p => p.id === i.productId)?.price || 0) * i.quantity), 0).toLocaleString('en-IN')}</span>
+                         <span className="text-2xl font-bold text-[#da7c44] font-serif">₹{cartTotalAmount.toLocaleString('en-IN')}</span>
                        </div>
                      </div>
 
