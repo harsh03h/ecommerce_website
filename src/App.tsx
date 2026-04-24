@@ -4205,9 +4205,26 @@ export default function App() {
                                 </tr>` : '';
                               }).join('');
 
-                              const subtotal = order.totalAmount || 0;
-                              const tax = Math.round(subtotal * 0.18);
-                              const total = subtotal + tax;
+                              const orderSubtotal = order.subtotal || order.totalAmount || 0;
+                              const autoDiscount = order.autoDiscount || 0;
+                              const couponDiscount = order.couponDiscount || 0;
+                              const finalTotal = order.totalAmount || orderSubtotal;
+                              
+                              let discountsHtml = '';
+                              if (autoDiscount > 0) {
+                                discountsHtml += `
+                                <div class="totals-row">
+                                  <span style="color: #16a34a;">Auto Discount (10%)</span>
+                                  <span style="color: #16a34a;">-₹${autoDiscount.toLocaleString('en-IN')}</span>
+                                </div>`;
+                              }
+                              if (couponDiscount > 0) {
+                                discountsHtml += `
+                                <div class="totals-row">
+                                  <span style="color: #16a34a;">Coupon Discount (${order.couponCode || 'Promo'})</span>
+                                  <span style="color: #16a34a;">-₹${couponDiscount.toLocaleString('en-IN')}</span>
+                                </div>`;
+                              }
 
                               printWindow.document.write(`
                                 <!DOCTYPE html>
@@ -4448,15 +4465,16 @@ export default function App() {
                                       <div class="totals">
                                         <div class="totals-row">
                                           <span>Subtotal</span>
-                                          <span>₹${subtotal.toLocaleString('en-IN')}</span>
+                                          <span>₹${orderSubtotal.toLocaleString('en-IN')}</span>
                                         </div>
+                                        ${discountsHtml}
                                         <div class="totals-row">
-                                          <span>Estimated Tax (18%)</span>
-                                          <span>₹${tax.toLocaleString('en-IN')}</span>
+                                          <span>Delivery</span>
+                                          <span style="color: #16a34a; font-weight: 600; text-transform: uppercase;">Free</span>
                                         </div>
                                         <div class="totals-row final">
                                           <span>Total</span>
-                                          <span>₹${total.toLocaleString('en-IN')}</span>
+                                          <span>₹${finalTotal.toLocaleString('en-IN')}</span>
                                         </div>
                                       </div>
 
