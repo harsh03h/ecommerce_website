@@ -16,6 +16,18 @@ const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-key';
 app.use(cors());
 app.use(express.json());
 
+// Global error handling middleware to ensure JSON responses
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Unhandled error:', err);
+  if (res.headersSent) {
+    return next(err);
+  }
+  res.status(err.status || 500).json({ 
+    error: err.message || 'Internal server error',
+    details: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  });
+});
+
 // MongoDB connection
 let MONGODB_URI = process.env.MONGODB_URI;
 let dbConnectionError = "";
