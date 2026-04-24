@@ -2491,12 +2491,18 @@ export default function App() {
     
     setIsCheckingOut(true);
     try {
+      const mrpTotal = cart.reduce((sum, item) => {
+        const product = PRODUCTS.find(p => p.id === item.productId);
+        return sum + Math.round((product?.price || 0) / 0.9) * item.quantity;
+      }, 0);
+      
       const subtotal = cart.reduce((sum, item) => {
         const product = PRODUCTS.find(p => p.id === item.productId);
         return sum + (product?.price || 0) * item.quantity;
       }, 0);
       
-      const autoDiscount = subtotal * 0.10;
+      const discountOnMrp = mrpTotal - subtotal;
+      
       let couponDiscount = 0;
       if (appliedCoupon) {
         if (appliedCoupon.type === 'percent') {
@@ -2506,7 +2512,7 @@ export default function App() {
         }
       }
       
-      const totalAmount = Math.max(0, subtotal - autoDiscount - couponDiscount);
+      const totalAmount = Math.max(0, subtotal - couponDiscount);
 
       await fetch('/api/orders', {
         method: 'POST',
@@ -2515,8 +2521,9 @@ export default function App() {
           userId: user.uid,
           items: cart,
           totalAmount,
+          mrpTotal,
           subtotal,
-          autoDiscount,
+          discountOnMrp,
           couponCode: appliedCoupon?.code || null,
           couponDiscount,
           status: 'pending',
@@ -2722,11 +2729,18 @@ export default function App() {
   }[storeMode];
 
   // Cart calculations
+  const cartMrpTotal = cart.reduce((sum, item) => {
+    const product = PRODUCTS.find(p => p.id === item.productId);
+    return sum + Math.round((product?.price || 0) / 0.9) * item.quantity;
+  }, 0);
+  
   const cartSubtotal = cart.reduce((sum, item) => {
     const product = PRODUCTS.find(p => p.id === item.productId);
     return sum + (product?.price || 0) * item.quantity;
   }, 0);
-  const cartAutoDiscount = cartSubtotal * 0.10;
+  
+  const cartDiscountOnMrp = cartMrpTotal - cartSubtotal;
+
   let cartCouponDiscount = 0;
   if (appliedCoupon) {
     if (appliedCoupon.type === 'percent') {
@@ -2735,7 +2749,7 @@ export default function App() {
       cartCouponDiscount = appliedCoupon.value;
     }
   }
-  const cartTotalAmount = Math.max(0, cartSubtotal - cartAutoDiscount - cartCouponDiscount);
+  const cartTotalAmount = Math.max(0, cartSubtotal - cartCouponDiscount);
 
   return (
     <div className="min-h-screen flex flex-col relative">
@@ -4205,8 +4219,9 @@ export default function App() {
                                 </tr>` : '';
                               }).join('');
 
+                              const orderMrpTotal = order.mrpTotal || order.subtotal || order.totalAmount || 0;
                               const orderSubtotal = order.subtotal || order.totalAmount || 0;
-                              const autoDiscount = order.autoDiscount || 0;
+                              const autoDiscount = order.discountOnMrp || order.autoDiscount || 0;
                               const couponDiscount = order.couponDiscount || 0;
                               const finalTotal = order.totalAmount || orderSubtotal;
                               
@@ -4214,7 +4229,7 @@ export default function App() {
                               if (autoDiscount > 0) {
                                 discountsHtml += `
                                 <div class="totals-row">
-                                  <span style="color: #16a34a;">Auto Discount (10%)</span>
+                                  <span style="color: #16a34a;">Discount on MRP</span>
                                   <span style="color: #16a34a;">-₹${autoDiscount.toLocaleString('en-IN')}</span>
                                 </div>`;
                               }
@@ -4456,7 +4471,7 @@ export default function App() {
                                                 ${variantsHtml}
                                               </td>
                                               <td style="text-align: center; color: #666">${item.quantity}</td>
-                                              <td style="text-align: right; color: var(--ink); font-weight: 500">₹${(p.price * item.quantity).toLocaleString('en-IN')}</td>
+                                              <td style="text-align: right; color: var(--ink); font-weight: 500">₹${(Math.round(p.price / 0.9) * item.quantity).toLocaleString('en-IN')}</td>
                                             </tr>` : '';
                                           }).join('')}
                                         </tbody>
@@ -4464,8 +4479,8 @@ export default function App() {
 
                                       <div class="totals">
                                         <div class="totals-row">
-                                          <span>Subtotal</span>
-                                          <span>₹${orderSubtotal.toLocaleString('en-IN')}</span>
+                                          <span>Total MRP</span>
+                                          <span>₹${orderMrpTotal.toLocaleString('en-IN')}</span>
                                         </div>
                                         ${discountsHtml}
                                         <div class="totals-row">
@@ -4473,7 +4488,7 @@ export default function App() {
                                           <span style="color: #16a34a; font-weight: 600; text-transform: uppercase;">Free</span>
                                         </div>
                                         <div class="totals-row final">
-                                          <span>Total</span>
+                                          <span>Total Amount</span>
                                           <span>₹${finalTotal.toLocaleString('en-IN')}</span>
                                         </div>
                                       </div>
@@ -4895,7 +4910,10 @@ export default function App() {
                                    </span>
                                  )}
                                </div>
-                               <span className="font-bold text-brand-ink font-serif whitespace-nowrap mt-0.5">₹{(product.price * item.quantity).toLocaleString('en-IN')}</span>
+                               <div className="flex flex-col items-end whitespace-nowrap mt-0.5">
+                                 <span className="font-bold text-[#da7c44] font-serif text-sm">₹{(product.price * item.quantity).toLocaleString('en-IN')}</span>
+                                 <span className="text-[10px] text-brand-ink/40 line-through">₹{(Math.round(product.price / 0.9) * item.quantity).toLocaleString('en-IN')}</span>
+                               </div>
                              </div>
                            );
                          })}
@@ -4917,7 +4935,10 @@ export default function App() {
                                   )}
                                   <div className="flex justify-between items-end mt-1.5">
                                     <div className="text-[10px] text-brand-ink/50 uppercase tracking-widest">Qty: {item.quantity}</div>
-                                    <div className="text-xs font-bold text-[#da7c44] font-serif">₹{(product.price * item.quantity).toLocaleString('en-IN')}</div>
+                                    <div className="flex flex-col items-end">
+                                      <div className="text-xs font-bold text-[#da7c44] font-serif">₹{(product.price * item.quantity).toLocaleString('en-IN')}</div>
+                                      <div className="text-[10px] text-brand-ink/40 line-through mt-0.5">₹{(Math.round(product.price / 0.9) * item.quantity).toLocaleString('en-IN')}</div>
+                                    </div>
                                   </div>
                                </div>
                              </div>
@@ -4928,13 +4949,13 @@ export default function App() {
 
                      <div className="space-y-4 text-sm">
                        <div className="flex justify-between items-center">
-                         <span className="text-brand-ink/60">Subtotal</span>
-                         <span className="text-brand-ink font-serif font-bold">₹{cartSubtotal.toLocaleString('en-IN')}</span>
+                         <span className="text-brand-ink/60">Total MRP</span>
+                         <span className="text-brand-ink font-serif font-bold">₹{cartMrpTotal.toLocaleString('en-IN')}</span>
                        </div>
                        
                        <div className="flex justify-between items-center text-green-600">
-                         <span className="tracking-widest text-[10px] uppercase font-bold">Auto Discount (10%)</span>
-                         <span className="font-serif font-bold">-₹{cartAutoDiscount.toLocaleString('en-IN')}</span>
+                         <span className="tracking-widest text-[10px] uppercase font-bold">Discount on MRP</span>
+                         <span className="font-serif font-bold">-₹{cartDiscountOnMrp.toLocaleString('en-IN')}</span>
                        </div>
 
                        {appliedCoupon && (
