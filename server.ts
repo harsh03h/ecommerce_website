@@ -101,11 +101,12 @@ async function connectDB() {
 // Automatically initiate connection on startup
 connectDB();
 
-app.use(async (req, _res, next) => {
+app.use((req, res, next) => {
   if (req.path.startsWith('/api')) {
-    await connectDB();
+    connectDB().then(() => next()).catch(next);
+  } else {
+    next();
   }
-  next();
 });
 
 // Mongoose Models
@@ -234,10 +235,11 @@ app.post('/api/auth/register', async (req, res) => {
     user = new User({ email, password: hashedPassword, displayName, userId });
     await user.save();
     
-    const token = jwt.sign({ id: userId, email }, JWT_SECRET, { expiresIn: '7d' });
-    res.json({ token, user: { uid: userId, email, displayName, isAdmin: email === 'harshgupta07h@gmail.com' } });
-  } catch (error) {
-    res.status(500).json({ error: "Registration failed" });
+    const token = jwt.sign({ id: user.userId, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+    res.json({ token, user: { uid: user.userId, email: user.email, displayName: user.displayName, isAdmin: user.email === 'harshgupta07h@gmail.com' } });
+  } catch (error: any) {
+    console.error("Registration error:", error.message || error);
+    res.status(500).json({ error: "Registration failed: " + (error.message || 'Unknown error') });
   }
 });
 
@@ -274,8 +276,9 @@ app.post('/api/auth/login', async (req, res) => {
     
     const token = jwt.sign({ id: user.userId, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, user: { uid: user.userId, email: user.email, displayName: user.displayName, isAdmin: user.email === 'harshgupta07h@gmail.com' } });
-  } catch (error) {
-    res.status(500).json({ error: "Login failed" });
+  } catch (error: any) {
+    console.error("Login error:", error.message || error);
+    res.status(500).json({ error: "Login failed: " + (error.message || 'Unknown error') });
   }
 });
 
@@ -290,8 +293,9 @@ app.get('/api/auth/me', async (req, res) => {
     if (!user) return res.status(404).json({ error: "User not found" });
     
     res.json({ user: { uid: user.userId, email: user.email, displayName: user.displayName, isAdmin: user.email === 'harshgupta07h@gmail.com' } });
-  } catch (error) {
-    res.status(401).json({ error: "Invalid token" });
+  } catch (error: any) {
+    console.error("Auth me error:", error.message || error);
+    res.status(401).json({ error: "Invalid token: " + (error.message || 'Unknown error') });
   }
 });
 
