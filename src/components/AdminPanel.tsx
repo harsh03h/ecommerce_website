@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Clock, CheckCircle, Truck, XCircle, FileText, Printer, ChevronDown, ChevronUp, Search, RefreshCw, DollarSign, TrendingUp } from 'lucide-react';
+import { Package, XCircle, FileText, Printer, ChevronDown, ChevronUp, Search, RefreshCw, DollarSign, TrendingUp } from 'lucide-react';
 import { PRODUCTS } from '../App';
 
 export interface User {
@@ -93,7 +93,7 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
     return () => clearInterval(interval);
   }, [user]);
 
-  const updateOrderStatus = async (userId: string, orderId: string, newStatus: string) => {
+  const updateOrderStatus = async (_userId: string, orderId: string, newStatus: string) => {
     try {
       setActionMessage('');
       const response = await fetch(`/api/orders/${orderId}/status`, {

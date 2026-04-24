@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, Search, ShoppingBag, ArrowRight, SlidersHorizontal, Star, X, User as UserIcon, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles, Trash2, CreditCard, Banknote, Smartphone, Check, Filter } from 'lucide-react';
+import { Menu, Search, ShoppingBag, ArrowRight, Star, X, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles, Trash2, CreditCard, Banknote, Smartphone, Check, Filter } from 'lucide-react';
 
 import { Login } from './components/Login';
 import { AdminPanel } from './components/AdminPanel';
@@ -1939,8 +1939,7 @@ const ProductCard: React.FC<{
   onAddToCart 
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>(() => {
+  const [selectedVariants] = useState<Record<string, string>>(() => {
     const defaults: Record<string, string> = {};
     if (product.variants) {
       product.variants.forEach(v => {
@@ -1979,9 +1978,7 @@ const ProductCard: React.FC<{
       transition={{ duration: 0.3 }}
       className="group cursor-pointer bg-brand-surface rounded-xl sm:rounded-2xl transition-all duration-300 relative z-0 hover:z-10 flex flex-col h-full border border-brand-ink/5 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
       onClick={() => onSelect(product)}
-      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
-        setIsHovered(false);
         setCurrentImageIndex(0);
       }}
     >
@@ -4207,18 +4204,6 @@ export default function App() {
                             onClick={() => {
                               const printWindow = window.open('', '_blank');
                             if (printWindow) {
-                              const productDetails = (order.items || []).map((item: any) => {
-                                const p = PRODUCTS.find(p => p.id === item.productId);
-                                let variantsHtml = '';
-                                if (item.variants && Object.keys(item.variants).length > 0) {
-                                  variantsHtml = `<br/><span style="font-size: 10px; color: #666; text-transform: uppercase;">${Object.entries(item.variants).map(([k,v]) => `${k}: ${v}`).join(' | ')}</span>`;
-                                }
-                                return p ? `<tr>
-                                  <td style="padding: 12px; border-bottom: 1px solid #ddd;">${p.name} (Qty: ${item.quantity})${variantsHtml}</td>
-                                  <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: right;">₹${(p.price * item.quantity).toLocaleString('en-IN')}</td>
-                                </tr>` : '';
-                              }).join('');
-
                               const orderMrpTotal = order.mrpTotal || order.subtotal || order.totalAmount || 0;
                               const orderSubtotal = order.subtotal || order.totalAmount || 0;
                               const autoDiscount = order.discountOnMrp || order.autoDiscount || 0;
@@ -4671,7 +4656,7 @@ export default function App() {
             </AnimatePresence>
           </section>
         ) : currentView === 'login' ? (
-          <Login onLoginSuccess={(view, token, userData) => { setCurrentView(view); setUser(userData); }} />
+          <Login onLoginSuccess={(view, _token, userData) => { setCurrentView(view); setUser(userData); }} />
         ) : currentView === 'admin' && user?.isAdmin ? (
           <AdminPanel user={user} />
         ) : currentView === 'cart' || currentView === 'checkout' ? (

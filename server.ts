@@ -22,7 +22,7 @@ let dbConnectionError = "";
 
 if (MONGODB_URI && MONGODB_URI.startsWith('mongodb+srv://')) {
   try {
-    const [prefix, rest] = MONGODB_URI.split('mongodb+srv://');
+    const [, rest] = MONGODB_URI.split('mongodb+srv://');
     const atIndices = [];
     for (let i = 0; i < rest.length; i++) {
       if (rest[i] === '@') atIndices.push(i);
@@ -89,7 +89,7 @@ async function connectDB() {
 // Automatically initiate connection on startup
 connectDB();
 
-app.use(async (req, res, next) => {
+app.use(async (req, _res, next) => {
   if (req.path.startsWith('/api')) {
     await connectDB();
   }
@@ -148,8 +148,7 @@ app.get('/api/auth/google/url', (req, res) => {
 });
 
 app.get(['/api/auth/callback', '/api/auth/callback/'], async (req, res) => {
-  const { code, state } = req.query; // we pass redirect URL via state if needed, or rely on URL
-  const redirectUri = req.query.redirectUri || (req.headers.referer ? new URL('/api/auth/callback', req.headers.referer).toString() : '');
+  const { code } = req.query; // we pass redirect URL via state if needed, or rely on URL
   
   try {
     // If not exchanging token server-side, we can just pass the code to the parent window
@@ -355,7 +354,7 @@ app.get('/api/orders/:userId', async (req, res) => {
   }
 });
 
-app.get('/api/admin/orders', async (req, res) => {
+app.get('/api/admin/orders', async (_req, res) => {
   if (mongoose.connection.readyState !== 1) return res.status(503).json({ error: "DB not connected" });
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
@@ -410,7 +409,7 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*all', (req, res) => {
+    app.get('*all', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
