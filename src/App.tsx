@@ -1940,6 +1940,17 @@ const ProductCard: React.FC<{
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>(() => {
+    const defaults: Record<string, string> = {};
+    if (product.variants) {
+      product.variants.forEach(v => {
+        if (v.options && v.options.length > 0) {
+          defaults[v.name] = v.options[0];
+        }
+      });
+    }
+    return defaults;
+  });
 
   const avgRating = reviews.length > 0 
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length 
@@ -1977,12 +1988,12 @@ const ProductCard: React.FC<{
       <div className="relative aspect-[4/5] overflow-hidden mb-3 md:mb-4 bg-brand-surface rounded-t-xl sm:rounded-t-2xl">
         <div className="absolute top-2 left-2 md:top-4 md:left-4 z-10 flex flex-col gap-1.5">
           {product.isNew && (
-            <div className="bg-brand-ink text-brand-surface text-[8px] md:text-[10px] uppercase tracking-widest px-2 py-0.5 md:px-3 md:py-1 font-bold shadow-sm">
+            <div className="bg-brand-ink text-brand-surface text-[8px] md:text-[10px] uppercase tracking-widest px-2 py-0.5 md:px-3 md:py-1 font-bold shadow-sm w-fit">
               New
             </div>
           )}
           {product.sales > 400 && (
-            <div className="bg-brand-gold text-brand-bg text-[8px] md:text-[10px] uppercase tracking-widest px-2 py-0.5 md:px-3 md:py-1 font-bold shadow-sm">
+            <div className="bg-brand-gold text-brand-bg text-[8px] md:text-[10px] uppercase tracking-widest px-2 py-0.5 md:px-3 md:py-1 font-bold shadow-sm w-fit">
               Sale
             </div>
           )}
@@ -2041,7 +2052,7 @@ const ProductCard: React.FC<{
       </div>
       <div className="flex flex-col gap-1.5 md:gap-2 flex-grow px-1.5 md:px-2 pb-2">
         <div className="flex flex-col xl:flex-row justify-between items-start gap-1">
-          <div className="flex-1 w-full truncate">
+          <div className="flex-1 w-full truncate pr-1">
             <p className="text-[7px] sm:text-[8px] md:text-[10px] uppercase tracking-widest text-brand-gold mb-0.5 md:mb-1">{product.category}</p>
             <h4 className="font-serif text-[10px] sm:text-xs md:text-lg text-brand-ink truncate leading-tight w-full" title={product.name}>{product.name}</h4>
             {reviews.length > 0 && (
@@ -2051,9 +2062,12 @@ const ProductCard: React.FC<{
               </div>
             )}
           </div>
-          <p className="text-[10px] sm:text-[11px] md:text-sm font-medium tracking-wider text-brand-ink/80 pt-0.5 whitespace-nowrap">₹{product.price.toLocaleString('en-IN')}</p>
+          <div className="flex flex-row items-center gap-1.5 xl:w-auto mt-1 xl:mt-0 pt-0.5">
+            <p className="text-[10px] sm:text-[11px] md:text-sm font-medium tracking-wider text-[#da7c44] whitespace-nowrap">₹{product.price.toLocaleString('en-IN')}</p>
+            <p className="text-[8px] sm:text-[9px] md:text-[10px] text-brand-ink/40 line-through whitespace-nowrap font-medium mt-[1px]">₹{Math.round(product.price / 0.9).toLocaleString('en-IN')}</p>
+          </div>
         </div>
-        
+
         <div className="flex flex-row gap-1.5 md:gap-2 mt-auto pt-3 w-full">
           <button 
              onClick={(e) => {
@@ -2068,7 +2082,7 @@ const ProductCard: React.FC<{
           <button 
             onClick={(e) => {
               e.stopPropagation();
-              onAddToCart(e, product.id);
+              onAddToCart(e, product.id, selectedVariants);
             }}
             className="w-1/2 flex-1 bg-brand-ink text-brand-surface text-[8px] sm:text-[9px] md:text-[10px] uppercase tracking-widest px-1 py-2 md:py-2.5 hover:bg-brand-gold hover:text-brand-bg transition-colors font-medium text-center truncate flex justify-center items-center"
           >
