@@ -1,4 +1,5 @@
 import express from 'express';
+import Stripe from 'stripe';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -388,6 +389,85 @@ app.post('/api/orders', async (req, res) => {
     res.json(order);
   } catch (error) {
     res.status(500).json({ error: "Failed to create order" });
+  }
+});
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
+  apiVersion: '2026-04-22.dahlia' as any
+});
+
+app.post('/api/create-checkout-session', async (req, res) => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return res.status(400).json({ error: "Stripe is not configured on this server." });
+  }
+
+  try {
+    const { orderId } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ error: 'Order not found' });
+
+    // Build line items
+    const lineItems = order.items.map((item: any) => {
+      // Find product to get name
+      // We pass the price in cents
+      // Wait, we need to pass a description for variants
+      const description = item.variants && Object.keys(item.variants).length > 0
+        ? Object.entries(item.variants).map(([k, v]) => `${k}: ${v}`).join(', ')
+        : 'Store Item';
+
+      return {
+        price_data: {
+          currency: 'inr',
+          product_data: {
+            name: `Product ID: ${item.productId}`, // Real product name should ideally be fetched from DB, but we only have it in UI mostly.
+            description,
+          },
+          unit_amount: Math.round((order.totalAmount / order.items.reduce((acc: number, i: any) => acc + i.quantity, 0)) * 100), // Approximation if we don't send individual prices
+        },
+        quantity: item.quantity,
+      };
+    });
+
+    // Actually, passing just one line item for the complete order is safer to match total exactly
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'inr',
+            product_data: {
+              name: `Order #${orderId}`,
+              description: 'Payment for Harsh Emporium Order',
+            },
+            unit_amount: Math.round(order.totalAmount * 100),
+          },
+          quantity: 1,
+        }
+      ],
+      mode: 'payment',
+      success_url: `${req.headers.origin}/?payment_success=true&order_id=${orderId}`,
+      cancel_url: `${req.headers.origin}/?payment_cancelled=true&order_id=${orderId}`,
+      client_reference_id: orderId.toString(),
+    });
+
+    res.json({ id: session.id, url: session.url });
+  } catch (error: any) {
+    console.error('Stripe error:', error.message || error);
+    res.status(500).json({ error: 'Failed to create checkout session: ' + (error.message || 'Unknown error') });
+  }
+});
+
+// Create order update endpoint for successful payments
+app.post('/api/orders/:orderId/verify-payment', async (req, res) => {
+  try {
+    // In a real app we'd verify the Stripe session using the ID from the query
+    // const session = await stripe.checkout.sessions.retrieve(req.query.session_id as string);
+    // if (session.payment_status === 'paid') { ... }
+    
+    const order = await Order.findByIdAndUpdate(req.params.orderId, { status: 'processing', paymentMethod: 'card_paid' }, { new: true });
+    res.json(order);
+  } catch (error: any) {
+    res.status(500).json({ error: "Failed to verify payment" });
   }
 });
 

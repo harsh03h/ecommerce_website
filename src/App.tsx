@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import QRCode from 'react-qr-code';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, Search, ShoppingBag, ArrowRight, Star, X, Heart, Share2, Facebook, Twitter, ChevronLeft, ChevronRight, Sun, Moon, ShieldCheck, Truck, RefreshCw, Headphones, ShoppingCart, PackageOpen, MapPin, Phone, Mail, Clock, Sparkles, Trash2, CreditCard, Banknote, Smartphone, Check, Filter } from 'lucide-react';
 
@@ -2193,16 +2194,7 @@ export default function App() {
     
     if (!checkoutData.state.trim()) errors.state = "State is required";
 
-    if (checkoutData.paymentMethod === 'card') {
-      if (!checkoutData.cardNumber.trim()) errors.cardNumber = "Card number is required";
-      else if (!/^\d{16}$/.test(checkoutData.cardNumber.replace(/\D/g, ''))) errors.cardNumber = "Card number must be 16 digits";
-      
-      if (!checkoutData.expiry.trim()) errors.expiry = "Expiry date is required";
-      else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(checkoutData.expiry)) errors.expiry = "Use MM/YY format";
-
-      if (!checkoutData.cvv.trim()) errors.cvv = "CVV is required";
-      else if (!/^\d{3,4}$/.test(checkoutData.cvv)) errors.cvv = "Invalid CVV";
-    }
+    // Note: Card validation is no longer needed locally as Stripe will handle it securely.
     
     setCheckoutErrors(errors);
   }, [checkoutData]);
@@ -2344,6 +2336,33 @@ export default function App() {
       setOrders([]);
     }
   }, [user]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('payment_success') === 'true') {
+      const orderId = params.get('order_id');
+      if (orderId) {
+        fetch(`/api/orders/${orderId}/verify-payment`, { method: 'POST' })
+          .then(() => {
+            setCart([]);
+            setAppliedCoupon(null);
+            setCurrentView('orders');
+            const id = Date.now();
+            setToast({ message: "Payment successful! Order processed.", id });
+            setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
+          })
+          .catch(console.error);
+        
+        // Remove params from URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    } else if (params.get('payment_cancelled') === 'true') {
+      const id = Date.now();
+      setToast({ message: "Payment was cancelled.", id });
+      setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
 
   const toggleWishlist = async (e: React.MouseEvent, productId: string) => {
     e.stopPropagation();
@@ -2511,7 +2530,7 @@ export default function App() {
       
       const totalAmount = Math.max(0, subtotal - couponDiscount);
 
-      await fetch('/api/orders', {
+      const response = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2536,6 +2555,35 @@ export default function App() {
           paymentMethod: checkoutData.paymentMethod
         })
       });
+      
+      const orderData = await response.json();
+
+      if (checkoutData.paymentMethod === 'card') {
+        try {
+          const stripeRes = await fetch('/api/create-checkout-session', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ orderId: orderData._id || orderData.id })
+          });
+          const stripeData = await stripeRes.json();
+          if (stripeData.url) {
+            window.location.href = stripeData.url;
+            return; // Exit here, let Stripe redirect happen
+          } else if (stripeData.error) {
+             console.error("Stripe Checkout Error:", stripeData.error);
+             const id = Date.now();
+             setToast({ message: stripeData.error, id });
+             setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
+             return;
+          }
+        } catch (err) {
+           console.error("Stripe error", err);
+           const id = Date.now();
+           setToast({ message: "Payment setup failed.", id });
+           setTimeout(() => setToast(prev => prev?.id === id ? null : prev), 3000);
+           return;
+        }
+      }
       
       setCart([]);
       setAppliedCoupon(null);
@@ -4844,29 +4892,35 @@ export default function App() {
                               <div className="text-xs text-brand-ink/60 mt-1">Visa, MasterCard, Amex, RuPay</div>
                             </div>
                           </label>
+                          {checkoutData.paymentMethod === 'upi' && (
+                            <div className="mt-4 pl-12 pr-4 space-y-3">
+                              <div className="text-sm text-brand-ink/80">
+                                Scan this QR code using any UPI app to pay <span className="font-bold">₹{cartTotalAmount.toLocaleString('en-IN')}</span>:
+                              </div>
+                              <div className="bg-white p-4 inline-block rounded-xl border border-brand-ink/10 shadow-sm relative group overflow-hidden">
+                                <QRCode 
+                                  value={`upi://pay?pa=harsh03h@jio&pn=Harsh%20Emporium&am=${cartTotalAmount}&cu=INR`}
+                                  size={160}
+                                  level="M"
+                                />
+                                <div className="absolute inset-0 bg-white/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                  <div className="text-center">
+                                    <Sparkles className="w-6 h-6 mx-auto text-brand-gold mb-1" />
+                                    <span className="text-xs font-bold text-brand-ink uppercase tracking-widest">Pay securely</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-sm font-bold text-brand-ink">
+                                UPI ID: <span className="text-[#da7c44] font-serif tracking-wider">harsh03h@jio</span>
+                              </div>
+                              <div className="text-xs text-brand-ink/60 bg-brand-ink/5 p-3 rounded-lg border border-brand-ink/10">
+                                After making the payment, click <strong>"Place Order"</strong> below to confirm your purchase. Our team will verify your transaction.
+                              </div>
+                            </div>
+                          )}
                           {checkoutData.paymentMethod === 'card' && (
-                            <div className="mt-4 pl-12 pr-4 space-y-4">
-                              <div>
-                                <label className="block text-xs font-bold text-brand-ink/80 mb-1">Card Number *</label>
-                                <input type="text" maxLength={16} placeholder="0000 0000 0000 0000" className={`w-full border ${checkoutErrors.cardNumber && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.cardNumber} onChange={e => setCheckoutData({...checkoutData, cardNumber: e.target.value.replace(/\D/g, '')})} />
-                                {checkoutErrors.cardNumber && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.cardNumber}</p>}
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="block text-xs font-bold text-brand-ink/80 mb-1">Expiry (MM/YY) *</label>
-                                  <input type="text" maxLength={5} placeholder="MM/YY" className={`w-full border ${checkoutErrors.expiry && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.expiry} onChange={e => {
-                                    let val = e.target.value.replace(/\D/g, '');
-                                    if (val.length >= 2) val = val.substring(0, 2) + '/' + val.substring(2, 4);
-                                    setCheckoutData({...checkoutData, expiry: val});
-                                  }} />
-                                  {checkoutErrors.expiry && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.expiry}</p>}
-                                </div>
-                                <div>
-                                  <label className="block text-xs font-bold text-brand-ink/80 mb-1">CVV *</label>
-                                  <input type="password" maxLength={4} placeholder="123" className={`w-full border ${checkoutErrors.cvv && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} value={checkoutData.cvv} onChange={e => setCheckoutData({...checkoutData, cvv: e.target.value.replace(/\D/g, '')})} />
-                                  {checkoutErrors.cvv && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.cvv}</p>}
-                                </div>
-                              </div>
+                            <div className="mt-4 pl-12 pr-4 text-sm text-brand-ink/80">
+                              You will be redirected to a secure Stripe payment page to complete your purchase after clicking "Place Order".
                             </div>
                           )}
                         </div>
