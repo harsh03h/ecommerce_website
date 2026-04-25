@@ -32,7 +32,10 @@ interface Order {
     zipCode: string;
   };
   paymentMethod?: string;
-    userInfo?: {
+  paymentDetails?: {
+    upiTransactionId?: string;
+  };
+  userInfo?: {
     displayName: string | null;
     email: string | null;
   };
@@ -410,8 +413,36 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                 <p className="text-brand-ink/60 font-medium mb-1">Invoice Details:</p>
                 <p className="text-brand-ink/80"><span className="font-medium text-brand-ink">Order ID:</span> {selectedBill.id}</p>
                 <p className="text-brand-ink/80"><span className="font-medium text-brand-ink">Date:</span> {selectedBill.createdAt?.toDate ? selectedBill.createdAt.toDate().toLocaleDateString() : 'N/A'}</p>
-                <p className="text-brand-ink/80"><span className="font-medium text-brand-ink">Payment Method:</span> {selectedBill.paymentMethod || 'Credit Card'}</p>
-                <p className="text-brand-ink/80"><span className="font-medium text-brand-ink">Status:</span> {selectedBill.status.toUpperCase()}</p>
+                <div className="text-brand-ink/80 mt-1">
+                  <span className="font-medium text-brand-ink">Payment Method:</span><br/>
+                  {selectedBill.paymentMethod === 'upi' ? (
+                    <span>
+                      UPI 
+                      {selectedBill.paymentDetails?.upiTransactionId && (
+                        <span className="block text-xs text-brand-ink/60 font-mono mt-0.5 bg-brand-ink/5 border border-brand-ink/10 px-1.5 py-0.5 rounded-sm w-fit ml-auto">
+                          UTR: {selectedBill.paymentDetails.upiTransactionId}
+                        </span>
+                      )}
+                    </span>
+                  ) : selectedBill.paymentMethod === 'card' ? (
+                    <span>
+                      Credit/Debit Card
+                      <span className="block text-xs text-brand-ink/60 mt-0.5 bg-brand-ink/5 border border-brand-ink/10 px-1.5 py-0.5 rounded-sm w-fit ml-auto">
+                        Stripe Secured
+                      </span>
+                    </span>
+                  ) : selectedBill.paymentMethod === 'cod' ? (
+                    <span>
+                      Cash on Delivery
+                      <span className="block text-xs text-brand-ink/60 mt-0.5 bg-brand-ink/5 border border-brand-ink/10 px-1.5 py-0.5 rounded-sm w-fit ml-auto">
+                        Pending Collection
+                      </span>
+                    </span>
+                  ) : (
+                    <span>{selectedBill.paymentMethod?.toUpperCase() || 'Credit Card'}</span>
+                  )}
+                </div>
+                <p className="text-brand-ink/80 mt-1"><span className="font-medium text-brand-ink">Status:</span> {selectedBill.status.toUpperCase()}</p>
               </div>
             </div>
 
@@ -594,7 +625,14 @@ export const AdminPanel = ({ user }: { user: User | null }) => {
                                     <p><span className="font-medium text-brand-ink">Address:</span> {order.shippingInfo.address}</p>
                                     <p><span className="font-medium text-brand-ink">City:</span> {order.shippingInfo.city}, {order.shippingInfo.state} {order.shippingInfo.zipCode}</p>
                                     <p><span className="font-medium text-brand-ink">Contact:</span> {order.shippingInfo.phone} | {order.shippingInfo.email}</p>
-                                    <p className="mt-2 text-xs"><span className="font-medium text-brand-ink">Payment:</span> {order.paymentMethod || 'Credit Card'}</p>
+                                    <p className="mt-2 text-xs">
+                                      <span className="font-medium text-brand-ink">Payment:</span> {order.paymentMethod || 'Credit Card'}
+                                      {order.paymentMethod === 'upi' && order.paymentDetails?.upiTransactionId && (
+                                        <span className="ml-2 px-2 py-0.5 bg-brand-gold/10 text-brand-gold rounded font-mono border border-brand-gold/20">
+                                          UTR: {order.paymentDetails.upiTransactionId}
+                                        </span>
+                                      )}
+                                    </p>
                                   </div>
                                 </div>
                               ) : (

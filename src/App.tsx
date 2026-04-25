@@ -53,10 +53,15 @@ export type OrderItem = {
 
 export type Order = {
   id: string;
+  _id?: string;
   items: OrderItem[];
   totalAmount: number;
   status: string;
   createdAt?: any;
+  paymentMethod?: string;
+  paymentDetails?: {
+    upiTransactionId?: string;
+  };
 };
 
 export const PRODUCTS: Product[] = [
@@ -2172,7 +2177,8 @@ export default function App() {
     paymentMethod: 'cod',
     cardNumber: '',
     expiry: '',
-    cvv: ''
+    cvv: '',
+    upiTransactionId: ''
   });
   const [checkoutErrors, setCheckoutErrors] = useState<Record<string, string>>({});
   const [hasSubmittedCheckout, setHasSubmittedCheckout] = useState(false);
@@ -2193,6 +2199,14 @@ export default function App() {
     else if (!/^\d{6}$/.test(checkoutData.pincode)) errors.pincode = "Invalid pincode";
     
     if (!checkoutData.state.trim()) errors.state = "State is required";
+
+    if (checkoutData.paymentMethod === 'upi') {
+      if (!checkoutData.upiTransactionId.trim()) {
+        errors.upiTransactionId = "Please enter the 12-digit UTR or Transaction ID after paying.";
+      } else if (checkoutData.upiTransactionId.trim().length < 8) {
+        errors.upiTransactionId = "Transaction ID seems too short. Please verify.";
+      }
+    }
 
     // Note: Card validation is no longer needed locally as Stripe will handle it securely.
     
@@ -2552,7 +2566,10 @@ export default function App() {
             pincode: checkoutData.pincode,
             state: checkoutData.state
           },
-          paymentMethod: checkoutData.paymentMethod
+          paymentMethod: checkoutData.paymentMethod,
+          paymentDetails: checkoutData.paymentMethod === 'upi' ? {
+            upiTransactionId: checkoutData.upiTransactionId
+          } : undefined
         })
       });
       
@@ -4468,7 +4485,11 @@ export default function App() {
                                         </div>
                                         <div class="meta-block">
                                           <strong>Payment Method</strong>
-                                          <div class="meta-value">${order.paymentMethod?.toUpperCase() || 'N/A'}</div>
+                                          <div class="meta-value">
+                                            ${order.paymentMethod === 'upi' ? `UPI<br><span style="font-size: 10px; color: #666; margin-top: 5px; display: inline-block; padding: 2px 6px; background: #f5f5f5; border-radius: 4px; border: 1px solid #e5e5e5; font-family: monospace;">UTR: ${order.paymentDetails?.upiTransactionId || 'Pending'}</span>` : 
+                                              order.paymentMethod === 'card' ? `Credit/Debit Card<br><span style="font-size: 10px; color: #666; margin-top: 5px; display: inline-block; padding: 2px 6px; background: #f5f5f5; border-radius: 4px; border: 1px solid #e5e5e5;">Stripe Secured</span>` : 
+                                              order.paymentMethod === 'cod' ? `Cash on Delivery<br><span style="font-size: 10px; color: #666; margin-top: 5px; display: inline-block; padding: 2px 6px; background: #f5f5f5; border-radius: 4px; border: 1px solid #e5e5e5;">Pending Collection</span>` : (order.paymentMethod?.toUpperCase() || 'N/A')}
+                                          </div>
                                         </div>
                                       </div>
 
@@ -4914,7 +4935,18 @@ export default function App() {
                                 UPI ID: <span className="text-[#da7c44] font-serif tracking-wider">harsh03h@jio</span>
                               </div>
                               <div className="text-xs text-brand-ink/60 bg-brand-ink/5 p-3 rounded-lg border border-brand-ink/10">
-                                After making the payment, click <strong>"Place Order"</strong> below to confirm your purchase. Our team will verify your transaction.
+                                After making the payment, please enter your transaction ID (UTR) below and click <strong>"Place Order"</strong>. Our team will verify your transaction.
+                              </div>
+                              <div className="mt-4">
+                                <label className="block text-xs font-bold text-brand-ink/80 mb-2">UPI Transaction ID / UTR *</label>
+                                <input 
+                                  type="text" 
+                                  placeholder="e.g. 123456789012" 
+                                  className={`w-full border ${checkoutErrors.upiTransactionId && hasSubmittedCheckout ? 'border-red-500' : 'border-brand-ink/10'} rounded-lg p-3 text-sm focus:outline-none focus:border-brand-gold bg-transparent`} 
+                                  value={checkoutData.upiTransactionId} 
+                                  onChange={e => setCheckoutData({...checkoutData, upiTransactionId: e.target.value.replace(/[^a-zA-Z0-9]/g, '')})} 
+                                />
+                                {checkoutErrors.upiTransactionId && hasSubmittedCheckout && <p className="text-red-500 text-xs mt-1">{checkoutErrors.upiTransactionId}</p>}
                               </div>
                             </div>
                           )}
